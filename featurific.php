@@ -40,11 +40,15 @@ Author URI: http://endorkins.com/
 
 
 //Libraries
-include ("htmlparser.inc");
-if(version_compare(PHP_VERSION, '5.0', '<'))
-	include 'parser_php4.phps';
-else
-	include 'parser_php5.phps';
+if(class_exists("HtmlParser")===false)
+	include ("htmlparser.inc");
+
+if(class_exists("XMLParser")===false) {
+	if(version_compare(PHP_VERSION, '5.0', '<'))
+		include 'parser_php4.phps';
+	else
+		include 'parser_php5.phps';
+}
 
 
 //Hooks
@@ -331,6 +335,10 @@ function featurific_get_plugin_web_root() {
 
 	$plugin_root = featurific_get_plugin_root();
 	$plugin_dir_name = substr($plugin_root, strrpos($plugin_root, '/', -2)+1); //-2 to skip the trailing '/' on $plugin_root
+	//PHP 5 only
+	//$plugin_dir_name = substr($plugin_root, strrpos($plugin_root, '/', -2)+1); //-2 to skip the trailing '/' on $plugin_root
+	//PHP 4 workaround
+	$plugin_dir_name = substr($plugin_root, strrpos(substr($plugin_root, 0, strlen($plugin_root)-2), '/')+1); //-2 to skip the trailing '/' on $plugin_root
 
 	$web_root = '/' . substr($web_root, $pos) . '/wp-content/plugins/' . $plugin_dir_name;
 
