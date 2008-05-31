@@ -1124,7 +1124,7 @@ function featurific_html_to_text($html) {
  * $screen_assignment_type, and (if 'ordered' is chosen), the
  * $last_template_id.
  */
-function featurific_choose_screen_template($templates, $screen_assignment_type, &$last_template_id=null) {
+function featurific_choose_screen_template($templates, $screen_assignment_type, &$last_template_id) {
 	$templates_size = sizeof($templates);
 		
 	//Ordered
