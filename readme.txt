@@ -1,19 +1,19 @@
 === Featurific For Wordpress ===
 Contributors: rinogo
 Donate link: http://featurific.com/
-Tags: slideshow, slide, show, gallery, flash, xml, dynamic, conversion, funnel
+Tags: slideshow, slide, show, gallery, flash, xml, dynamic, conversion, funnel, Post, posts, sidebar, images, links, photo, photos, statistics, stats, swf
 Requires at least: 2.3
 Tested up to: 2.5
 Stable tag: trunk
 
-An effortless interface to Featurific, the featured story slideshow.  (Similar to the 'featured' widget on time.com,
-msn.com, walmart.com, etc.)
+An effortless but powerful interface to Featurific Free, the featured story slideshow.  (Similar to the 'featured'
+widget on time.com, msn.com, walmart.com, etc.)
 
 
 
 == Description ==
 
-An effortless interface to Featurific, the featured story slideshow.
+An effortless interface to Featurific Free, the featured story slideshow.
 
 Unlike traditional slideshows, Featurific imitates the behavior seen on the home pages of sites like time.com and msn.com,
 displaying summaries of featured articles on the site.  The idea is to increase conversion and user satisfaction by
@@ -47,6 +47,13 @@ For basic configuration, visit the 'Settings' menu and access the submenu named 
 
 = Where can I find more templates? =
 [The Featurific website](http://featurific.com/ffw) ([http://featurific.com/ffw](http://featurific.com/ffw)).
+
+
+= What are the system requirements for using Featurific? =
+Featurific has been successfully tested with Wordpress 2.3 to 2.5.1.  While it was developed with PHP5, we've taken
+measures to facilitate usage under PHP4.  If you have or have not successfully used Featurific for Wordpress
+with PHP4, please email me with your comments.  (rich at [please don't spam me] byu period net)  I'm happy to make changes
+to the code to support legacy systems.  (to a certain degree)
 
 
 = How do I move Featurific to another location on my page? =
@@ -97,7 +104,7 @@ To get rid of the "Powered by Featurific" logo, you're going to have to splurge 
 
 
 = I can't get this thing to work!  What's wrong? =
-Drop me an email and I'll try to help you out.  (rich at <please don't spam me> byu period net)
+Drop me an email and I'll try to help you out.  (rich at [please don't spam me] byu period net)
 
 
 
