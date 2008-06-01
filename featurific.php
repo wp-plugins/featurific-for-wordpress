@@ -1472,6 +1472,84 @@ function featurific_get_posts_tweak(&$posts) {
 }
 
 
+//http://www.phpbuilder.com/board/showthread.php?t=10292234
+/**
+ *
+ */
+// Check to see if functin exists 
+if (!function_exists('file_get_contents')) { 
+
+    // Define function and arguments 
+    function file_get_contents($file, $include=false) 
+    { 
+        // Varify arguments are correct types 
+        if (!is_string($file))  return(false); 
+        if (!is_bool($include)) return(false); 
+         
+        // Open the file with givin options 
+        if (!$handle = @fopen($file, 'rb', $include)) return(false); 
+        // Read data from file 
+        $contents = fread($handle, filesize($file)); 
+        // Close file 
+        fclose($handle); 
+         
+        // Return contents of file 
+        return($contents); 
+    } 
+}
+
+
+/**
+ *
+ */
+if (!function_exists('file_put_contents')) { 
+    // Define flags related to file_put_contents(), if necessary 
+    if (!defined('FILE_USE_INCLUDE_PATH')) { 
+        define('FILE_USE_INCLUDE_PATH', 1); 
+    } 
+    if (!defined('FILE_APPEND')) { 
+        define('FILE_APPEND', 8); 
+    } 
+
+    function file_put_contents($filename, $data, $flags = 0) { 
+        // Handle single dimensional array data 
+        if (is_array($data)) { 
+            // Join the array elements 
+            $data = implode('', $data); 
+        } 
+
+        // Flags should be an integral value 
+        $flags = (int)$flags; 
+        // Set the mode for fopen(), defaulting to 'wb' 
+        $mode = ($flags & FILE_APPEND) ? 'ab' : 'wb'; 
+        $use_include_path = (bool)($flags & FILE_USE_INCLUDE_PATH); 
+
+        // Open file with filename as a string 
+        if ($fp = fopen("$filename", $mode, $use_include_path)) { 
+            // Acquire exclusive lock if requested 
+            if ($flags & LOCK_EX) { 
+                if (!flock($fp, LOCK_EX)) { 
+                    fclose($fp); 
+                    return false; 
+                } 
+            } 
+
+            // Write the data as a string 
+            $bytes = fwrite($fp, "$data"); 
+
+            // Release exclusive lock if it was acquired 
+            if ($flags & LOCK_EX) { 
+                flock($fp, LOCK_UN); 
+            } 
+
+            fclose($fp); 
+            return $bytes; // number of bytes written 
+        } else { 
+            return false; 
+        } 
+    } 
+}
+
 
 
 ?>
