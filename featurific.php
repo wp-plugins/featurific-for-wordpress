@@ -330,18 +330,31 @@ function featurific_get_plugin_root() {
  * the web root.
  */
 function featurific_get_plugin_web_root() {
-	$web_root = get_option('siteurl');
-	$pos = featurific_strpos_nth(3, $web_root, '/');
-
+	$site_url = get_option('siteurl');
+	
+	//Test URLs
+	//$site_url = 'http://nacl.ir';
+	//$site_url = 'http://nacl.ir/';
+	//$site_url = 'http://nacl.ir/a-dir/whatever/wordpress';
+	//$site_url = 'http://nacl.ir/a-dir/whatever/wordpress/';
+	$pos = featurific_strpos_nth(3, $site_url, '/');
+	
 	$plugin_root = featurific_get_plugin_root();
-	$plugin_dir_name = substr($plugin_root, strrpos($plugin_root, '/', -2)+1); //-2 to skip the trailing '/' on $plugin_root
 	//PHP 5 only
 	//$plugin_dir_name = substr($plugin_root, strrpos($plugin_root, '/', -2)+1); //-2 to skip the trailing '/' on $plugin_root
 	//PHP 4 workaround
 	$plugin_dir_name = substr($plugin_root, strrpos(substr($plugin_root, 0, strlen($plugin_root)-2), '/')+1); //-2 to skip the trailing '/' on $plugin_root
 
-	$web_root = '/' . substr($web_root, $pos) . '/wp-content/plugins/' . $plugin_dir_name;
+	if($pos===false)
+		$web_root = substr($site_url, strlen($site_url));
+	else
+		$web_root = '/' . substr($site_url, $pos);
+	
+	if($web_root[strlen($web_root)-1]!='/')
+		$web_root .= '/';
 
+	$web_root .= 'wp-content/plugins/' . $plugin_dir_name;
+	
 	return $web_root;
 }
 
