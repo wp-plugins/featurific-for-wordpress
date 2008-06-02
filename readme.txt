@@ -43,6 +43,12 @@ For basic configuration, visit the 'Settings' menu and access the submenu named 
 
 
 
+== Demo Sites ==
+Once you get Featurific for Wordpress installed, please email me and I'll add you to a list of demo sites for prospective
+users to check out.  (Hey, free traffic! :) ) (rich at [please don't spam me] byu period net)
+
+
+
 == Frequently Asked Questions ==
 
 = This plugin is worthless!  It won't install, or it will install and nothing happens!  Boooo! =
