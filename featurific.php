@@ -34,7 +34,7 @@ displaying summaries of featured articles on the site.  Installation is
 automatic and easy, while advanced users can customize every element of the
 Flash slideshow presentation.
 Author: Rich Christiansen
-Version: 1.0
+Version: 1.0.1
 Author URI: http://endorkins.com/
 */
 
@@ -1472,9 +1472,10 @@ function featurific_get_posts_tweak(&$posts) {
 }
 
 
-//http://www.phpbuilder.com/board/showthread.php?t=10292234
 /**
+ * file_get_contents for PHP 4
  *
+ * (from http://www.phpbuilder.com/board/showthread.php?t=10292234)
  */
 // Check to see if functin exists 
 if (!function_exists('file_get_contents')) { 
@@ -1500,7 +1501,9 @@ if (!function_exists('file_get_contents')) {
 
 
 /**
+ * file_put_contents for PHP 4
  *
+ * (from http://www.phpbuilder.com/board/showthread.php?t=10292234)
  */
 if (!function_exists('file_put_contents')) { 
     // Define flags related to file_put_contents(), if necessary 
