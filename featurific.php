@@ -34,7 +34,7 @@ displaying summaries of featured articles on the site.  Installation is
 automatic and easy, while advanced users can customize every element of the
 Flash slideshow presentation.
 Author: Rich Christiansen
-Version: 1.1.1
+Version: 1.1.2
 Author URI: http://endorkins.com/
 */
 
@@ -64,17 +64,70 @@ add_action('admin_menu', 'featurific_add_pages');
 
 
 
-/*
-//if ( !get_option('wordpress_api_key') && !$wpcom_api_key && !isset($_POST['submit']) ) {
-	function featurific_warning() {
+if(!get_option('featurific_current_template_configured')) {
+	function featurific_template_configuration_warning() {
+		$theme_editor_url = get_option('siteurl').'/wp-admin/theme-editor.php';
 		echo "
-		<div id='akismet-warning' class='updated fade'><p><strong>".__('Akismet is almost ready.')."</strong> ".sprintf(__('You must <a href="%1$s">enter your WordPress.com API key</a> for it to work.'), "plugins.php?page=akismet-key-config")."</p></div>
-		";
+			<div id='featurific-for-wordpress-warning' class='updated fade'><p><strong>Featurific for Wordpress is almost ready</strong>.  To complete installation, Featurific for Wordpress needs access to your main template file.<br/>
+				<ul>
+					<li>
+						<strong>Temporarily modify your theme's file permissions and reinstall</strong>
+						<ol>
+							<li>
+								Change the file permissions on your current theme's files to be world-writable (chmod 666 should suffice)
+								<ul>
+									<li><a href='http://codex.wordpress.org/Changing_File_Permissions#Using_an_FTP_Client'>Using an FTP client (easy)</a></li>
+									<li><a href='http://codex.wordpress.org/Changing_File_Permissions#Using_the_Command_Line'>Using the command line (harder, requires shell access)</a></li>
+								</ul>
+							</li>
+							<li>Deactivate and re-activate Featurific for Wordpress, and installation will complete successfully if the main template file is in fact world-writable.</li>
+							<li><strong>Optional</strong>: If desired, revert your permissions back to normal. (chmod 644 for files, chmod 755 for directories)</li>
+						</ol>
+					</li>
+				</ul>
+				<small>To get rid of this status message, either complete the steps listed above or disable the Featurific for Wordpress plugin.</small>
+			</p></div>";
+
+// 		echo "
+// 			<div id='featurific-for-wordpress-warning' class='updated fade'><p><strong>Featurific for Wordpress is almost ready</strong>.  To complete installation, you must do <strong>one of the following</strong>:<br/>
+// 				<ul>
+// 					<li>
+// 						<strong>Easy</strong> - Manually insert Featurific into your theme
+// 						<ol>
+// 							<li>Edit the index.php or home.php file of your theme in the <a href='$theme_editor_url'>Wordpress Theme Editor</a> (<a href='http://codex.wordpress.org/Editing_Files#Using_the_Theme_Editor'>More info on the Theme Editor</a>)</li>
+// 							<li>
+// 								Insert the Featurific for Wordpress code.<br/>
+// <pre>&lt;?php
+//  //Code automatically inserted by Featurific for Wordpress plugin
+//  if(is_home())                             //If we're generating the home page (remove this line to make Featurific appear on all pages)...
+//   if(function_exists('insert_featurific')) //If the Featurific plugin is activated...
+//    insert_featurific();                    //Insert the HTML code to embed Featurific
+// ?&gt;</pre>
+// 								The code needs to go in a specific location.  Here's how to find where to put it:
+// 								<ol type='a'>
+// 									<li>Find the first occurrence of the text 'have_posts()' in the template.</li>
+// 									<li>Find the first occurrence of '&lt;?' that <em>precedes</em> the text found in step 1.</li>
+// 									<li>Insert the code <em>just before</em> the '&lt;?' found in step 2.</li>
+// 								</ol>
+// 							</li>
+// 						</ol>
+// 					</li>
+// 					<li>
+// 						<strong>Harder</strong> - Temporarily modify your theme's file permissions and reinstall
+// 						<ol>
+// 							<li><a href='http://www.google.com/search?q=chmod+777'>Change the file permissions</a> on your current theme files (the containing directory and all files) to be world-writable (chmod 777 should suffice)</li>
+// 							<li>Disable and re-enable Featurific for Wordpress, and installation will complete successfully if the theme is in fact world-writable.</li>
+// 							<li>Revert your permissions back to normal. (chmod 644)</li>
+// 						</ol>
+// 					</li>
+// 				</ul>
+// 			</p></div>";
+
+
 	}
-	add_action('admin_notices', 'featurific_warning');
+	add_action('admin_notices', 'featurific_template_configuration_warning');
 	//return;
-//}
-*/
+}
 
 
 /**
@@ -106,8 +159,11 @@ function featurific_activate($template)
 	//Force XML generation
 	featurific_do_cron(true);
 
-	if(!featurific_configure_template($template_path)) {
-		//echo('Activation of Featurific failed or has been previously completed.<br/>');
+	if(featurific_configure_template($template_path)) {
+		update_option('featurific_current_template_configured', true);
+	}
+	else {
+		update_option('featurific_current_template_configured', false);
 		return;
 	}
 	
@@ -201,6 +257,8 @@ function featurific_test_image_cache_write_access() {
  *  4. Insert our call to insert_featurific() just before the newline character found in step 3.
  *
  * Note that we do lots of error checking because we want to avoid trashing the template at all costs.
+ *
+ * Returns true if insertion was successful or if the template already contains a call to insert_featurific.
  */
 function featurific_configure_template($template_path)
 {
@@ -216,9 +274,9 @@ function featurific_configure_template($template_path)
 	//echo "fb len: ".strlen($fb)."<br/>";
 
 
-	//If the template already contains the call to insert_featurific(), just return.
+	//If the template already contains the call to insert_featurific(), just return (true).
 	if(strpos($fb, 'insert_featurific')!==false) {
-		return false;
+		return true;
 	}
 
 
@@ -280,7 +338,7 @@ function featurific_configure_template($template_path)
  * Write out an error message and return.
  */
 function featurific_configure_template_error($error) {
-	echo "Featurific for Wordpress error: $error  For Featurific for Wordpress to function correctly, you need to manually add '&lt;?php insert_featurific(); ?&gt;' to your template file at the desired location.<br/>";
+	//echo "Featurific for Wordpress error: $error  For Featurific for Wordpress to function correctly, you need to manually add '&lt;?php insert_featurific(); ?&gt;' to your template file at the desired location.<br/>";
 	return false;
 }
 
