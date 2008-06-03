@@ -34,12 +34,14 @@ displaying summaries of featured articles on the site.  Installation is
 automatic and easy, while advanced users can customize every element of the
 Flash slideshow presentation.
 Author: Rich Christiansen
-Version: 1.0.1
+Version: 1.1
 Author URI: http://endorkins.com/
 */
 
 
 //Libraries
+include_once('featurific_db.php');
+
 if(class_exists("HtmlParser")===false)
 	include ("htmlparser.inc");
 
@@ -61,6 +63,20 @@ add_action('switch_theme', 'featurific_activate');
 add_action('admin_menu', 'featurific_add_pages');
 
 
+
+/*
+//if ( !get_option('wordpress_api_key') && !$wpcom_api_key && !isset($_POST['submit']) ) {
+	function featurific_warning() {
+		echo "
+		<div id='akismet-warning' class='updated fade'><p><strong>".__('Akismet is almost ready.')."</strong> ".sprintf(__('You must <a href="%1$s">enter your WordPress.com API key</a> for it to work.'), "plugins.php?page=akismet-key-config")."</p></div>
+		";
+	}
+	add_action('admin_notices', 'featurific_warning');
+	//return;
+//}
+*/
+
+
 /**
  * Activate featurific.
  *
@@ -70,8 +86,11 @@ add_action('admin_menu', 'featurific_add_pages');
 function featurific_activate($template)
 {
 	//echo('Activating Featurific<br/>');
-	
+		
 	featurific_set_default_options();
+	featurific_test_environment();
+	
+	featurific_create_tables();
 	
 	//$template is non-null (contains the name of the new theme) when featurific_activate() is called by the switch_theme action.
 	if($template) {
@@ -106,8 +125,71 @@ function featurific_deactivate()
 	//echo('Deactivating Featurific');
 	
 	//featurific_delete_options(); //Only used for debugging
+	
+	//TODO: Delete SQL tables (e.g. featurific_image_cache)
 }
 
+
+/**
+ * Test the configuration of Wordpress/the webserver to determine to what
+ * degree it is compatible with certain features required by the plugin.
+ */
+function featurific_test_environment() {
+	featurific_test_plugin_root_write_access();
+	featurific_test_image_cache_write_access();
+}
+
+
+/**
+ *
+ */
+function featurific_test_plugin_root_write_access() {
+	$filename = 'FeaturificTestPluginRootWriteAccess'.rand(999999999, 9999999999); //Create an (essentially) guaranteed unique filename
+	$path = featurific_get_plugin_root().$filename;
+	echo "Testing $path<br/>";
+	$f = @fopen($path, 'w');
+	
+	//Success
+	if($f) {
+		echo 'success<br/>';
+		fclose($f);
+		unlink($path);
+		update_option('featurific_root_write_access', true);
+		update_option('featurific_store_data_xml_in_db', false);
+	}
+	//Failure
+	else {
+		echo 'failure<br/>';
+		update_option('featurific_root_write_access', false);
+		update_option('featurific_store_data_xml_in_db', true);
+	}
+}
+
+
+/**
+ *
+ */
+function featurific_test_image_cache_write_access() {
+	$filename = 'FeaturificTestImageCacheWriteAccess'.rand(999999999, 9999999999); //Create an (essentially) guaranteed unique filename
+	$path = featurific_get_plugin_root().'image_cache/'.$filename;
+	echo "Testing $path<br/>";
+	$f = @fopen($path, 'w');
+	
+	//Success
+	if($f) {
+		echo 'success<br/>';
+		fclose($f);
+		unlink($path);
+		update_option('featurific_image_cache_write_access', true);
+		update_option('featurific_store_cached_images_in_db', false);
+	}
+	//Failure
+	else {
+		echo 'failure<br/>';
+		update_option('featurific_image_cache_write_access', false);
+		update_option('featurific_store_cached_images_in_db', true);
+	}
+}
 
 /**
  * Attempt to automatically insert the call to insert_featurific() in the user's active template.
@@ -122,7 +204,7 @@ function featurific_deactivate()
  */
 function featurific_configure_template($template_path)
 {
-	$f = fopen($template_path, 'r');
+	$f = @fopen($template_path, 'r'); //NOTE: The '@' suppresses warning messages.  We need to be certain to check the return value.
 	if(!$f) return featurific_configure_template_error("Template file ($template_path) could not be opened for reading.");
 
 	//Read file into a buffer.  Hard on memory, easy on the programmer (string manipulation is much easier than file pointer manipulation).  Since this function is only run on activation, this isn't a problem.
@@ -178,7 +260,7 @@ function featurific_configure_template($template_path)
 	//Save a back up copy of the template in case something unexpected happens.
 	copy($template_path, $template_path.'.original');
 
-	$f = fopen($template_path, 'w');
+	$f = @fopen($template_path, 'w'); //NOTE: The '@' suppresses warning messages.  We need to be certain to check the return value.
 	if(!$f) return featurific_configure_template_error("Template file ($template_path) could not be opened for writing.");
 
 	//Write the file from the buffer.  If an error occurs on any of the writes, restore the original file and return.
@@ -244,10 +326,20 @@ function insert_featurific() {
 	$height = get_option('featurific_height');
 	
 	$data_xml_override = get_option('featurific_data_xml_override');
+	//Use the data.xml override
 	if($data_xml_override!=null && $data_xml_override!='')
 		$data_xml_filename = $data_xml_override;
-	else
-		$data_xml_filename = get_option('featurific_data_xml_filename');
+	//Don't use the data.xml override
+	else {
+		//Serve up the XML dynamically from the DB
+		if(get_option('featurific_store_data_xml_in_db')) {
+			$data_xml_filename = 'data_xml.php';
+		}
+		//Serve up the XML via the web server from a previously generated flat file
+		else {
+			$data_xml_filename = get_option('featurific_data_xml_filename');
+		}
+	}
 	
 	$html = <<<HTML
 		<center><!-- Begin Featurific Flash Gallery - featurific.com -->
@@ -884,7 +976,7 @@ function featurific_data_xml_housekeeping() {
 	
 	//Delete the oldest XML file.
 	if($f_to_delete!='')
-		unlink(featurific_get_plugin_root() . $f_to_delete);
+		@unlink(featurific_get_plugin_root() . $f_to_delete); //NOTE: The '@' suppresses warnings (e.g. if the file could not be deleted, no error is reported.)
 
 	//Update the options.  Note that we keep two old files around to avoid attempts at deleting the file while the web server is still sending it to clients.  It's unprobable, although possible, that if we immediately deleted the old XML file, that a client could still be requesting the old file.  So, keeping around the *two* old XML files (instead of just one) essentially eliminates this possibility.
 	update_option('featurific_data_xml_filename', $f_new);
@@ -928,22 +1020,29 @@ function featurific_generate_data_xml($output_filename) {
 	
 	//echo str_replace("\n", "<br/>", htmlentities($out));
 
+	//Write the gallery XML to the DB
+	if(get_option('featurific_store_data_xml_in_db')) {
+		update_option('featurific_data_xml', $out);
+		//echo get_option('featurific_data_xml');
+	}
 	//Write the gallery XML to disk
-	$fout_filename = featurific_get_plugin_root() . $output_filename;
-	
-	$fout = fopen($fout_filename, 'w');
-	if(!$fout) {
-		echo "Could not open $fout_filename for writing.";
-		return false;
-	}
-	
-	if(fwrite($fout, $out)===false) {
-		echo "Could not write the XML to $fout_filename.";
-		fclose($fout);
-		return false;
-	}
+	else {
+		$fout_filename = featurific_get_plugin_root() . $output_filename;
 
-	fclose($fout);
+		$fout = @fopen($fout_filename, 'w'); //NOTE: The '@' suppresses warning messages.  We need to be certain to check the return value.
+		if(!$fout) {
+			echo "Could not open $fout_filename for writing.";
+			return false;
+		}
+
+		if(fwrite($fout, $out)===false) {
+			echo "Could not write the XML to $fout_filename.";
+			fclose($fout);
+			return false;
+		}
+
+		fclose($fout);
+	}
 }
 
 
@@ -1420,19 +1519,38 @@ function featurific_get_posts_tweak(&$posts) {
 			//If the image is on a different domain, we can't access it from Flash 9 directly, so we've got to load it by proxy (save locally via PHP).
 			else {
 				$image_data = file_get_contents($image);
-
+				
 				//On error, just continue to the next image
 				if($image_data===false)
 					continue;
 				
-				$relative_path = 'image_cache/screen_'.$screen_number.'_image_'.$image_number;
-				$bytes_written = file_put_contents(featurific_get_plugin_root().$relative_path, $image_data);
-				
-				//On error, just continue to the next image
-				if($bytes_written===false)
-					continue;
+				//Store the cached images in the DB
+				if(get_option('featurific_store_cached_images_in_db')) {
+					$image_info = getimagesize($image); //Yes, this requires fetching the image via HTTP twice (we fetch it once to get the image (above), and again to get the mime type); but since getimagesize() will only work with a filename/uri, I can't just feed it the raw data.  The best workaround I found for this was writing a temporary file (which we can't because we might not have write access to the FS), and using stream_wrapper_register() (http://fi.php.net/manual/en/function.stream-wrapper-register.php) to 'fake' the file
 
-				$image_url = featurific_get_plugin_web_root().$relative_path;
+					$success = featurific_image_cache_put_image($screen_number, $image_number, $image_data, $image_info['mime']);
+					//echo $success?'put successful!':'put failed!';
+					
+					$image_url = featurific_get_plugin_web_root()."cached_image.php?snum=$screen_number&inum=$image_number";
+					//echo "Stored featurific_cached_image_screen_{$screen_number}_image_{$image_number}.<br/>";
+
+					// echo "Its value was: $image_data";
+					// echo "Try it: " . get_option("featurific_cached_image_screen_{$screen_number}_image_{$image_number}");
+				}
+				//Store the cached images as files on the local filesystem
+				else {
+					$relative_path = 'image_cache/screen_'.$screen_number.'_image_'.$image_number;
+					$image_path = featurific_get_plugin_root().$relative_path;
+					$bytes_written = @file_put_contents($image_path, $image_data); //NOTE: The '@' suppresses warning messages.  We need to be certain to check the return value.
+				
+					//On error, just continue to the next image
+					if($bytes_written===false) {
+						echo "Error writing proxied image to file ($image_path)";
+						continue;
+					}
+
+					$image_url = featurific_get_plugin_web_root().$relative_path;
+				}
 			}
 
 			//Actually add the image url to the post.  Images can be accessed in template.xml in this manner: %image_1%, %image_2%, etc.

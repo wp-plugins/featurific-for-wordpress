@@ -51,7 +51,7 @@ users to check out.  (Hey, free traffic! :) ) (rich at [please don't spam me] by
 
 == Frequently Asked Questions ==
 
-= The plugin won't install, or it will install and nothing happens.  What's wrong? =
+= This plugin is worthless!  It won't install, or it will install and nothing happens!  Boooo! =
 I'm sorry if the plugin is causing you problems.  It has only recently been released (consider yourself an early
 adopter! :) ), so I still need to work through the bugs that weren't manifest in my development environment.  Please
 email me (rich at [please don't spam me] byu period net) and I'll be happy to help you work through the bugs.
