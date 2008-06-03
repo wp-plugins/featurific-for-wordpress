@@ -34,7 +34,7 @@ displaying summaries of featured articles on the site.  Installation is
 automatic and easy, while advanced users can customize every element of the
 Flash slideshow presentation.
 Author: Rich Christiansen
-Version: 1.1
+Version: 1.1.1
 Author URI: http://endorkins.com/
 */
 
@@ -146,12 +146,12 @@ function featurific_test_environment() {
 function featurific_test_plugin_root_write_access() {
 	$filename = 'FeaturificTestPluginRootWriteAccess'.rand(999999999, 9999999999); //Create an (essentially) guaranteed unique filename
 	$path = featurific_get_plugin_root().$filename;
-	echo "Testing $path<br/>";
+	//echo "Testing $path<br/>";
 	$f = @fopen($path, 'w');
 	
 	//Success
 	if($f) {
-		echo 'success<br/>';
+		//echo 'success<br/>';
 		fclose($f);
 		unlink($path);
 		update_option('featurific_root_write_access', true);
@@ -159,7 +159,7 @@ function featurific_test_plugin_root_write_access() {
 	}
 	//Failure
 	else {
-		echo 'failure<br/>';
+		//echo 'failure<br/>';
 		update_option('featurific_root_write_access', false);
 		update_option('featurific_store_data_xml_in_db', true);
 	}
@@ -172,12 +172,12 @@ function featurific_test_plugin_root_write_access() {
 function featurific_test_image_cache_write_access() {
 	$filename = 'FeaturificTestImageCacheWriteAccess'.rand(999999999, 9999999999); //Create an (essentially) guaranteed unique filename
 	$path = featurific_get_plugin_root().'image_cache/'.$filename;
-	echo "Testing $path<br/>";
+	//echo "Testing $path<br/>";
 	$f = @fopen($path, 'w');
 	
 	//Success
 	if($f) {
-		echo 'success<br/>';
+		//echo 'success<br/>';
 		fclose($f);
 		unlink($path);
 		update_option('featurific_image_cache_write_access', true);
@@ -185,7 +185,7 @@ function featurific_test_image_cache_write_access() {
 	}
 	//Failure
 	else {
-		echo 'failure<br/>';
+		//echo 'failure<br/>';
 		update_option('featurific_image_cache_write_access', false);
 		update_option('featurific_store_cached_images_in_db', true);
 	}
