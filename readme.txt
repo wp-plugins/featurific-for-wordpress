@@ -57,14 +57,14 @@ adopter! :) ), so I still need to work through the bugs that weren't manifest in
 email me (rich at [please don't spam me] byu period net) and I'll be happy to help you work through the bugs.
 
 = Where can I find more templates? =
-[The Featurific website](http://featurific.com/ffw) ([http://featurific.com/ffw](http://featurific.com/ffw)).
+[The Featurific website](http://featurific.com/ffw) ([http://featurific.com/ffw](http://featurific.com/ffw)).  No
+extra templates have been released yet - please let me know if you'd like your template to be the first featured
+template!
 
 
 = What are the system requirements for using Featurific? =
-Featurific has been successfully tested with Wordpress 2.3 to 2.5.1.  While it was developed with PHP5, we've taken
-measures to facilitate usage under PHP4.  If you have or have not successfully used Featurific for Wordpress
-with PHP4, please email me with your comments.  (rich at [please don't spam me] byu period net)  I'm happy to make changes
-to the code to support legacy systems.  (to a certain degree)
+Featurific has been successfully tested with Wordpress 2.3 to 2.5.1 on PHP4 and PHP5.  If you have problems on these
+(or other) configurations, feel free to email me.  (rich at [please don't spam me] byu period net)
 
 
 = How do I move Featurific to another location on my page? =
