@@ -34,7 +34,7 @@ displaying summaries of featured articles on the site.  Installation is
 automatic and easy, while advanced users can customize every element of the
 Flash slideshow presentation.
 Author: Rich Christiansen
-Version: 1.1.2
+Version: 1.2
 Author URI: http://endorkins.com/
 */
 

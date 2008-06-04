@@ -49,6 +49,12 @@ users to check out.  (Hey, free traffic! :) ) (rich at [please don't spam me] by
 
 
 
+== Changelog ==
+**1.2 (6/4/08)**
+Changelog added.  Unicode Support (UTF-8 encoding) added to FeaturificFree.swf.
+
+
+
 == Frequently Asked Questions ==
 
 = I can't get the plugin to install.  What's up? =
