@@ -1,7 +1,7 @@
 === Featurific For Wordpress ===
 Contributors: rinogo
 Donate link: http://featurific.com/
-Tags: slideshow, slide, show, gallery, flash, xml, dynamic, conversion, funnel, Post, posts, sidebar, images, links, photo, photos, statistics, stats, swf
+Tags: slideshow, slide, show, gallery, flash, xml, dynamic, conversion, funnel, Post, posts, sidebar, images, links, photo, photos, statistics, stats, swf, plugin, admin
 Requires at least: 2.3
 Tested up to: 2.5
 Stable tag: trunk
@@ -44,8 +44,11 @@ For basic configuration, visit the 'Settings' menu and access the submenu named 
 
 
 == Demo Sites ==
-Once you get Featurific for Wordpress installed, please email me and I'll add you to a list of demo sites for prospective
-users to check out.  (Hey, free traffic! :) ) (rich at [please don't spam me] byu period net)
+Once you get Featurific for Wordpress installed, please email me and I'll add you to this list of demo sites.
+(Hey, free traffic! :) ) (rich at [please don't spam me] byu period net)
+
+[Sox & Dawgs](http://soxanddawgs.com/)
+[Endorkins](http://endorkins.com/)
 
 
 
