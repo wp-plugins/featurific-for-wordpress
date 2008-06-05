@@ -47,8 +47,12 @@ For basic configuration, visit the 'Settings' menu and access the submenu named 
 Once you get Featurific for Wordpress installed, please email me and I'll add you to this list of demo sites.
 (Hey, free traffic! :) ) (rich at [please don't spam me] byu period net)
 
-[Sox & Dawgs](http://soxanddawgs.com/)
-[Endorkins](http://endorkins.com/)
+[Sox & Dawgs](http://soxanddawgs.com/) |
+[Endorkins](http://endorkins.com/) |
+[Passion for Poetry](http://p4poetry.com/) |
+[C'mon Yu Irons!](http://cmonyuirons.com) |
+[Esperto Seo](http://www.espertoseo.it)
+
 
 
 
