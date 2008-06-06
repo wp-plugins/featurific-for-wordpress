@@ -55,10 +55,19 @@ Once you get Featurific for Wordpress installed, please email me and I'll add yo
 
 
 
+== Testers and Debuggers ==
+Muchas gracias to the following individuals for their help with testing and debugging Featurific for Wordress:
+Edward Prislac of [Semper Fried](http://www.semperfried.com/)
+Ian Bethune of [Sox & Dawgs](http://soxanddawgs.com/)
+
+
 
 == Changelog ==
 **1.2 (6/4/08)**
 Changelog added.  Unicode Support (UTF-8 encoding) added to FeaturificFree.swf.
+
+**1.2.1 (6/5/08)**
+Added plugin version printout to HTML embedding code for debugging.
 
 
 
