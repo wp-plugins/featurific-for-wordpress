@@ -86,7 +86,8 @@ template!
 
 = What are the system requirements for using Featurific? =
 Featurific has been successfully tested with Wordpress 2.3 to 2.5.1 on PHP4 and PHP5.  If you have problems on these
-(or other) configurations, feel free to email me.  (rich at [please don't spam me] byu period net)
+(or other) configurations, feel free to email me.  (rich at [please don't spam me] byu period net)  Support on Wordpress
+2.3 seems to be limited, I'll post more information as it becomes available.
 
 
 = How do I move Featurific to another location on my page? =
