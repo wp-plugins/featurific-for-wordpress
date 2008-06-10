@@ -51,13 +51,16 @@ Once you get Featurific for Wordpress installed, please email me and I'll add yo
 [Endorkins](http://endorkins.com/) |
 [Passion for Poetry](http://p4poetry.com/) |
 [C'mon Yu Irons!](http://cmonyuirons.com) |
-[Esperto Seo](http://www.espertoseo.it)
+[Esperto Seo](http://www.espertoseo.it) |
+[Bigg Success](http://biggsuccess.com)
 
 
 
 == Testers and Debuggers ==
 Muchas gracias to the following individuals for their help with testing and debugging Featurific for Wordress:
+
 Edward Prislac of [Semper Fried](http://www.semperfried.com/)
+
 Ian Bethune of [Sox & Dawgs](http://soxanddawgs.com/)
 
 
@@ -68,6 +71,9 @@ Changelog added.  Unicode Support (UTF-8 encoding) added to FeaturificFree.swf.
 
 **1.2.1 (6/5/08)**
 Added plugin version printout to HTML embedding code for debugging.
+
+**1.2.2 (6/9/08)**
+featurific_show_admin_message_once($message) implemented (and one call to it added).  This function is to be called when a minor error occurs that we wish to show to the admin user one time only.
 
 
 

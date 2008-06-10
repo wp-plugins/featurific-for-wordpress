@@ -34,10 +34,11 @@ displaying summaries of featured articles on the site.  Installation is
 automatic and easy, while advanced users can customize every element of the
 Flash slideshow presentation.
 Author: Rich Christiansen
-Version: 1.2
+Version: 1.2.2
 Author URI: http://endorkins.com/
 */
 
+$featurific_version = '1.2.1';
 
 //Libraries
 include_once('featurific_db.php');
@@ -61,6 +62,7 @@ register_deactivation_hook( __FILE__, 'featurific_deactivate' );
 //Actions
 add_action('switch_theme', 'featurific_activate');
 add_action('admin_menu', 'featurific_add_pages');
+add_action('admin_notices', 'featurific_show_admin_messages');
 
 
 
@@ -127,6 +129,37 @@ if(!get_option('featurific_current_template_configured')) {
 	}
 	add_action('admin_notices', 'featurific_template_configuration_warning');
 	//return;
+}
+
+function featurific_show_admin_message_once($m) {
+	$messages = get_option('featurific_admin_messages_to_show_once');
+	
+	//Only add the message $m if it's not already in $messages.
+	if(array_search($m, $messages)===false) {
+		if($messages==null)
+			$messages = array();
+		
+		$messages[] = $m;
+		update_option('featurific_admin_messages_to_show_once', $messages);
+	}
+}
+
+
+function featurific_show_admin_messages() {
+	$messages = get_option('featurific_admin_messages_to_show_once');
+	
+	if($messages==null || sizeof($messages)<1)
+		return;
+	
+	foreach ($messages as $m) {
+		echo "
+			<div id='featurific-for-wordpress-warning' class='updated fade'><p><strong>Featurific for Wordpress needs your attention</strong>.<br/>\n
+			<br/>\n
+			$m\n
+			</div>\n";
+	}
+	
+	update_option('featurific_admin_messages_to_show_once', array());
 }
 
 
@@ -377,6 +410,8 @@ function featurific_insert() {
  * what we use here.
  */
 function insert_featurific() {
+	global $featurific_version;
+	
 	//Plugin is active and we're on the home page - prepare and insert the HTML.
 	featurific_do_cron();
 	$web_root = featurific_get_plugin_web_root();
@@ -400,7 +435,7 @@ function insert_featurific() {
 	}
 	
 	$html = <<<HTML
-		<center><!-- Begin Featurific Flash Gallery - featurific.com -->
+		<center><!-- Begin Featurific Flash Gallery (version {$featurific_version}) - featurific.com -->
 		<script type="text/javascript" src="{$web_root}featurific.js"></script><div id="swfDiv" name="swfDiv" wmode="transparent">
 		<script type="text/javascript">
 		// <![CDATA[
@@ -678,6 +713,7 @@ function featurific_set_default_options() {
 	if(get_option('featurific_data_xml_filename')===false)						add_option('featurific_data_xml_filename', '');
 	if(get_option('featurific_data_xml_filename_old')===false)				add_option('featurific_data_xml_filename_old', '');
 	if(get_option('featurific_data_xml_filename_to_delete')===false)	add_option('featurific_data_xml_filename_to_delete', '');
+	if(get_option('featurific_admin_messages_to_show_once')===false)	add_option('featurific_admin_messages_to_show_once', array());
 }
 
 
@@ -847,10 +883,13 @@ function featurific_options_page() {
  <tr valign="top">
   <th scope="row">Template:</th>
   <td>
-	 <select name="<?php echo $template_opt_name; ?>">
-		<?
+   <select name="<?php echo $template_opt_name; ?>">
+    <?
 			$templates = featurific_get_templates();
 			asort($templates);
+			echo '<!--';
+			print_r($templates);
+			echo '-->';
 			foreach($templates as $template => $path) {
 				$selected = $path==$template_opt_val?"selected='selected'":'';
 				echo "<option value='$path' $selected>$template</option>\n";
@@ -1030,8 +1069,13 @@ function featurific_data_xml_housekeeping() {
 	// echo "f_to_delete: $f_to_delete<br/>";
 
 	//Generate the new XML file.
-	featurific_generate_data_xml($f_new);
+	$success = featurific_generate_data_xml($f_new);
 	
+	if(!$success) {
+		featurific_show_admin_message_once('Featurific for Wordpress needs your attention: There was a minor error while generating your Featurific data.xml file.  Don\'t worry - everything is fine with your site and Featurific.  However, we recommend that you <a href="http://featurific.com/content/contact-us">contact us</a> so we can help you resolve this minor issue.');
+		return;
+	}
+
 	//Delete the oldest XML file.
 	if($f_to_delete!='')
 		@unlink(featurific_get_plugin_root() . $f_to_delete); //NOTE: The '@' suppresses warnings (e.g. if the file could not be deleted, no error is reported.)
@@ -1101,6 +1145,8 @@ function featurific_generate_data_xml($output_filename) {
 
 		fclose($fout);
 	}
+	
+	return true;
 }
 
 
