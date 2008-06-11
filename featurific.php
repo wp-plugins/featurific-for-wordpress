@@ -34,11 +34,11 @@ displaying summaries of featured articles on the site.  Installation is
 automatic and easy, while advanced users can customize every element of the
 Flash slideshow presentation.
 Author: Rich Christiansen
-Version: 1.2.2
+Version: 1.2.3
 Author URI: http://endorkins.com/
 */
 
-$featurific_version = '1.2.1';
+$featurific_version = '1.2.3';
 
 //Libraries
 include_once('featurific_db.php');
@@ -884,12 +884,12 @@ function featurific_options_page() {
   <th scope="row">Template:</th>
   <td>
    <select name="<?php echo $template_opt_name; ?>">
-    <?
+    <?php
 			$templates = featurific_get_templates();
 			asort($templates);
-			echo '<!--';
-			print_r($templates);
-			echo '-->';
+			// echo '<!--';
+			// print_r($templates);
+			// echo '-->';
 			foreach($templates as $template => $path) {
 				$selected = $path==$template_opt_val?"selected='selected'":'';
 				echo "<option value='$path' $selected>$template</option>\n";

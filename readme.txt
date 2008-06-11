@@ -39,7 +39,9 @@ Standard Wordpress installation (no fancy config steps required):
 1. Activate the plugin through the 'Plugins' menu in WordPress
 1. You're done! :)
 
-For basic configuration, visit the 'Settings' menu and access the submenu named 'Featurific'.
+For basic configuration:
+* Wordpress 2.3: visit the 'Options' menu and access the submenu named 'Featurific'.
+* Wordpress 2.4+: visit the 'Settings' menu and access the submenu named 'Featurific'.
 
 
 
@@ -73,7 +75,10 @@ Changelog added.  Unicode Support (UTF-8 encoding) added to FeaturificFree.swf.
 Added plugin version printout to HTML embedding code for debugging.
 
 **1.2.2 (6/9/08)**
-featurific_show_admin_message_once($message) implemented (and one call to it added).  This function is to be called when a minor error occurs that we wish to show to the admin user one time only.
+featurific__show__admin__message__once($message) implemented (and one call to it added).  This function is to be called when a minor error occurs that we wish to show to the admin user one time only.
+
+**1.2.3 (6/10/08)**
+Fixed one instance of "<?" in featurific.php that should have been "<?php".  In systems on which PHP was compiled with short_open_tag set to Off, this would cause the PHP block in question to not be executed.  (More information: http://www.daaq.net/old/php/index.php?page=embedding+php&parent=php+basics)
 
 
 
@@ -102,10 +107,12 @@ Many Featurific templates look better in a sidebar than in the main content area
 any other location, just edit your theme.  Featurific for Wordpress automatically inserts itself into your index.php or
 home.php theme file (whichever it detects is present).  Open up the file and look for the following code:
 
-`//Code automatically inserted by Featurific for Wordpress plugin
+`&lt;?php
+//Code automatically inserted by Featurific for Wordpress plugin
 if(is_home())                             //If we're generating the home page (remove this line to make Featurific appear on all pages)...
  if(function_exists('insert_featurific')) //If the Featurific plugin is activated...
-  insert_featurific();                    //Insert the HTML code to embed Featurific`
+  insert_featurific();                    //Insert the HTML code to embed Featurific
+?&gt;`
 
 Move this code to wherever you'd like Featurific to appear (in any of your theme files).
 
@@ -121,17 +128,21 @@ the desired location in the appropriate theme file.
 If you want Featurific to appear on *all* pages and not just on the home page, find the following code in your theme's
 index.php or home.php file:
 
-`//Code automatically inserted by Featurific for Wordpress plugin
+`&lt;?php
+//Code automatically inserted by Featurific for Wordpress plugin
 if(is_home())                             //If we're generating the home page (remove this line to make Featurific appear on all pages)...
  if(function_exists('insert_featurific')) //If the Featurific plugin is activated...
-  insert_featurific();                    //Insert the HTML code to embed Featurific`
+  insert_featurific();                    //Insert the HTML code to embed Featurific
+?&gt;`
 
 Comment out the line that begins with `if(is_home())` by inserting '//' at the beginning of the line as follows:
 
-`//Code automatically inserted by Featurific for Wordpress plugin
+`&lt;?php
+//Code automatically inserted by Featurific for Wordpress plugin
  //if(is_home())                             //If we're generating the home page (remove this line to make Featurific appear on all pages)...
  if(function_exists('insert_featurific')) //If the Featurific plugin is activated...
-  insert_featurific();                    //Insert the HTML code to embed Featurific`
+  insert_featurific();                    //Insert the HTML code to embed Featurific
+?&gt;`
 
 **Specific pages**
 If you want Featurific to appear on specific pages, you could try using `$_SERVER['REQUEST_URI'])` and either an if
