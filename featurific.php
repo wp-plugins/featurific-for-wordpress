@@ -34,11 +34,11 @@ displaying summaries of featured articles on the site.  Installation is
 automatic and easy, while advanced users can customize every element of the
 Flash slideshow presentation.
 Author: Rich Christiansen
-Version: 1.2.3
+Version: 1.2.4
 Author URI: http://endorkins.com/
 */
 
-$featurific_version = '1.2.3';
+$featurific_version = '1.2.4';
 
 //Libraries
 include_once('featurific_db.php');
@@ -1267,14 +1267,29 @@ function featurific_generate_translation_array($post) {
  * We could use htmlspecialchars(), but that escapes too much (&, ', ", <, >).
  * We only need to escape ' and ", so that's all we do here.  In addition to
  * escaping special HTML chars, we also want to escape '%' characters since
- * those have special meaning in our XML attributes.
+ * those have special meaning in our XML attributes.  We also need to
+ * transform some HTML sequences that are not valid in Flash (e.g.
+ * Some users copy over their posts from Word/OpenOffice which may use, for
+ * example, &ldquo; &rdquo; &lsquo; &rsquo; for opening and closing quotes.
+ * Flash (or at least the font we're using?) doesn't support these sequences,
+ * so we need to transform them to their normal (' and ") equivalents.)
  */
 function featurific_flash_escape($s) {
+	//OPT: Optimization candidate
+
 	return
 	$string =
-		str_replace('\'', '&#039;',					//Escape '
-			str_replace('"', '&quot;',				//Escape "
-				str_replace('%', '&#37;', $s)		//Escape %
+		str_replace('\'', '&#039;',
+			str_replace('"', '&quot;',
+				str_replace('%', '&#37;',
+					str_replace('&ldquo;', '&quot;',
+						str_replace('&rdquo;', '&quot;',
+							str_replace('&lsquo;', '&#039;',
+								str_replace('&rsquo;', '&#039;', $s)
+							)
+						)
+					)
+				)		
 			)
 		);
 }
@@ -1478,9 +1493,9 @@ function featurific_get_posts($type, $n, $post_list=null)
 			$posts_fixed[$v->ID] = (array) $v;
 	}
 	
-	featurific_get_posts_categories($posts_fixed);
-	featurific_get_posts_tags($posts_fixed);
-	featurific_get_posts_meta($posts_fixed);
+	featurific_get_posts_categories($posts_fixed);	//Add categories
+	featurific_get_posts_tags($posts_fixed);				//Add tags
+	featurific_get_posts_meta($posts_fixed);				//Add custom fields
 	featurific_get_posts_tweak($posts_fixed);
 	
 	return $posts_fixed;
@@ -1575,6 +1590,8 @@ function featurific_get_posts_meta(&$posts) {
  * the featurific_get_posts_xxx() functions.
  */
 function featurific_get_posts_tweak(&$posts) {
+	//NOTE: Since this method is called AFTER featurific_get_posts_meta(), we can't use custom fields to override any tags defined in this method (e.g. post_human_date) unless we've explicitly checked to ensure that the value is empty before we write to it (like we're doing with 'post_excerpt' and 'image_x').  As for the other tags, (e.g. the 'post_xxx_date' fields, writing a method to only perform the assignment if the original value is null would be trivial.
+	
 	$date_chars = array('d', 'D', 'j', 'l', 'N', 'S', 'w', 'z', 'W', 'F', 'm', 'M', 'n', 't', 'L', 'o', 'Y', 'y', 'a', 'A', 'B', 'g', 'G', 'h', 'H', 'i', 's', 'u', 'e', 'I', 'O', 'P', 'T', 'Z', 'c', 'r', 'U');
 
 	//For each post...
@@ -1613,9 +1630,27 @@ function featurific_get_posts_tweak(&$posts) {
 		//Find images in the post content's HTML and prepare the images and $posts[$post_id] so the images can be accessed in the template.
 		$web_root = get_option('siteurl'); //e.g. 'http://mysite.com/wordpress' (provided wordpress was installed at public_html/wordpress)
 		$images = featurific_parse_images_from_html($posts[$post_id]['post_content']);
+
+
+		//Before we process the images and cache them if necessary, load any image_x custom fields.  These custom fields specify images that should be used *instead of* OR *in addition to* (depending on whether or not the corresponding image (e.g. image_1) was found in the post) the existing images as parsed from the post.
+		//We already have the custom fields in $posts[$post_id] since featurific_get_posts_tweak() is called after featurific_get_posts_meta().
+		foreach($posts[$post_id] as $k => $v) {
+			
+			//If this is an image_x custom field...
+			if(strpos($k, 'image_')===0) {
+				
+				//Get the image number and add it to the $images working variable
+				$image_number = intval(substr($k, 6)); //6 because strlen('image_') is 6
+				$images[$image_number] = $v;
+			}
+		}
+		
+		
 		$image_number = 1;
 		foreach($images as $image) {
 			//echo "pos: ".strpos($image, $web_root)."<br/>";
+			if($posts[$post_id]['image_'.$image_number]!=null)
+				$image = $posts[$post_id]['image_'.$image_number];
 			
 			//If the image is on the same domain, we can access it from Flash 9 directly.
 			if(strpos($image, $web_root)===0)
