@@ -34,11 +34,11 @@ displaying summaries of featured articles on the site.  Installation is
 automatic and easy, while advanced users can customize every element of the
 Flash slideshow presentation.
 Author: Rich Christiansen
-Version: 1.2.4
+Version: 1.2.5
 Author URI: http://endorkins.com/
 */
 
-$featurific_version = '1.2.4';
+$featurific_version = '1.2.5';
 
 //Libraries
 include_once('featurific_db.php');
@@ -506,7 +506,8 @@ function get_home_template_of_theme($theme) {
  * the filesystem root.
  */
 function featurific_get_plugin_root() {
-	return substr(__FILE__, 0, strrpos(__FILE__, '/')+1);
+	//return substr(__FILE__, 0, strrpos(__FILE__, '/')+1); //Works, but only on POSIX systems (not windows).  And should use DIRECTORY_SEPARATOR instead of '/' anyway...
+	return dirname(__FILE__).'/'; //Should work on all systems
 }
 
 
@@ -528,7 +529,7 @@ function featurific_get_plugin_web_root() {
 	//PHP 5 only
 	//$plugin_dir_name = substr($plugin_root, strrpos($plugin_root, '/', -2)+1); //-2 to skip the trailing '/' on $plugin_root
 	//PHP 4 workaround
-	$plugin_dir_name = substr($plugin_root, strrpos(substr($plugin_root, 0, strlen($plugin_root)-2), '/')+1); //-2 to skip the trailing '/' on $plugin_root
+	$plugin_dir_name = substr($plugin_root, strrpos(substr($plugin_root, 0, strlen($plugin_root)-2), DIRECTORY_SEPARATOR)+1); //-2 to skip the trailing '/' on $plugin_root
 
 	if($pos===false)
 		$web_root = substr($site_url, strlen($site_url));
@@ -928,7 +929,7 @@ function featurific_options_page() {
    <input type="radio" name="<?php echo $type_opt_name; ?>" value='popular' <?php if($type_opt_val=='popular') { echo 'checked'; } ?>> Most popular posts over the last <input type="text" name="<?php echo $popular_days_opt_name; ?>" value="<?php echo $popular_days_opt_val; ?>" size="2"> days (<a href='http://wordpress.org/extend/plugins/stats/'>Wordpress.com Stats Plugin</a> <?php echo $stats_installed_str; ?>)<br/>
    <input type="radio" name="<?php echo $type_opt_name; ?>" value='commented' <?php if($type_opt_val=='commented') { echo 'checked'; } ?>> Most commented posts<br/>
    <input type="radio" name="<?php echo $type_opt_name; ?>" value='recent' <?php if($type_opt_val=='recent') { echo 'checked'; } ?>> Most recent posts<br/>
-   <input type="radio" name="<?php echo $type_opt_name; ?>" value='userspecified' <?php if($type_opt_val=='userspecified') { echo 'checked'; } ?>> User-specified posts: <input type="text" name="<?php echo $user_specified_posts_opt_name; ?>" value="<?php echo $user_specified_posts_opt_val; ?>" size="35"> (comma separated)<br/>
+   <input type="radio" name="<?php echo $type_opt_name; ?>" value='userspecified' <?php if($type_opt_val=='userspecified') { echo 'checked'; } ?>> User-specified posts: <input type="text" name="<?php echo $user_specified_posts_opt_name; ?>" value="<?php echo $user_specified_posts_opt_val; ?>" size="35"> (comma separated - e.g. "4, 1, 16, 5")<br/>
    <!--This field is only used if  '<code>User-specified posts</code>' is selected as the <code>Post Selection</code>.-->
   </td>
  </tr>
