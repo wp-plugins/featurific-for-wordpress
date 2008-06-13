@@ -86,6 +86,9 @@ Fixed an issue in which custom fields were not properly overriding original valu
 **1.2.5 (6/12/08)**
 Fixed some path issues that prevented Featurific for Wordpress from working on Windows machines.
 
+**1.2.6 (6/13/08)**
+Moved the image cache table name from a global variable to a function because some systems seemed unable to access the global variable.  (Weird...)
+
 
 
 == Frequently Asked Questions ==

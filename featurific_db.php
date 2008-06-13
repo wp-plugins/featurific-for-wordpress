@@ -24,8 +24,18 @@
 */
 
 
-$featurific_image_cache_table_name = $wpdb->prefix . "featurific_image_cache";
+/**
+ * Return the table name for the image cache table.
+ *
+ * We used to store the table name in a global variable, but found that some
+ * LAMP installations simply couldn't 'see' the global variable.  (The variable
+ * was empty)  Weird.  So, this is an easy way around the problem.
+ */
+function featurific_get_image_cache_table_name() {
+	global $wpdb;
 
+	return $wpdb->prefix . "featurific_image_cache";
+}
 
 
 /**
@@ -42,7 +52,7 @@ function featurific_create_tables() {
  */
 function featurific_create_image_cache_table() {
 	global $wpdb;
-	global $featurific_image_cache_table_name;
+	$featurific_image_cache_table_name = featurific_get_image_cache_table_name();
 	
 	if($wpdb->get_var("show tables like '$featurific_image_cache_table_name'") != $featurific_image_cache_table_name) {
 		$sql = "CREATE TABLE " . $featurific_image_cache_table_name . " (
@@ -66,7 +76,7 @@ function featurific_create_image_cache_table() {
  */
 function featurific_image_cache_row_exists($snum, $inum) {
 	global $wpdb;
-	global $featurific_image_cache_table_name;
+	$featurific_image_cache_table_name = featurific_get_image_cache_table_name();
 	
 	if(!is_numeric($snum) || floatval($snum) != intval(floatval($snum)) ||
 	   !is_numeric($inum) || floatval($inum) != intval(floatval($inum)))
@@ -81,7 +91,7 @@ function featurific_image_cache_row_exists($snum, $inum) {
  */
 function featurific_image_cache_put_image($snum, $inum, $image, $mimetype) {
 	global $wpdb;
-	global $featurific_image_cache_table_name;
+	$featurific_image_cache_table_name = featurific_get_image_cache_table_name();
 
 	if(!is_numeric($snum) || floatval($snum) != intval(floatval($snum)) ||
 	   !is_numeric($inum) || floatval($inum) != intval(floatval($inum)))
@@ -110,7 +120,7 @@ function featurific_image_cache_put_image($snum, $inum, $image, $mimetype) {
  */
 function featurific_image_cache_get_image($snum, $inum) {
 	global $wpdb;
-	global $featurific_image_cache_table_name;
+	$featurific_image_cache_table_name = featurific_get_image_cache_table_name();
 	
 	if(!is_numeric($snum) || floatval($snum) != intval(floatval($snum)) ||
 	   !is_numeric($inum) || floatval($inum) != intval(floatval($inum)))

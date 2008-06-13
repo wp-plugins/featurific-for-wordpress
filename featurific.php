@@ -34,11 +34,11 @@ displaying summaries of featured articles on the site.  Installation is
 automatic and easy, while advanced users can customize every element of the
 Flash slideshow presentation.
 Author: Rich Christiansen
-Version: 1.2.5
+Version: 1.2.6
 Author URI: http://endorkins.com/
 */
 
-$featurific_version = '1.2.5';
+$featurific_version = '1.2.6';
 
 //Libraries
 include_once('featurific_db.php');
