@@ -116,12 +116,12 @@ Many Featurific templates look better in a sidebar than in the main content area
 any other location, just edit your theme.  Featurific for Wordpress automatically inserts itself into your index.php or
 home.php theme file (whichever it detects is present).  Open up the file and look for the following code:
 
-`&lt;?php
+`<?php
 //Code automatically inserted by Featurific for Wordpress plugin
 if(is_home())                             //If we're generating the home page (remove this line to make Featurific appear on all pages)...
  if(function_exists('insert_featurific')) //If the Featurific plugin is activated...
   insert_featurific();                    //Insert the HTML code to embed Featurific
-?&gt;`
+?>`
 
 Move this code to wherever you'd like Featurific to appear (in any of your theme files).
 
@@ -137,21 +137,21 @@ the desired location in the appropriate theme file.
 If you want Featurific to appear on *all* pages and not just on the home page, find the following code in your theme's
 index.php or home.php file:
 
-`&lt;?php
+`<?php
 //Code automatically inserted by Featurific for Wordpress plugin
 if(is_home())                             //If we're generating the home page (remove this line to make Featurific appear on all pages)...
  if(function_exists('insert_featurific')) //If the Featurific plugin is activated...
   insert_featurific();                    //Insert the HTML code to embed Featurific
-?&gt;`
+?>`
 
 Comment out the line that begins with `if(is_home())` by inserting '//' at the beginning of the line as follows:
 
-`&lt;?php
+`<?php
 //Code automatically inserted by Featurific for Wordpress plugin
  //if(is_home())                             //If we're generating the home page (remove this line to make Featurific appear on all pages)...
  if(function_exists('insert_featurific')) //If the Featurific plugin is activated...
   insert_featurific();                    //Insert the HTML code to embed Featurific
-?&gt;`
+?>`
 
 **Specific pages**
 If you want Featurific to appear on specific pages, you could try using `$_SERVER['REQUEST_URI'])` and either an if
