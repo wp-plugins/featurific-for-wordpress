@@ -98,6 +98,21 @@ I'm sorry if the plugin is causing you problems.  It has only recently been rele
 adopter! :) ), so I still need to work through the bugs that weren't manifest in my development environment.  Please
 email me (rich at [please don't spam me] byu period net) and I'll be happy to help you work through the bugs.
 
+
+= I can't get the "User-Defined Posts" feature to work.  Any ideas? =
+When using the "User-Defined Posts" feature, posts won't appear if they are non-existent.  You can check to see
+if the posts exist by accessing them in your web browser via the following URL:
+
+http://<location of your blog>/?p=<insert post id here>
+
+So, if your blog were located at mysuperblog.com/blog, and if you wanted to check to see if post 54 existed,
+you would access:
+
+http://mysuperblog.com/blog/?p=54
+
+If you can't access the post via this URL, then you're trying to use an invalid post id.
+
+
 = Where can I find more templates? =
 [The Featurific website](http://featurific.com/ffw) ([http://featurific.com/ffw](http://featurific.com/ffw)).  No
 extra templates have been released yet - please let me know if you'd like your template to be the first featured
