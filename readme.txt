@@ -89,6 +89,9 @@ Fixed some path issues that prevented Featurific for Wordpress from working on W
 **1.2.6 (6/13/08)**
 Moved the image cache table name from a global variable to a function because some systems seemed unable to access the global variable.  (Weird...)
 
+**1.2.7 (6/24/08)**
+Fixed a bug that generated invalid input XML when HTML was used in a manual excerpt.
+
 
 
 == Frequently Asked Questions ==
@@ -100,6 +103,10 @@ email me (rich at [please don't spam me] byu period net) and I'll be happy to he
 
 
 = I can't get the "User-Defined Posts" feature to work.  Any ideas? =
+**Use the correct format**
+The format for this field is a comma-separated list of post id's, such as '5, 14, 8, 23' (omit the quotes).
+
+**Ensure that the posts actually exist**
 When using the "User-Defined Posts" feature, posts won't appear if they are non-existent.  You can check to see
 if the posts exist by accessing them in your web browser via the following URL:
 
