@@ -103,7 +103,7 @@ email me (rich at [please don't spam me] byu period net) and I'll be happy to he
 When using the "User-Defined Posts" feature, posts won't appear if they are non-existent.  You can check to see
 if the posts exist by accessing them in your web browser via the following URL:
 
-http://<location of your blog>/?p=<insert post id here>
+http://&lt;location of your blog&gt;/?p=&lt;insert post id here&gt;
 
 So, if your blog were located at mysuperblog.com/blog, and if you wanted to check to see if post 54 existed,
 you would access:
