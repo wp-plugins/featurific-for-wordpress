@@ -53,13 +53,13 @@ Once you get Featurific for Wordpress installed, please email me and I'll add yo
 [Endorkins](http://endorkins.com/) |
 [Passion for Poetry](http://p4poetry.com/) |
 [Esperto Seo](http://www.espertoseo.it) |
-[Bigg Success](http://biggsuccess.com)
-[Life Magick](http://www.lifemagick.net/)
-[Teknoblog](http://www.teknoblog.com/)
-[West Ham United](http://www.westhampoland.com)
-[The Couch Potato](http://myblogisonfire.com/couchpotato/)
-[Alofoke Music](http://alofokemusic.net/v2)
-[GameAttic.com](http://gameattic.com/)
+[Bigg Success](http://biggsuccess.com) |
+[Life Magick](http://www.lifemagick.net/) |
+[Teknoblog](http://www.teknoblog.com/) |
+[West Ham United](http://www.westhampoland.com) |
+[The Couch Potato](http://myblogisonfire.com/couchpotato/) |
+[Alofoke Music](http://alofokemusic.net/v2) |
+[GameAttic.com](http://gameattic.com/) |
 [The GPS Times](http://thegpstimes.com)
 
 
