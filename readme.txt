@@ -172,6 +172,23 @@ if(is_home())                             //If we're generating the home page (r
 Move this code to wherever you'd like Featurific to appear (in any of your theme files).
 
 
+
+= How do I include an image in Featurific without also including it in the Wordpress post itself? =
+There are two solutions to this requirement:
+1. *Sneaky HTML/CSS*: In your Wordpress posts, embed the images like you normally embed images, but add some CSS to hide
+them when the post is displayed in Wordpress.  For example, you could add 'style="display: none"' to the <img> tags.
+The images won't appear in Wordpress, but Featurific will still detect them and display them (since it does not process
+CSS).
+
+1. *Custom Fields*: Add a custom field to your posts with the url of the image in it.  For example, you could use a custom
+field of 'image_1' which would cause the image to show up in the default location for images in most galleries.  (image_1
+is a tag used within most Featurific templates that is replaced with the first detected image from the Wordpress post.
+Likewise, image_2 is the second detected image, image_3 is the third, etc.)  If you want even more control, you could
+use a custom field and tag with your own name, such as 'my_image'.  Then, you need to edit the template.xml file for
+your template, adding in the 'my_image' tag where you want the image to appear.
+
+
+
 = How do I make Featurific appear on pages other than the main page? =
 
 **Theme file**
