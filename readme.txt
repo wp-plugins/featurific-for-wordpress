@@ -175,6 +175,7 @@ Move this code to wherever you'd like Featurific to appear (in any of your theme
 
 = How do I include an image in Featurific without also including it in the Wordpress post itself? =
 There are two solutions to this requirement:
+
 1. *Sneaky HTML/CSS*: In your Wordpress posts, embed the images like you normally embed images, but add some CSS to hide
 them when the post is displayed in Wordpress.  For example, you could add 'style="display: none"' to the <img> tags.
 The images won't appear in Wordpress, but Featurific will still detect them and display them (since it does not process
