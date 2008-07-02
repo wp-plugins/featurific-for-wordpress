@@ -117,10 +117,13 @@ discover why Featurific isn't working.  However, there's a sneaky workaround we 
 generated upon plugin activation.
 
 Here are the steps:
+
 1. Change the *Featurific* template to one that does not correctly display Featurific.  This causes the data*.xml file to
 be regenerated, but errors are unfortunately suppressed.
+
 1. With the nonfunctional template still selected, change your *Wordpress* theme to something other than your current
 theme.  This causes the data*.xml file to be regenerated, but this time, errors are reported.
+
 1. Finally, after you have viewed the errors (or verified that no errors are generated), you may of course revert
 your Featurific template and Wordpress theme to their original state.
 
