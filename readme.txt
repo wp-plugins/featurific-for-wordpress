@@ -76,32 +76,32 @@ Ian Bethune of [Sox & Dawgs](http://soxanddawgs.com/)
 
 
 == Changelog ==
-**1.2 (6/4/08)**
-Changelog added.  Unicode Support (UTF-8 encoding) added to FeaturificFree.swf.
-
-**1.2.1 (6/5/08)**
-Added plugin version printout to HTML embedding code for debugging.
-
-**1.2.2 (6/9/08)**
-featurific\_show\_admin\_message\_once($message) implemented (and one call to it added).  This function is to be called when a minor error occurs that we wish to show to the admin user one time only.
-
-**1.2.3 (6/10/08)**
-Fixed one instance of "&lt;?" in featurific.php that should have been "&lt;?php".  In systems on which PHP was compiled with short_open_tag set to Off, this would cause the PHP block in question to not be executed.  (More information: http://www.daaq.net/old/php/index.php?page=embedding+php&parent=php+basics)
-
-**1.2.4 (6/11/08)**
-Fixed an issue in which custom fields were not properly overriding original values.  Also fixed an issue in which the characters '&ldquo; &rdquo; &lsquo; &rsquo;' were not displaying correctly.
-
-**1.2.5 (6/12/08)**
-Fixed some path issues that prevented Featurific for Wordpress from working on Windows machines.
-
-**1.2.6 (6/13/08)**
-Moved the image cache table name from a global variable to a function because some systems seemed unable to access the global variable.  (Weird...)
+**1.2.8 (7/3/08)**
+Added an auto-upgrade warning to prevent users from overwriting changes/additions made to their templates upon auto-upgrading.
 
 **1.2.7 (6/24/08)**
 Fixed a bug that generated invalid input XML when HTML was used in a manual excerpt.
 
-**1.2.8 (7/3/08)**
-Added an auto-upgrade warning to prevent users from overwriting changes/additions made to their templates upon auto-upgrading.
+**1.2.6 (6/13/08)**
+Moved the image cache table name from a global variable to a function because some systems seemed unable to access the global variable.  (Weird...)
+
+**1.2.5 (6/12/08)**
+Fixed some path issues that prevented Featurific for Wordpress from working on Windows machines.
+
+**1.2.4 (6/11/08)**
+Fixed an issue in which custom fields were not properly overriding original values.  Also fixed an issue in which the characters '&ldquo; &rdquo; &lsquo; &rsquo;' were not displaying correctly.
+
+**1.2.3 (6/10/08)**
+Fixed one instance of "&lt;?" in featurific.php that should have been "&lt;?php".  In systems on which PHP was compiled with short_open_tag set to Off, this would cause the PHP block in question to not be executed.  (More information: http://www.daaq.net/old/php/index.php?page=embedding+php&parent=php+basics)
+
+**1.2.2 (6/9/08)**
+featurific\_show\_admin\_message\_once($message) implemented (and one call to it added).  This function is to be called when a minor error occurs that we wish to show to the admin user one time only.
+
+**1.2.1 (6/5/08)**
+Added plugin version printout to HTML embedding code for debugging.
+
+**1.2 (6/4/08)**
+Changelog added.  Unicode Support (UTF-8 encoding) added to FeaturificFree.swf.
 
 
 
