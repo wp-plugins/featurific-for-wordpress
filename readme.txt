@@ -86,7 +86,7 @@ Added plugin version printout to HTML embedding code for debugging.
 featurific\_show\_admin\_message\_once($message) implemented (and one call to it added).  This function is to be called when a minor error occurs that we wish to show to the admin user one time only.
 
 **1.2.3 (6/10/08)**
-Fixed one instance of "<?" in featurific.php that should have been "<?php".  In systems on which PHP was compiled with short_open_tag set to Off, this would cause the PHP block in question to not be executed.  (More information: http://www.daaq.net/old/php/index.php?page=embedding+php&parent=php+basics)
+Fixed one instance of "&lt;?" in featurific.php that should have been "&lt;?php".  In systems on which PHP was compiled with short_open_tag set to Off, this would cause the PHP block in question to not be executed.  (More information: http://www.daaq.net/old/php/index.php?page=embedding+php&parent=php+basics)
 
 **1.2.4 (6/11/08)**
 Fixed an issue in which custom fields were not properly overriding original values.  Also fixed an issue in which the characters '&ldquo; &rdquo; &lsquo; &rsquo;' were not displaying correctly.
