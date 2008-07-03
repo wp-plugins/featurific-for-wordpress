@@ -100,6 +100,9 @@ Moved the image cache table name from a global variable to a function because so
 **1.2.7 (6/24/08)**
 Fixed a bug that generated invalid input XML when HTML was used in a manual excerpt.
 
+**1.2.8 (7/3/08)**
+Added an auto-upgrade warning to prevent users from overwriting changes/additions made to their templates upon auto-upgrading.
+
 
 
 == Frequently Asked Questions ==

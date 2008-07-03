@@ -34,11 +34,11 @@ displaying summaries of featured articles on the site.  Installation is
 automatic and easy, while advanced users can customize every element of the
 Flash slideshow presentation.
 Author: Rich Christiansen
-Version: 1.2.7
+Version: 1.2.8
 Author URI: http://endorkins.com/
 */
 
-$featurific_version = '1.2.7';
+$featurific_version = '1.2.8';
 
 //Libraries
 include_once('featurific_db.php');
@@ -63,6 +63,7 @@ register_deactivation_hook( __FILE__, 'featurific_deactivate' );
 add_action('switch_theme', 'featurific_activate');
 add_action('admin_menu', 'featurific_add_pages');
 add_action('admin_notices', 'featurific_show_admin_messages');
+add_action('after_plugin_row', 'featurific_show_upgrade_notice');
 
 
 
@@ -160,6 +161,37 @@ function featurific_show_admin_messages() {
 	}
 	
 	update_option('featurific_admin_messages_to_show_once', array());
+}
+
+
+function featurific_show_upgrade_notice($plugin_path) {
+	//The next few lines were copied and modified from update.php's wp_plugin_update_row()
+	$current = get_option('update_plugins');
+	if(!isset($current->response[$plugin_path]) ||									//If an update for the plugin is not available
+			$plugin_path!='featurific-for-wordpress/featurific.php') {	//or we currently processing a plugin other than the Featurific for Wordpress plugin...			//TODO: Don't hard-code this path, generate it dynamically (there's no guarantee that the files will have these names - the user might move the plugin to another directory, for example, and this test would (inappropriately) fail.)
+		return;
+	}
+	
+	echo "
+	<tr>
+		<td colspan='5' class='plugin-update'>
+			<h3>Important Upgrade Notice</h3>
+			<div align='left'>
+				Auto-upgrading Featurific for Wordpress to the most recent version works flawlessly.  However, <strong>any changes
+				to your template files will be lost</strong> if you have:
+				<ul>
+					<li>Modified existing templates</li>
+					<li>Created new templates</li>
+					<li>Installed new templates</li>
+				</ul>
+				Essentially, if you have done anything custom to your templates and you auto-upgrade, your customized templates will
+				be lost.  <strong>Before upgrading, copy your	customized templates to a safe location (e.g. outside of the
+				featurific-for-wordpress directory), upgrade the plugin, and then copy your custom templates back into Featurific's
+				templates directory.</strong>  This will prevent your customized templates from being lost.
+			</div>
+		</td>
+	</tr>
+	";
 }
 
 
