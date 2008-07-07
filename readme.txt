@@ -121,11 +121,11 @@ generated upon plugin activation.
 
 Here are the steps:
 
-1. Change the *Featurific* template to one that does not correctly display Featurific.  This causes the data*.xml file to
+1. Change the *Featurific* template to one that does not correctly display Featurific.  This causes the data\*.xml file to
 be regenerated, but errors are unfortunately suppressed.
 
 1. With the nonfunctional template still selected, change your *Wordpress* theme to something other than your current
-theme.  This causes the data*.xml file to be regenerated, but this time, errors are reported.
+theme.  This causes the data\*.xml file to be regenerated, but this time, errors are reported.
 
 1. Finally, after you have viewed the errors (or verified that no errors are generated), you may of course revert
 your Featurific template and Wordpress theme to their original state.
@@ -270,7 +270,7 @@ To verify that you're using Flash 9, [visit the Flash Version Test Page](http://
 
 
 = I edited my template.xml file, but nothing happened.  What did I do wrong? =
-Featurific for Wordpress generates the data*.xml file every x minutes (e.g. 10 minutes by default).  The next time the data*.xml file is generated, your changes will be visible.  However, if you wish to see your changes more immediately, access the Featurific Settings page (Settings->Featurific), and hit the "Update Options" button at the bottom without changing any of your settings.  Doing so forces a regeneration of the data*.xml file, so you can see the result of your modifications immediately.
+Featurific for Wordpress generates the data\*.xml file every x minutes (e.g. 10 minutes by default).  The next time the data\*.xml file is generated, your changes will be visible.  However, if you wish to see your changes more immediately, access the Featurific Settings page (Settings->Featurific), and hit the "Update Options" button at the bottom without changing any of your settings.  Doing so forces a regeneration of the data\*.xml file, so you can see the result of your modifications immediately.
 
 
 = I hate the logo that appears in the corner all the time.  How can I get rid of it? =
