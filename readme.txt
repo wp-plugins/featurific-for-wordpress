@@ -276,6 +276,10 @@ To verify that you're using Flash 9, [visit the Flash Version Test Page](http://
 Featurific for Wordpress generates the data\*.xml file every x minutes (e.g. 10 minutes by default).  The next time the data\*.xml file is generated, your changes will be visible.  However, if you wish to see your changes more immediately, access the Featurific Settings page (Settings->Featurific), and hit the "Update Options" button at the bottom without changing any of your settings.  Doing so forces a regeneration of the data\*.xml file, so you can see the result of your modifications immediately.
 
 
+= I have purchased Featurific Pro.  How do I upgrade the plugin without reverting back to Featurific Free? =
+Wordpress' plugin auto-updater is great, but it could still use a bit of work.  When it auto-upgrades a plugin, it simply deletes the old plugin's directory reather than trying to merge the old and new directories into one.  This causes problems when we want to keep some of our old files and upgrade the rest.  In order to retain Featurific Pro through the upgrade, first copy Featurific Pro (FeaturificFree.swf in the featurific-for-wordpress directory) to a safe location that is either outside of the plugin directory or on your local system.  Next, auto-upgrade (or manually upgrade) the plugin.  Finally, restore your version of Featurific Pro (FeaturificFree.swf) to the featurific-for-wordpress directory.  At this point, the upgrade is complete and Featurific Pro should be installed.
+
+
 = I hate the logo that appears in the corner all the time.  How can I get rid of it? =
 To get rid of the "Powered by Featurific" logo, you're going to have to splurge for the commercial version of Featurific.
 [Visit the Featurific website](http://featurific.com) for details ([http://featurific.com](http://featurific.com)).
