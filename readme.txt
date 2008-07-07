@@ -264,6 +264,11 @@ likely be simplified in the future, but for the time being, the following log (p
 > I think there was another plugin I used a long time ago that required Exec-PHP but then the author got around it somehow and no longer required the use of this plugin. It would be great if in the future, you were able to develop the code to no longer require these two additional plugins. But for now it works. I've also left the code in the index.php so Featurific appears on my main page and my blog page. Pretty cool!
 
 
+= Featurific for Wordpress works fine in browser X but I can't get it to work right in browser Y.  What's up? =
+Featurific has been extensively tested to be compatible with a long list of web browsers.  Sometimes, on a given computer, it will work fine in one browser (e.g. Firefox), but not in another browser (e.g. Internet Explorer).  In most cases, the problem is with the Flash player and not the browser itself.  It is possible to have different versions of Flash installed in different browsers, even on the same computer.
+To verify that you're using Flash 9, [visit the Flash Version Test Page](http://kb.adobe.com/selfservice/viewContent.do?externalId=tn_15507) in the browser that is causing problems.  If you are not using Flash 9 in the problem browser (e.g. Internet Explorer in our example), [upgrade to the most recent Flash Player](http://www.adobe.com/shockwave/download/download.cgi?P1_Prod_Version=shockwaveFlash), and Featurific should work fine.
+
+
 = I hate the logo that appears in the corner all the time.  How can I get rid of it? =
 To get rid of the "Powered by Featurific" logo, you're going to have to splurge for the commercial version of Featurific.
 [Visit the Featurific website](http://featurific.com) for details ([http://featurific.com](http://featurific.com)).
