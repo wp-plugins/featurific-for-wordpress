@@ -162,7 +162,7 @@ Featurific has been successfully tested with Wordpress 2.3 to 2.5.1 on PHP4 and 
 2.3 seems to be limited, I'll post more information as it becomes available.
 
 
-= How do I move Featurific to another location on my page? =
+= How do I move Featurific to another location on my page? (aka How do I manually install Featurific?) =
 
 Many Featurific templates look better in a sidebar than in the main content area.  To move Featurific to the side bar or
 any other location, just edit your theme.  Featurific for Wordpress automatically inserts itself into your index.php or
@@ -267,6 +267,10 @@ likely be simplified in the future, but for the time being, the following log (p
 = Featurific for Wordpress works fine in browser X but I can't get it to work right in browser Y.  What's up? =
 Featurific has been extensively tested to be compatible with a long list of web browsers.  Sometimes, on a given computer, it will work fine in one browser (e.g. Firefox), but not in another browser (e.g. Internet Explorer).  In most cases, the problem is with the Flash player and not the browser itself.  It is possible to have different versions of Flash installed in different browsers, even on the same computer.
 To verify that you're using Flash 9, [visit the Flash Version Test Page](http://kb.adobe.com/selfservice/viewContent.do?externalId=tn_15507) in the browser that is causing problems.  If you are not using Flash 9 in the problem browser (e.g. Internet Explorer in our example), [upgrade to the most recent Flash Player](http://www.adobe.com/shockwave/download/download.cgi?P1_Prod_Version=shockwaveFlash), and Featurific should work fine.
+
+
+= I edited my template.xml file, but nothing happened.  What did I do wrong? =
+Featurific for Wordpress generates the data*.xml file every x minutes (e.g. 10 minutes by default).  The next time the data*.xml file is generated, your changes will be visible.  However, if you wish to see your changes more immediately, access the Featurific Settings page (Settings->Featurific), and hit the "Update Options" button at the bottom without changing any of your settings.  Doing so forces a regeneration of the data*.xml file, so you can see the result of your modifications immediately.
 
 
 = I hate the logo that appears in the corner all the time.  How can I get rid of it? =
