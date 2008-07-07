@@ -76,6 +76,9 @@ Ian Bethune of [Sox & Dawgs](http://soxanddawgs.com/)
 
 
 == Changelog ==
+**1.2.9 (7/7/08)**
+Added a bunch of text in various places to enhance usability.  Should not effect program execution.
+
 **1.2.8 (7/3/08)**
 Added an auto-upgrade warning to prevent users from overwriting changes/additions made to their templates upon auto-upgrading.
 

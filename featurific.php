@@ -34,11 +34,11 @@ displaying summaries of featured articles on the site.  Installation is
 automatic and easy, while advanced users can customize every element of the
 Flash slideshow presentation.
 Author: Rich Christiansen
-Version: 1.2.8
+Version: 1.2.9
 Author URI: http://endorkins.com/
 */
 
-$featurific_version = '1.2.8';
+$featurific_version = '1.2.9';
 
 //Libraries
 include_once('featurific_db.php');
@@ -86,6 +86,10 @@ if(!get_option('featurific_current_template_configured')) {
 							<li>Deactivate and re-activate Featurific for Wordpress, and installation will complete successfully if the main template file is in fact world-writable.</li>
 							<li><strong>Optional</strong>: If desired, revert your permissions back to normal. (chmod 644 for files, chmod 755 for directories)</li>
 						</ol>
+					</li>
+					<li>
+						<strong>Manually insert the Featurific code</strong>
+						Instead of modifying your permissions so that Featurific can install itself into your theme automatically, you have the option of installing Featurific manually.  For instructions on how to do so, <a href='http://featurific.com/ffw#movelocation'>visit the Featurific website</a>.
 					</li>
 				</ul>
 				<small>To get rid of this status message, either complete the steps listed above or disable the Featurific for Wordpress plugin.</small>
