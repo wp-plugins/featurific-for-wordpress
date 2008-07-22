@@ -76,7 +76,10 @@ Ian Bethune of [Sox & Dawgs](http://soxanddawgs.com/)
 
 
 == Changelog ==
-**1.3.1 (7/22/08)**
+**1.3.3 (7/22/08)**
+Fixed a bug introduced in 1.3.1 that caused funky post selection when using category filtering, as well as a bug in Popular Post selection.
+
+**1.3.2 (7/22/08)**
 Fixed a bug introduced in 1.3.1 that prevented images contained within the post from being parsed and included in Featurific.
 
 **1.3.1 (7/22/08)**

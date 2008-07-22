@@ -34,11 +34,11 @@ displaying summaries of featured articles on the site.  Installation is
 automatic and easy, while advanced users can customize every element of the
 Flash slideshow presentation.
 Author: Rich Christiansen
-Version: 1.3.2
+Version: 1.3.3
 Author URI: http://endorkins.com/
 */
 
-$featurific_version = '1.3.2';
+$featurific_version = '1.3.3';
 
 //Libraries
 include_once('featurific_db.php');
@@ -1005,7 +1005,7 @@ function featurific_options_page() {
 			}
     ?>
    </select><br />
-   The categories whose posts you want to include in post selection.  Select one or more categories (Ctrl-click (PC) or Command-click (Mac)) to restrict post selection to those categories.  Select zero categories to allow all posts to be selected regardless of category.
+   The categories whose posts you want to include in post selection.  Select one or more categories to restrict post selection to those categories.  Select zero categories to allow all posts to be selected regardless of category.  (Select/Deselect with Ctrl-click (PC) or Command-click (Mac))
   </td>
  </tr>
 
@@ -1484,7 +1484,7 @@ function featurific_get_posts($type, $cat_filter, $n, $post_list=null)
 	switch($type) {
 		case 'popular':
 			$days = get_option('featurific_popular_days');
-			$popular_posts = stats_get_csv('postviews', "days=$days&limit=$n");
+			$popular_posts = stats_get_csv('postviews', "days=$days&limit=0"); //Get all posts with stats over the last $days
 			
 			$post_list = '';
 			foreach ($popular_posts as $post) {
@@ -1494,7 +1494,7 @@ function featurific_get_posts($type, $cat_filter, $n, $post_list=null)
 				$post_list .= $post['post_id'];
 			}
 			
-			return featurific_get_posts('userspecified', $n, $post_list);
+			return featurific_get_posts('userspecified', $cat_filter, $n, $post_list);
 			break;
 
 			
@@ -1512,17 +1512,17 @@ function featurific_get_posts($type, $cat_filter, $n, $post_list=null)
 
 			$posts = get_posts(
 				array(
-					'numberposts' => $n
+					'numberposts' => 0 //Get all posts
 				)
 			);
-
+			
 			break;
 
 			
 		case 'commented':
 			$posts = get_posts(
 				array(
-					'numberposts' => $n,
+					'numberposts' => 0, //Get all posts
 					'orderby' => 'comment_count'
 				)
 			);
@@ -1532,8 +1532,8 @@ function featurific_get_posts($type, $cat_filter, $n, $post_list=null)
 		case 'userspecified':
 			$posts_tmp = get_posts(
 				array(
-					'numberposts' => $n,
-					'include' => $post_list
+					'numberposts' => 0, //Get all posts
+					'include' => $post_list //Only get posts within the comma-separated $post_list
 				)
 			);
 			
@@ -1572,6 +1572,10 @@ function featurific_get_posts($type, $cat_filter, $n, $post_list=null)
 	$posts_fixed = array();
 	if($posts!=null && sizeof($posts)>0 && is_object($posts[0])) {
 		foreach ($posts as $k => $v) {
+			
+			//Once we've stored the specified max number of posts, stop searching for more posts (break out of this loop)
+			if(sizeof($posts_fixed)==$n)
+				break;
 
 			//Copy the post to $posts_fixed if it belongs to a category specified in $cat_filter OR if category filtering is disabled
 			$post_categories = wp_get_post_categories($v->ID);
