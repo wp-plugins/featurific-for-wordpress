@@ -77,6 +77,9 @@ Ian Bethune of [Sox & Dawgs](http://soxanddawgs.com/)
 
 == Changelog ==
 **1.3.1 (7/22/08)**
+Fixed a bug introduced in 1.3.1 that prevented images contained within the post from being parsed and included in Featurific.
+
+**1.3.1 (7/22/08)**
 Added a call to do_shortcode() to convert shortcodes (e.g. [caption id="" caption="whatever"]) into their resulting HTML (which is then converted to text and displayed in Featurific)
 
 **1.3.0 (7/21/08)**
