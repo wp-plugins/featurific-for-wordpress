@@ -34,11 +34,11 @@ displaying summaries of featured articles on the site.  Installation is
 automatic and easy, while advanced users can customize every element of the
 Flash slideshow presentation.
 Author: Rich Christiansen
-Version: 1.3.0
+Version: 1.3.1
 Author URI: http://endorkins.com/
 */
 
-$featurific_version = '1.3.0';
+$featurific_version = '1.3.1';
 
 //Libraries
 include_once('featurific_db.php');
@@ -1714,6 +1714,20 @@ function featurific_get_posts_tweak(&$posts) {
 			$posts[$post_id]["post_modified_date_$dc"] = date($dc, $date);		
 
 
+		$posts[$post_id]['post_content'] = $post['post_content'];
+		//Process any shortcodes, converting them into their resulting HTML.
+		if(function_exists('do_shortcode'))
+			$posts[$post_id]['post_content'] = do_shortcode($posts[$post_id]['post_content']);
+
+
+		//Fix up the post content for plaintext display.
+		$posts[$post_id]['post_content'] =
+			featurific_html_to_text(					//Convert the HTML to text
+				str_replace("\xC2\xA0", '',			//The wordpress editor seems to put the chars "\xC2\xA0" into our content (perhaps at newlines?).  Remove these extra characters before converting to plain text.
+					$posts[$post_id]['post_content']
+				)
+			);
+
 		//Find images in the post content's HTML and prepare the images and $posts[$post_id] so the images can be accessed in the template.
 		$web_root = get_option('siteurl'); //e.g. 'http://mysite.com/wordpress' (provided wordpress was installed at public_html/wordpress)
 		$images = featurific_parse_images_from_html($posts[$post_id]['post_content']);
@@ -1784,15 +1798,6 @@ function featurific_get_posts_tweak(&$posts) {
 			
 			$image_number++;
 		}
-
-		
-		//Fix up the post content for plaintext display.
-		$posts[$post_id]['post_content'] =
-			featurific_html_to_text(					//Convert the HTML to text
-				str_replace("\xC2\xA0", '',			//The wordpress editor seems to put the chars "\xC2\xA0" into our content (perhaps at newlines?).  Remove these extra characters before converting to plain text.
-					$post['post_content']
-				)
-			);
 					
 		
 		//If the post doesn't have a post_excerpt, then create one.
