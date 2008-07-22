@@ -34,11 +34,11 @@ displaying summaries of featured articles on the site.  Installation is
 automatic and easy, while advanced users can customize every element of the
 Flash slideshow presentation.
 Author: Rich Christiansen
-Version: 1.2.9
+Version: 1.3.0
 Author URI: http://endorkins.com/
 */
 
-$featurific_version = '1.2.9';
+$featurific_version = '1.3.0';
 
 //Libraries
 include_once('featurific_db.php');
@@ -176,10 +176,12 @@ function featurific_show_upgrade_notice($plugin_path) {
 		return;
 	}
 	
+	//$upgrade_url = wp_nonce_url("update.php?action=upgrade-plugin&plugin=$plugin_path", 'upgrade-plugin_' . $plugin_path); //auto-upgrade url
+
 	echo "
 	<tr>
 		<td colspan='5' class='plugin-update'>
-			<h3>Important Upgrade Notice</h3>
+			<h3>New Version Available - Important Upgrade Notice</h3>
 			<div align='left'>
 				Auto-upgrading Featurific for Wordpress to the most recent version works flawlessly.  However, <strong>any changes
 				to your template files will be lost</strong> if you have:
@@ -193,6 +195,7 @@ function featurific_show_upgrade_notice($plugin_path) {
 				featurific-for-wordpress directory), upgrade the plugin, and then copy your custom templates back into Featurific's
 				templates directory.</strong>  This will prevent your customized templates from being lost.
 			</div>
+			<h3>Upgrade Options:</h3>
 		</td>
 	</tr>
 	";
@@ -349,6 +352,7 @@ function featurific_configure_template($template_path)
 	}
 
 
+
 	//1. Find the first instance of 'have_posts()' in the template.
 	$pos = strpos($fb, 'have_posts()');
 	if($pos===false) return featurific_configure_template_error("Template file ($template_path) does not contain 'have_posts()'.");
@@ -408,6 +412,7 @@ function featurific_configure_template($template_path)
  */
 function featurific_configure_template_error($error) {
 	//echo "Featurific for Wordpress error: $error  For Featurific for Wordpress to function correctly, you need to manually add '&lt;?php insert_featurific(); ?&gt;' to your template file at the desired location.<br/>";
+	featurific_show_admin_message_once($error);
 	return false;
 }
 
@@ -528,6 +533,8 @@ HTML;
 function get_home_template_of_theme($theme) {
 	$template = '';
 
+	//Put index.php if statement before the home.php statement - if both index.php and home.php exist, we want to use home.php.  (From experience, it seems that if both files exist, home.html is more likely to be the actual main template.)
+	//TODO: A better solution might be to just insert Featurific into *both* index.php and home.php.
 	if ( file_exists(ABSPATH . $theme['Template Dir'] . "/home.php") )
 		$template = ABSPATH . $theme['Template Dir'] . "/home.php";
 	elseif ( file_exists(ABSPATH . $theme['Template Dir'] . "/index.php") )
@@ -708,6 +715,7 @@ function featurific_delete_options() {
 	delete_option('featurific_width');
 	delete_option('featurific_height');
 	delete_option('featurific_type');
+	delete_option('featurific_category_filter');
 	delete_option('featurific_user_specified_posts');
 	delete_option('featurific_generation_frequency');
 	delete_option('featurific_data_xml_override');
@@ -736,6 +744,7 @@ function featurific_set_default_options() {
 	if(get_option('featurific_width')===false)								add_option('featurific_width', 0);
 	if(get_option('featurific_height')===false)								add_option('featurific_height', 0);
 	if(get_option('featurific_type')===false)									add_option('featurific_type', 'commented');
+	if(get_option('featurific_category_filter')===false)			add_option('featurific_category_filter', array());
 	if(get_option('featurific_user_specified_posts')===false)	add_option('featurific_user_specified_posts', '');
 	if(get_option('featurific_generation_frequency')===false)	add_option('featurific_generation_frequency', 10);
 	if(get_option('featurific_data_xml_override')===false)		add_option('featurific_data_xml_override', '');
@@ -803,6 +812,7 @@ function featurific_options_page() {
 	$width_opt_name = 'featurific_width';
 	$height_opt_name = 'featurific_height';
 	$type_opt_name = 'featurific_type';
+	$category_filter_opt_name = 'featurific_category_filter';
 	$user_specified_posts_opt_name = 'featurific_user_specified_posts';
 	$frequency_opt_name = 'featurific_generation_frequency';
 	$data_xml_override_opt_name = 'featurific_data_xml_override';
@@ -819,6 +829,7 @@ function featurific_options_page() {
 	$width_opt_val = get_option($width_opt_name);
 	$height_opt_val = get_option($height_opt_name);
 	$type_opt_val = get_option($type_opt_name);
+	$category_filter_val = get_option($category_filter_opt_name);
 	$user_specified_posts_opt_val = get_option($user_specified_posts_opt_name);
 	$frequency_opt_val = get_option($frequency_opt_name);
 	$data_xml_override_opt_val = get_option($data_xml_override_opt_name);
@@ -838,6 +849,7 @@ function featurific_options_page() {
 		//$width_opt_val = $_POST[$width_opt_name];
 		//$height_opt_val = $_POST[$height_opt_name];
 		$type_opt_val = $_POST[$type_opt_name];
+		$category_filter_val = $_POST[$category_filter_opt_name];
 		$user_specified_posts_opt_val = $_POST[$user_specified_posts_opt_name];
 
 		//Make sure there's a valid value in the frequency field.  If not, we just insert our own valid value.
@@ -876,6 +888,7 @@ function featurific_options_page() {
 		update_option($width_opt_name, $width_opt_val);
 		update_option($height_opt_name, $height_opt_val);
 		update_option($type_opt_name, $type_opt_val);
+		update_option($category_filter_opt_name, $category_filter_val);
 		update_option($user_specified_posts_opt_name, $user_specified_posts_opt_val);
 		update_option($frequency_opt_name, $frequency_opt_val);
 		update_option($data_xml_override_opt_name, $data_xml_override_opt_val);
@@ -967,6 +980,32 @@ function featurific_options_page() {
    <input type="radio" name="<?php echo $type_opt_name; ?>" value='recent' <?php if($type_opt_val=='recent') { echo 'checked'; } ?>> Most recent posts<br/>
    <input type="radio" name="<?php echo $type_opt_name; ?>" value='userspecified' <?php if($type_opt_val=='userspecified') { echo 'checked'; } ?>> User-specified posts: <input type="text" name="<?php echo $user_specified_posts_opt_name; ?>" value="<?php echo $user_specified_posts_opt_val; ?>" size="35"> (comma separated - e.g. "4, 1, 16, 5")<br/>
    <!--This field is only used if  '<code>User-specified posts</code>' is selected as the <code>Post Selection</code>.-->
+  </td>
+ </tr>
+
+ <tr valign="top">
+  <th scope="row">Category Filter:</th>
+  <td>
+   <select style="height: auto;" name="<?php echo $category_filter_opt_name; ?>[]" multiple="multiple"> 
+    <?php 
+			$categories =  get_categories(array('hide_empty' => false));
+			if($categories!=null) {
+				foreach ($categories as $cat) {
+					if(in_array($cat->cat_ID, $category_filter_val))
+						$selected = 'selected="selected"';
+					else
+						$selected = '';
+
+					$option = '<option value="'.$cat->cat_ID.'" '.$selected.'>';
+					$option .= $cat->cat_name;
+					$option .= ' ('.$cat->category_count.')';
+					$option .= '</option>';
+					echo $option;
+				}
+			}
+    ?>
+   </select><br />
+   The categories whose posts you want to include in post selection.  Select one or more categories (Ctrl-click (PC) or Command-click (Mac)) to restrict post selection to those categories.  Select zero categories to allow all posts to be selected regardless of category.
   </td>
  </tr>
 
@@ -1147,6 +1186,7 @@ function featurific_generate_data_xml($output_filename) {
 	
 	$posts = featurific_get_posts(
 		get_option('featurific_type'),
+		get_option('featurific_category_filter'),
 		get_option('featurific_num_posts'),
 		get_option('featurific_user_specified_posts')
 	);
@@ -1439,7 +1479,7 @@ function featurific_get_template_screen_elements($template_xml) {
  * Get an array of $n posts according to the post selection type ($type) and
  * (if 'userspecified' is chosen) $post_list.
  */
-function featurific_get_posts($type, $n, $post_list=null)
+function featurific_get_posts($type, $cat_filter, $n, $post_list=null)
 {
 	switch($type) {
 		case 'popular':
@@ -1522,12 +1562,22 @@ function featurific_get_posts($type, $n, $post_list=null)
 			break;
 	}
 	
+	if($cat_filter==null || sizeof($cat_filter)<1)
+		$do_category_filter = false;
+	else
+		$do_category_filter = true;
+		
 	//Convert get_posts()'s returned array of objects to an array of arrays to make the data easier to work with.
 	//Also, re-index the posts so they can be accessed by their post id.  Note that given PHP's arrays, this still retains the order of the posts in the new $posts_fixed array - they will be in the same order as we insert them, not in order according to their numeric keys (post id)
 	$posts_fixed = array();
 	if($posts!=null && sizeof($posts)>0 && is_object($posts[0])) {
-		foreach ($posts as $k => $v)
-			$posts_fixed[$v->ID] = (array) $v;
+		foreach ($posts as $k => $v) {
+
+			//Copy the post to $posts_fixed if it belongs to a category specified in $cat_filter OR if category filtering is disabled
+			$post_categories = wp_get_post_categories($v->ID);
+			if(!$do_category_filter || ($do_category_filter && sizeof(array_intersect($cat_filter, $post_categories))>0))
+				$posts_fixed[$v->ID] = (array) $v;
+		}
 	}
 	
 	featurific_get_posts_categories($posts_fixed);	//Add categories

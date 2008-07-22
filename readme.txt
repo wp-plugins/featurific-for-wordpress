@@ -76,6 +76,9 @@ Ian Bethune of [Sox & Dawgs](http://soxanddawgs.com/)
 
 
 == Changelog ==
+**1.3.0 (7/21/08)**
+Added support for category filtering.  Also made some minor improvements in error reporting.
+
 **1.2.9 (7/7/08)**
 Added a bunch of text in various places to enhance usability.  Should not effect program execution.
 
