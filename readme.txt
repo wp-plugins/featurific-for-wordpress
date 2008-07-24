@@ -49,18 +49,15 @@ For basic configuration:
 Once you get Featurific for Wordpress installed, please email me and I'll add you to this list of demo sites.
 (Hey, free traffic! :) ) (rich at [please don't spam me] byu period net)
 
-[Sox & Dawgs](http://soxanddawgs.com/) |
 [Endorkins](http://endorkins.com/) |
 [Passion for Poetry](http://p4poetry.com/) |
-[Esperto Seo](http://www.espertoseo.it) |
 [Bigg Success](http://biggsuccess.com) |
 [Life Magick](http://www.lifemagick.net/) |
 [Teknoblog](http://www.teknoblog.com/) |
 [West Ham United](http://www.westhampoland.com) |
-[The Couch Potato](http://myblogisonfire.com/couchpotato/) |
 [Alofoke Music](http://alofokemusic.net/v2) |
-[GameAttic.com](http://gameattic.com/) |
-[The GPS Times](http://thegpstimes.com)
+[The GPS Times](http://thegpstimes.com) |
+[Sox & Dawgs](http://soxanddawgs.com/)
 
 
 
@@ -73,9 +70,14 @@ Edward Prislac of [Semper Fried](http://www.semperfried.com/)
 
 Ian Bethune of [Sox & Dawgs](http://soxanddawgs.com/)
 
+Sax Hammer of [Ultragreek News](http://news.ultragreek.com/)
+
 
 
 == Changelog ==
+**1.3.4 (7/24/08)**
+Fixed a bug introduced in 1.3.1 that caused the Recent Post selection type to return fewer posts than requested, even if more posts were available.  Also fixed a bug introduced by Wordpress 2.6-ish (get_theme(..)["Template Dir"] no longer contains the string 'wp-content') that caused the automatic insertion algorithm to fail when changing templates.  Finally, modified the HTML used to embed FeaturificFree.swf so that it is valid XHTML 1.0 Transitional.
+
 **1.3.3 (7/22/08)**
 Fixed a bug introduced in 1.3.1 that caused funky post selection when using category filtering, as well as a bug in Popular Post selection.
 

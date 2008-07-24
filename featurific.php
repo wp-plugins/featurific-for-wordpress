@@ -34,11 +34,12 @@ displaying summaries of featured articles on the site.  Installation is
 automatic and easy, while advanced users can customize every element of the
 Flash slideshow presentation.
 Author: Rich Christiansen
-Version: 1.3.3
+Version: 1.3.4
 Author URI: http://endorkins.com/
 */
 
-$featurific_version = '1.3.3';
+define('FEATURIFIC_VERSION', '1.3.4');
+define('FEATURIFIC_MAX_INT', defined('PHP_INT_MAX') ? PHP_INT_MAX : 32767);
 
 //Libraries
 include_once('featurific_db.php');
@@ -226,8 +227,6 @@ function featurific_activate($template)
 		$template_path = get_home_template();
 	}
 		
-	//echo('$template_path:'.$template_path.'<br/>');
-	
 	//Force XML generation
 	featurific_do_cron(true);
 
@@ -451,8 +450,6 @@ function featurific_insert() {
  * what we use here.
  */
 function insert_featurific() {
-	global $featurific_version;
-	
 	//Plugin is active and we're on the home page - prepare and insert the HTML.
 	featurific_do_cron();
 	$web_root = featurific_get_plugin_web_root();
@@ -475,9 +472,11 @@ function insert_featurific() {
 		}
 	}
 	
+	$version = FEATURIFIC_VERSION;
+	
 	$html = <<<HTML
-		<center><!-- Begin Featurific Flash Gallery (version {$featurific_version}) - featurific.com -->
-		<script type="text/javascript" src="{$web_root}featurific.js"></script><div id="swfDiv" name="swfDiv" wmode="transparent">
+		<center><!-- Begin Featurific Flash Gallery (version {$version}) - featurific.com -->
+		<script type="text/javascript" src="{$web_root}featurific.js"></script><div id="swfDiv">
 		<script type="text/javascript">
 		// <![CDATA[
 		fo = new SWFObject("{$web_root}FeaturificFree.swf?&lzproxied=false", "lzapp", "$width", "$height", "6", "#FF6600");
@@ -533,12 +532,18 @@ HTML;
 function get_home_template_of_theme($theme) {
 	$template = '';
 
-	//Put index.php if statement before the home.php statement - if both index.php and home.php exist, we want to use home.php.  (From experience, it seems that if both files exist, home.html is more likely to be the actual main template.)
+	//Wordpress 2.6ish changed the format of $theme['Template Dir'], removing the preceding 'wp-content' from the values typically returned in the field.  So, we need to detect to see if 'wp-content' is present, and if not, add it to our $template.
+	if(strpos($theme['Template Dir'], 'wp-content')!==0)
+		$wp_content = 'wp-content';
+	else
+		$wp_content = '';
+		
+	//Put home.php if statement before the index.php statement - if both index.php and home.php exist, we want to use home.php.  (From experience, it seems that if both files exist, home.php is more likely to be the actual main template.)
 	//TODO: A better solution might be to just insert Featurific into *both* index.php and home.php.
-	if ( file_exists(ABSPATH . $theme['Template Dir'] . "/home.php") )
-		$template = ABSPATH . $theme['Template Dir'] . "/home.php";
-	elseif ( file_exists(ABSPATH . $theme['Template Dir'] . "/index.php") )
-		$template = ABSPATH . $theme['Template Dir'] . "/index.php";
+	if(file_exists(ABSPATH . $wp_content . $theme['Template Dir'] . "/home.php"))
+		$template = ABSPATH . $wp_content . $theme['Template Dir'] . "/home.php";
+	elseif(file_exists(ABSPATH . $wp_content . $theme['Template Dir'] . "/index.php"))
+		$template = ABSPATH . $wp_content . $theme['Template Dir'] . "/index.php";
 
 	return apply_filters('home_template', $template);
 }
@@ -1512,7 +1517,8 @@ function featurific_get_posts($type, $cat_filter, $n, $post_list=null)
 
 			$posts = get_posts(
 				array(
-					'numberposts' => 0 //Get all posts
+					'numberposts' => FEATURIFIC_MAX_INT, //Get all posts.  We initially just used 0 (zero) here, which seemed to return all posts, but this didn't work on some installations.  My suspicion is that another plugin was interfering.  Regardless, this is a sufficient solution for now.
+					'orderby' => 'post_date'
 				)
 			);
 			
@@ -1522,7 +1528,7 @@ function featurific_get_posts($type, $cat_filter, $n, $post_list=null)
 		case 'commented':
 			$posts = get_posts(
 				array(
-					'numberposts' => 0, //Get all posts
+					'numberposts' => FEATURIFIC_MAX_INT,
 					'orderby' => 'comment_count'
 				)
 			);
@@ -1532,7 +1538,7 @@ function featurific_get_posts($type, $cat_filter, $n, $post_list=null)
 		case 'userspecified':
 			$posts_tmp = get_posts(
 				array(
-					'numberposts' => 0, //Get all posts
+					'numberposts' => FEATURIFIC_MAX_INT,
 					'include' => $post_list //Only get posts within the comma-separated $post_list
 				)
 			);
@@ -1562,6 +1568,8 @@ function featurific_get_posts($type, $cat_filter, $n, $post_list=null)
 			break;
 	}
 	
+	//echo 'Initial post selection yielded '.sizeof($posts).' posts.<br/>';
+	
 	if($cat_filter==null || sizeof($cat_filter)<1)
 		$do_category_filter = false;
 	else
@@ -1584,6 +1592,8 @@ function featurific_get_posts($type, $cat_filter, $n, $post_list=null)
 		}
 	}
 	
+	//echo 'Final post selection yielded '.sizeof($posts_fixed).' posts.<br/>';
+
 	featurific_get_posts_categories($posts_fixed);	//Add categories
 	featurific_get_posts_tags($posts_fixed);				//Add tags
 	featurific_get_posts_meta($posts_fixed);				//Add custom fields
