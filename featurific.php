@@ -34,11 +34,11 @@ displaying summaries of featured articles on the site.  Installation is
 automatic and easy, while advanced users can customize every element of the
 Flash slideshow presentation.
 Author: Rich Christiansen
-Version: 1.3.4
+Version: 1.3.5
 Author URI: http://endorkins.com/
 */
 
-define('FEATURIFIC_VERSION', '1.3.4');
+define('FEATURIFIC_VERSION', '1.3.5');
 define('FEATURIFIC_MAX_INT', defined('PHP_INT_MAX') ? PHP_INT_MAX : 32767);
 
 //Libraries
@@ -1762,8 +1762,8 @@ function featurific_get_posts_tweak(&$posts) {
 			if($posts[$post_id]['image_'.$image_number]!=null)
 				$image = $posts[$post_id]['image_'.$image_number];
 			
-			//If the image is on the same domain, we can access it from Flash 9 directly.
-			if(strpos($image, $web_root)===0)
+			//If the image is on the same domain (absolute path or relative path), we can access it from Flash 9 directly.
+			if(strpos($image, $web_root)===0 || $image[0]=='/' || $image[0]=='\\')
 				$image_url = $image;
 			//If the image is on a different domain, we can't access it from Flash 9 directly, so we've got to load it by proxy (save locally via PHP).
 			else {
@@ -1834,7 +1834,7 @@ function featurific_get_posts_tweak(&$posts) {
 
 		//Etc
 		$posts[$post_id]['nickname'] = get_usermeta($post['post_author'], 'nickname');
-		$posts[$post_id]['url'] = $post['guid'];
+		$posts[$post_id]['url'] = apply_filters('the_permalink', get_permalink($post_id)); //Instead of using $post['guid'], this method (copied from link-template.php's the_permalink()) generates functional URLs even if the blog is moved to a new directory/domain/etc.
 		$posts[$post_id]['screen_duration'] = get_option('featurific_screen_duration');
 		$posts[$post_id]['screen_number'] = $screen_number;
 		

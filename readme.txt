@@ -1,9 +1,8 @@
 === Featurific For Wordpress ===
 Contributors: rinogo
-Donate link: http://featurific.com/
 Tags: slideshow, slide, show, gallery, flash, xml, dynamic, conversion, funnel, Post, posts, sidebar, images, links, photo, photos, statistics, stats, swf, plugin, admin
 Requires at least: 2.3
-Tested up to: 2.5
+Tested up to: 2.6
 Stable tag: trunk
 
 An effortless but powerful interface to Featurific Free, the featured story slideshow.  (Similar to the 'featured'
@@ -57,7 +56,9 @@ Once you get Featurific for Wordpress installed, please email me and I'll add yo
 [West Ham United](http://www.westhampoland.com) |
 [Alofoke Music](http://alofokemusic.net/v2) |
 [The GPS Times](http://thegpstimes.com) |
-[Sox & Dawgs](http://soxanddawgs.com/)
+[Sox & Dawgs](http://soxanddawgs.com/) |
+[The Hoop Doctors](http://thehoopdoctors.com/online/) |
+[Michael Aulia](http://www.michaelaulia.com/blogs/)
 
 
 
@@ -75,6 +76,9 @@ Sax Hammer of [Ultragreek News](http://news.ultragreek.com/)
 
 
 == Changelog ==
+**1.3.5 (7/28/08)**
+Fixed a bug that caused the plugin to use incorrect URLs in slideshow generation when the blog had been moved from one location (e.g. myblog.com/wordpress) to another location (e.g. myblog.com).  (A method leveraging the_permalink() is now used rather than using $post['guid']).  Also fixed a bug that caused images referenced via a relative URL to not be processed/included correctly in the slideshow.
+
 **1.3.4 (7/24/08)**
 Fixed a bug introduced in 1.3.1 that caused the Recent Post selection type to return fewer posts than requested, even if more posts were available.  Also fixed a bug introduced by Wordpress 2.6-ish (get_theme(..)["Template Dir"] no longer contains the string 'wp-content') that caused the automatic insertion algorithm to fail when changing templates.  Finally, modified the HTML used to embed FeaturificFree.swf so that it is valid XHTML 1.0 Transitional.
 
