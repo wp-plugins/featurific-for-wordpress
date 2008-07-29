@@ -67,7 +67,7 @@ Once you get Featurific for Wordpress installed, please email me and I'll add yo
 == Testers and Debuggers ==
 Muchas gracias to the following individuals for their help with testing and debugging Featurific for Wordress:
 
-Edward Prislac of [Semper Fried](http://www.semperfried.com/)
+Edward Prislac of [Fit to be Fried](http://www.semperfried.com/)
 
 Ian Bethune of [Sox & Dawgs](http://soxanddawgs.com/)
 
@@ -288,6 +288,10 @@ likely be simplified in the future, but for the time being, the following log (p
 = Featurific for Wordpress works fine in browser X but I can't get it to work right in browser Y.  What's up? =
 Featurific has been extensively tested to be compatible with a long list of web browsers.  Sometimes, on a given computer, it will work fine in one browser (e.g. Firefox), but not in another browser (e.g. Internet Explorer).  In most cases, the problem is with the Flash player and not the browser itself.  It is possible to have different versions of Flash installed in different browsers, even on the same computer.
 To verify that you're using Flash 9, [visit the Flash Version Test Page](http://kb.adobe.com/selfservice/viewContent.do?externalId=tn_15507) in the browser that is causing problems.  If you are not using Flash 9 in the problem browser (e.g. Internet Explorer in our example), [upgrade to the most recent Flash Player](http://www.adobe.com/shockwave/download/download.cgi?P1_Prod_Version=shockwaveFlash), and Featurific should work fine.
+
+
+= How do I modify the post excerpt, post time, images, or any other fields for a given post? =
+When generating the data\*.xml file, Featurific for Wordpress automatically replaces tags from the template (e.g. %post_excerpt%) with the corresponding value from the post. However, sometimes the automatically generated value is not what is desired. For example, if your post has an image with a caption at the beginning of the post, the caption will likely be included in the %post_excerpt%. Also, the first-appearing image in the post will be parsed and used as %image_1% in the Featurific template. If the automatically generated %post_excerpt%, %image_1%, or any other tag is not populated as you desire, you can use custom fields to override the default values. If, for example, you wish to provide a manually created post excerpt, simply create a custom field with the name of the tag ('post_excerpt' (note that the '%' marks are not used here)). Enter your custom post excerpt as the value for this field. When the data\*.xml is generated, your manual post_excerpt field overrides the automatically generated value, and the resulting slideshow displays as desired. (Note that you can also use custom fields to define a custom tag, (e.g. my_tag (no '%' marks)). The value of the custom field will then be substituted into your template.xml file wherever the tag (e.g. %my_tag% (with '%' marks)) is present.)
 
 
 = I edited my template.xml file, but nothing happened.  What did I do wrong? =
