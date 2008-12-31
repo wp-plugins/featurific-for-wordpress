@@ -34,12 +34,16 @@ displaying summaries of featured articles on the site.  Installation is
 automatic and easy, while advanced users can customize every element of the
 Flash slideshow presentation.
 Author: Rich Christiansen
-Version: 1.3.5
+Version: 1.4.4
 Author URI: http://endorkins.com/
 */
 
-define('FEATURIFIC_VERSION', '1.3.5');
+//Constants
+define('FEATURIFIC_VERSION', '1.4.4');
 define('FEATURIFIC_MAX_INT', defined('PHP_INT_MAX') ? PHP_INT_MAX : 32767);
+define('FEATURIFIC_STORE_UNDEFINED', false);
+define('FEATURIFIC_STORE_IN_DB', 1);
+define('FEATURIFIC_STORE_ON_FILESYSTEM', 2);
 
 //Libraries
 include_once('featurific_db.php');
@@ -207,7 +211,7 @@ function featurific_show_upgrade_notice($plugin_path) {
  * Activate featurific.
  *
  * Attempt to automatically add a call to insert_featurific() in the user's
- * home template.
+ * home template, as well as performing other activation tasks.
  */
 function featurific_activate($template)
 {
@@ -282,13 +286,12 @@ function featurific_test_plugin_root_write_access() {
 		fclose($f);
 		unlink($path);
 		update_option('featurific_root_write_access', true);
-		update_option('featurific_store_data_xml_in_db', false);
 	}
 	//Failure
 	else {
 		//echo 'failure<br/>';
 		update_option('featurific_root_write_access', false);
-		update_option('featurific_store_data_xml_in_db', true);
+		update_option('featurific_store_data_xml', FEATURIFIC_STORE_IN_DB); //If we don't have root write access, force the data.xml to be stored in the DB.
 	}
 }
 
@@ -308,13 +311,12 @@ function featurific_test_image_cache_write_access() {
 		fclose($f);
 		unlink($path);
 		update_option('featurific_image_cache_write_access', true);
-		update_option('featurific_store_cached_images_in_db', false);
 	}
 	//Failure
 	else {
 		//echo 'failure<br/>';
 		update_option('featurific_image_cache_write_access', false);
-		update_option('featurific_store_cached_images_in_db', true);
+		update_option('featurific_store_cached_images', FEATURIFIC_STORE_IN_DB); //If we don't have image cache write access, force the the images to be stored in the DB.
 	}
 }
 
@@ -462,20 +464,24 @@ function insert_featurific() {
 		$data_xml_filename = $data_xml_override;
 	//Don't use the data.xml override
 	else {
-		//Serve up the XML dynamically from the DB
-		if(get_option('featurific_store_data_xml_in_db')) {
-			$data_xml_filename = 'data_xml.php';
-		}
-		//Serve up the XML via the web server from a previously generated flat file
-		else {
-			$data_xml_filename = get_option('featurific_data_xml_filename');
+		switch(get_option('featurific_store_data_xml')) {
+			case FEATURIFIC_STORE_ON_FILESYSTEM:
+				//Serve up the XML via the web server from a previously generated flat file
+				$data_xml_filename = get_option('featurific_data_xml_filename');
+				break;
+				
+			case FEATURIFIC_STORE_IN_DB:
+			default:
+				//Serve up the XML dynamically from the DB
+				$data_xml_filename = 'data_xml.php';
+				break;
 		}
 	}
 	
 	$version = FEATURIFIC_VERSION;
 	
 	$html = <<<HTML
-		<center><!-- Begin Featurific Flash Gallery (version {$version}) - featurific.com -->
+		<center><!-- Begin Featurific Flash Gallery (version {$version}) - http://featurific.com -->
 		<script type="text/javascript" src="{$web_root}featurific.js"></script><div id="swfDiv">
 		<script type="text/javascript">
 		// <![CDATA[
@@ -486,6 +492,7 @@ function insert_featurific() {
 		fo.addParam("allowScriptAccess", "always");
 		fo.addVariable("xml_location", "{$web_root}{$data_xml_filename}");
 		fo.write("swfDiv");
+		// End JS for http://featurific.com
 		// ]]>
 		</script></div>
 		<!-- End Featurific --></center>
@@ -619,6 +626,7 @@ function featurific_parse_images_from_html($html) {
 	$images = array();
 	$parser = new HtmlParser($html);
 
+	//echo "Working on ***$html***<br/>";
 	while ($parser->parse()) {
 		if($parser->iNodeType==NODE_TYPE_ELEMENT && strtolower($parser->iNodeName)=='img') {
 			$src = $parser->iNodeAttributes['src'];
@@ -729,6 +737,8 @@ function featurific_delete_options() {
 	delete_option('featurific_popular_days');
 	delete_option('featurific_auto_excerpt_length');
 	delete_option('featurific_screen_duration');
+	delete_option('featurific_store_data_xml');
+	delete_option('featurific_store_cached_images');
 	
 	//Internal options
 	delete_option('featurific_last_generation_time');
@@ -745,19 +755,21 @@ function featurific_delete_options() {
  */
 function featurific_set_default_options() {
 	//User-specified options
-	if(get_option('featurific_screen_assignment')===false)		add_option('featurific_screen_assignment', 'random');
-	if(get_option('featurific_width')===false)								add_option('featurific_width', 0);
-	if(get_option('featurific_height')===false)								add_option('featurific_height', 0);
-	if(get_option('featurific_type')===false)									add_option('featurific_type', 'commented');
-	if(get_option('featurific_category_filter')===false)			add_option('featurific_category_filter', array());
-	if(get_option('featurific_user_specified_posts')===false)	add_option('featurific_user_specified_posts', '');
-	if(get_option('featurific_generation_frequency')===false)	add_option('featurific_generation_frequency', 10);
-	if(get_option('featurific_data_xml_override')===false)		add_option('featurific_data_xml_override', '');
-	if(get_option('featurific_template')===false)							add_option('featurific_template', 'Thumber Abstract/template.xml');
-	if(get_option('featurific_num_posts')===false)						add_option('featurific_num_posts', 5);
-	if(get_option('featurific_popular_days')===false)					add_option('featurific_popular_days', 90);
-	if(get_option('featurific_auto_excerpt_length')===false)	add_option('featurific_auto_excerpt_length', 150);
-	if(get_option('featurific_screen_duration')===false)			add_option('featurific_screen_duration', 7000);
+	if(get_option('featurific_screen_assignment')===false)			add_option('featurific_screen_assignment', 'random');
+	if(get_option('featurific_width')===false)									add_option('featurific_width', 0);
+	if(get_option('featurific_height')===false)									add_option('featurific_height', 0);
+	if(get_option('featurific_type')===false)										add_option('featurific_type', 'commented');
+	if(get_option('featurific_category_filter')===false)				add_option('featurific_category_filter', array());
+	if(get_option('featurific_user_specified_posts')===false)		add_option('featurific_user_specified_posts', '');
+	if(get_option('featurific_generation_frequency')===false)		add_option('featurific_generation_frequency', 10);
+	if(get_option('featurific_data_xml_override')===false)			add_option('featurific_data_xml_override', '');
+	if(get_option('featurific_template')===false)								add_option('featurific_template', 'Thumber Abstract/template.xml');
+	if(get_option('featurific_num_posts')===false)							add_option('featurific_num_posts', 5);
+	if(get_option('featurific_popular_days')===false)						add_option('featurific_popular_days', 90);
+	if(get_option('featurific_auto_excerpt_length')===false)		add_option('featurific_auto_excerpt_length', 150);
+	if(get_option('featurific_screen_duration')===false)				add_option('featurific_screen_duration', 7000);
+	if(get_option('featurific_store_data_xml')===false)					add_option('featurific_store_data_xml', FEATURIFIC_STORE_IN_DB); //We can't use true/false to indicate whether or not to store the data.xml in the database, because false also means that the option is undefined.  So, we use an int (and constants defined at the beginning of this file).
+	if(get_option('featurific_store_cached_images')===false)		add_option('featurific_store_cached_images', FEATURIFIC_STORE_IN_DB); //We can't use true/false to indicate whether or not to store the data.xml in the database, because false also means that the option is undefined.  So, we use an int (and constants defined at the beginning of this file).
 
 	//Internal options
 	if(get_option('featurific_last_generation_time')===false)					add_option('featurific_last_generation_time', 0);
@@ -826,7 +838,8 @@ function featurific_options_page() {
 	$popular_days_opt_name = 'featurific_popular_days';
 	$auto_excerpt_length_opt_name = 'featurific_auto_excerpt_length';
 	$screen_duration_opt_name = 'featurific_screen_duration';
-	//$_opt_name = 'featurific_';
+	$store_data_xml_opt_name = 'featurific_store_data_xml';
+	$store_cached_images_opt_name = 'featurific_store_cached_images';
 	//$_opt_name = 'featurific_';
 
 	//Read in existing option values from database
@@ -843,7 +856,8 @@ function featurific_options_page() {
 	$popular_days_opt_val = get_option($popular_days_opt_name);
 	$auto_excerpt_length_opt_val = get_option($auto_excerpt_length_opt_name);
 	$screen_duration_opt_val = get_option($screen_duration_opt_name);
-	//$_opt_val = get_option($_opt_name);
+	$store_data_xml_opt_val = get_option($store_data_xml_opt_name);
+	$store_cached_images_opt_val = get_option($store_cached_images_opt_name);
 	//$_opt_val = get_option($_opt_name);
 
 	// See if the user has posted us some information
@@ -868,6 +882,8 @@ function featurific_options_page() {
 		$popular_days_opt_val = $_POST[$popular_days_opt_name];
 		$auto_excerpt_length_opt_val = $_POST[$auto_excerpt_length_opt_name];
 		$screen_duration_opt_val = $_POST[$screen_duration_opt_name];
+		if($_POST[$store_data_xml_opt_name]!=null) $store_data_xml_opt_val = $_POST[$store_data_xml_opt_name]; //Only change the displayed value for this field to the new POSTed value if a value was actually POSTed (if the field was disabled, no value will be submitted)
+		if($_POST[$store_cached_images_opt_name]!=null) $store_cached_images_opt_val = $_POST[$store_cached_images_opt_name];
 		//$_opt_val = $_POST[$_opt_name];
 		//$_opt_val = $_POST[$_opt_name];
 		
@@ -902,7 +918,8 @@ function featurific_options_page() {
 		update_option($popular_days_opt_name, $popular_days_opt_val);
 		update_option($auto_excerpt_length_opt_name, $auto_excerpt_length_opt_val);
 		update_option($screen_duration_opt_name, $screen_duration_opt_val);
-		//update_option($_opt_name, $_opt_val);
+		if($store_data_xml_opt_val!=null) update_option($store_data_xml_opt_name, $store_data_xml_opt_val); //Only update the option if it is present (if the field is disabled, the value of this input element is not even included in the POST data.)
+		if($store_cached_images_opt_val!=null) update_option($store_cached_images_opt_name, $store_cached_images_opt_val);
 		//update_option($_opt_name, $_opt_val);
 		
 		// Output a status message.
@@ -996,7 +1013,7 @@ function featurific_options_page() {
 			$categories =  get_categories(array('hide_empty' => false));
 			if($categories!=null) {
 				foreach ($categories as $cat) {
-					if(in_array($cat->cat_ID, $category_filter_val))
+					if($category_filter_val!=null && in_array($cat->cat_ID, $category_filter_val))
 						$selected = 'selected="selected"';
 					else
 						$selected = '';
@@ -1058,6 +1075,39 @@ function featurific_options_page() {
   <td>
    Every <input type="text" name="<?php echo $frequency_opt_name; ?>" value="<?php echo $frequency_opt_val; ?>" size="2"> minutes<br />
    How often the gallery will be re-generated (e.g. to include new posts).
+  </td>
+ </tr>
+
+ <tr valign="top">
+  <th scope="row">Storage Location:</th>
+  <td>
+   <table style="border-collapse: collapse">
+    <tr>
+     <td style="border-style: none; padding: 5px;"></td>
+     <td style="border-style: none; padding: 5px;">Database</td>
+     <td style="border-style: none; padding: 5px;">Filesystem</td>
+		</tr>
+		<tr>
+		 <td style="border-style: none; padding: 5px;">data.xml</td>
+		 <td style="border: solid; border-width: 1px; text-align: center"><input type="radio" name="<?php echo $store_data_xml_opt_name; ?>" value='<?php echo FEATURIFIC_STORE_IN_DB; ?>' <?php if($store_data_xml_opt_val==FEATURIFIC_STORE_IN_DB) { echo 'checked'; } ?> <?php if(!get_option('featurific_root_write_access')) { echo 'disabled'; } ?>/></td>
+     <td style="border: solid; border-width: 1px; text-align: center"><input type="radio" name="<?php echo $store_data_xml_opt_name; ?>" value='<?php echo FEATURIFIC_STORE_ON_FILESYSTEM; ?>' <?php if($store_data_xml_opt_val==FEATURIFIC_STORE_ON_FILESYSTEM) { echo 'checked'; } ?> <?php if(!get_option('featurific_root_write_access')) { echo 'disabled'; } ?>/></td>
+    </tr>
+    <tr>
+     <td style="border-style: none; padding: 5px;">Cached Images</td>
+     <td style="border: solid; border-width: 1px; text-align: center"><input type="radio" name="<?php echo $store_cached_images_opt_name; ?>" value='<?php echo FEATURIFIC_STORE_IN_DB; ?>' <?php if($store_cached_images_opt_val==FEATURIFIC_STORE_IN_DB) { echo 'checked'; } ?> <?php if(!get_option('featurific_image_cache_write_access')) { echo 'disabled'; } ?>/></td>
+     <td style="border: solid; border-width: 1px; text-align: center"><input type="radio" name="<?php echo $store_cached_images_opt_name; ?>" value='<?php echo FEATURIFIC_STORE_ON_FILESYSTEM; ?>' <?php if($store_cached_images_opt_val==FEATURIFIC_STORE_ON_FILESYSTEM) { echo 'checked'; } ?> <?php if(!get_option('featurific_image_cache_write_access')) { echo 'disabled'; } ?>/></td>
+    </tr>
+   </table>
+   <ul>
+    <li>Database: <strong>Advantage: Convenience.</strong>  Store the files in the database and serve them to clients via PHP.  This eliminates the need for the web server to be able to write to the filesystem.</li>
+    <li>Filesystem: <strong>Advantage: Speed.</strong>  Store the files on the filesystem and serve them to clients directly via the web server.  This decreases server load substantially, but is more difficult to set up than 'Database' storage.</li>
+    <li>If any of these options are greyed out, it is because your server is only configured to allow 'Database' storage.  To enable 'Filesystem' storage, the web server needs write access to the following locations.
+     <ul>
+      <li>For data.xml files: <code><?php echo featurific_get_plugin_root(); ?></code></li>
+      <li>For cached images: <code><?php echo featurific_get_plugin_root(); ?>image_cache</code></li>
+     </ul>
+    </li>
+   </ul>
   </td>
  </tr>
 
@@ -1195,7 +1245,7 @@ function featurific_generate_data_xml($output_filename) {
 		get_option('featurific_num_posts'),
 		get_option('featurific_user_specified_posts')
 	);
-
+	
 	$out .= featurific_generate_screen_elements($template_xml, $posts);
 
 	$out .= "\n</data>\n";
@@ -1204,30 +1254,35 @@ function featurific_generate_data_xml($output_filename) {
 	
 	//echo str_replace("\n", "<br/>", htmlentities($out));
 
-	//Write the gallery XML to the DB
-	if(get_option('featurific_store_data_xml_in_db')) {
-		update_option('featurific_data_xml', $out);
-		//echo get_option('featurific_data_xml');
-	}
-	//Write the gallery XML to disk
-	else {
-		$fout_filename = featurific_get_plugin_root() . $output_filename;
+	//Write the XML to the data persistence layer (in the DB or directly to disk)
+	switch(get_option('featurific_store_data_xml')) {
+		case FEATURIFIC_STORE_ON_FILESYSTEM:
+			//Write the gallery XML to disk
+			$fout_filename = featurific_get_plugin_root() . $output_filename;
 
-		$fout = @fopen($fout_filename, 'w'); //NOTE: The '@' suppresses warning messages.  We need to be certain to check the return value.
-		if(!$fout) {
-			echo "Could not open $fout_filename for writing.";
-			return false;
-		}
+			$fout = @fopen($fout_filename, 'w'); //NOTE: The '@' suppresses warning messages.  We need to be certain to check the return value.
+			if(!$fout) {
+				echo "Could not open $fout_filename for writing.";
+				return false;
+			}
 
-		if(fwrite($fout, $out)===false) {
-			echo "Could not write the XML to $fout_filename.";
+			if(fwrite($fout, $out)===false) {
+				echo "Could not write the XML to $fout_filename.";
+				fclose($fout);
+				return false;
+			}
+
 			fclose($fout);
-			return false;
-		}
-
-		fclose($fout);
+			break;
+			
+		case FEATURIFIC_STORE_IN_DB:
+		default:
+			//Write the gallery XML to the DB
+			update_option('featurific_data_xml', $out);
+			//echo get_option('featurific_data_xml');
+			break;
 	}
-	
+
 	return true;
 }
 
@@ -1697,9 +1752,9 @@ function featurific_get_posts_tweak(&$posts) {
 
 	//For each post...
 	$screen_number = 1;
-	foreach ($posts as $post_id => $post) {
+	foreach ($posts as $post_id => $p) {
 		//Post Date/Time
-		$date_str = $post['post_date'];
+		$date_str = $p['post_date'];
 		$date = featurific_parse_date($date_str);
 		$posts[$post_id]['post_human_date'] = featurific_date_to_human_date($date);
 		$posts[$post_id]['post_long_human_date'] = featurific_date_to_long_human_date($date);
@@ -1714,7 +1769,7 @@ function featurific_get_posts_tweak(&$posts) {
 
 
 		//Modified Date/Time
-		$date_str = $post['post_modified'];
+		$date_str = $p['post_modified'];
 		$date = featurific_parse_date($date_str);
 		$posts[$post_id]['post_modified_human_date'] = featurific_date_to_human_date($date);
 		$posts[$post_id]['post_modified_long_human_date'] = featurific_date_to_long_human_date($date);
@@ -1728,13 +1783,18 @@ function featurific_get_posts_tweak(&$posts) {
 			$posts[$post_id]["post_modified_date_$dc"] = date($dc, $date);		
 
 
-		//Copy the post_content from $post to $posts[]
-		$posts[$post_id]['post_content'] = $post['post_content'];
+		//Copy the post_content from $p to $posts[]
+		$posts[$post_id]['post_content'] = $p['post_content'];
 
 
 		//Process any shortcodes, converting them into their resulting HTML.
-		if(function_exists('do_shortcode'))
+		if(function_exists('do_shortcode')) {
+			//gallery_shortcode() expects the global object $post to have a member, ID ($post->ID), which contains the post id for the current post.  So, we prepare that value here.
+			global $post;
+			$post = new StdClass();
+			$post->ID = $post_id;
 			$posts[$post_id]['post_content'] = do_shortcode($posts[$post_id]['post_content']);
+		}
 
 
 		//Find images in the post content's HTML and prepare the images and $posts[$post_id] so the images can be accessed in the template.
@@ -1773,21 +1833,8 @@ function featurific_get_posts_tweak(&$posts) {
 				if($image_data===false)
 					continue;
 				
-				//Store the cached images in the DB
-				if(get_option('featurific_store_cached_images_in_db')) {
-					$image_info = getimagesize($image); //Yes, this requires fetching the image via HTTP twice (we fetch it once to get the image (above), and again to get the mime type); but since getimagesize() will only work with a filename/uri, I can't just feed it the raw data.  The best workaround I found for this was writing a temporary file (which we can't because we might not have write access to the FS), and using stream_wrapper_register() (http://fi.php.net/manual/en/function.stream-wrapper-register.php) to 'fake' the file
-
-					$success = featurific_image_cache_put_image($screen_number, $image_number, $image_data, $image_info['mime']);
-					//echo $success?'put successful!':'put failed!';
-					
-					$image_url = featurific_get_plugin_web_root()."cached_image.php?snum=$screen_number&inum=$image_number";
-					//echo "Stored featurific_cached_image_screen_{$screen_number}_image_{$image_number}.<br/>";
-
-					// echo "Its value was: $image_data";
-					// echo "Try it: " . get_option("featurific_cached_image_screen_{$screen_number}_image_{$image_number}");
-				}
 				//Store the cached images as files on the local filesystem
-				else {
+				if(get_option('featurific_store_cached_images')==FEATURIFIC_STORE_ON_FILESYSTEM) {
 					$relative_path = 'image_cache/screen_'.$screen_number.'_image_'.$image_number;
 					$image_path = featurific_get_plugin_root().$relative_path;
 					$bytes_written = @file_put_contents($image_path, $image_data); //NOTE: The '@' suppresses warning messages.  We need to be certain to check the return value.
@@ -1799,6 +1846,19 @@ function featurific_get_posts_tweak(&$posts) {
 					}
 
 					$image_url = featurific_get_plugin_web_root().$relative_path;
+				}
+				//Store the cached images in the DB
+				else {
+					$image_info = getimagesize($image); //OPT Yes, this requires fetching the image via HTTP twice (we fetch it once to get the image (above), and again to get the mime type); but since getimagesize() will only work with a filename/uri, I can't just feed it the raw data.  The best workaround I found for this was writing a temporary file (which we can't because we might not have write access to the FS), and using stream_wrapper_register() (http://fi.php.net/manual/en/function.stream-wrapper-register.php) to 'fake' the file
+
+					$success = featurific_image_cache_put_image($screen_number, $image_number, $image_data, $image_info['mime']);
+					//echo $success?'put successful!':'put failed!';
+					
+					$image_url = featurific_get_plugin_web_root()."cached_image.php?snum=$screen_number&inum=$image_number";
+					//echo "Stored featurific_cached_image_screen_{$screen_number}_image_{$image_number}.<br/>";
+
+					// echo "Its value was: $image_data";
+					// echo "Try it: " . get_option("featurific_cached_image_screen_{$screen_number}_image_{$image_number}");
 				}
 			}
 
@@ -1833,8 +1893,8 @@ function featurific_get_posts_tweak(&$posts) {
 		}
 
 		//Etc
-		$posts[$post_id]['nickname'] = get_usermeta($post['post_author'], 'nickname');
-		$posts[$post_id]['url'] = apply_filters('the_permalink', get_permalink($post_id)); //Instead of using $post['guid'], this method (copied from link-template.php's the_permalink()) generates functional URLs even if the blog is moved to a new directory/domain/etc.
+		$posts[$post_id]['nickname'] = get_usermeta($p['post_author'], 'nickname');
+		$posts[$post_id]['url'] = apply_filters('the_permalink', get_permalink($post_id)); //Instead of using $p['guid'], this method (copied from link-template.php's the_permalink()) generates functional URLs even if the blog is moved to a new directory/domain/etc.
 		$posts[$post_id]['screen_duration'] = get_option('featurific_screen_duration');
 		$posts[$post_id]['screen_number'] = $screen_number;
 		
