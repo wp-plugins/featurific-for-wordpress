@@ -3,7 +3,7 @@ Contributors: rinogo
 Tags: slideshow, slide, show, gallery, flash, xml, dynamic, conversion, funnel, Post, posts, sidebar, images, links, photo, photos, statistics, stats, swf, plugin, admin
 Requires at least: 2.3
 Tested up to: 2.7
-Stable tag: 1.4.3
+Stable tag: 1.4.4
 
 An effortless but powerful interface to Featurific Free, the featured story slideshow.  (Similar to the 'featured'
 widget on time.com, msn.com, walmart.com, etc.)
@@ -77,7 +77,10 @@ Sax Hammer of [Ultragreek News](http://news.ultragreek.com/)
 
 
 == Changelog ==
-**1.4.3 (12/30/08)**
+**1.4.4 (12/30/08)**
+Documentation update.
+
+**1.4.4 (12/30/08)**
 Releasing changes since 1.3.5 to public.  Tested (with no issues) in WP 2.7.
 
 **1.4.2 (9/3/08)**
@@ -147,7 +150,7 @@ Changelog added.  Unicode Support (UTF-8 encoding) added to FeaturificFree.swf.
 = I can't get the plugin to install.  Can you help me? =
 I'm sorry if the plugin is causing you problems.  It has only recently been released (consider yourself an early
 adopter! :) ), so I still need to work through the bugs that weren't manifest in my development environment.  Please
-[contact me](http://featurific.com) via the [Featurific.com support forum](http://featurific.com) and I'll be happy
+[contact me](http://featurific.com/support) via the [Featurific.com support forum](http://featurific.com/support) and I'll be happy
 to help you work through the bugs.
 
 
@@ -208,7 +211,7 @@ template!
 
 = What are the system requirements for using Featurific? =
 Featurific has been successfully tested with Wordpress 2.3 to 2.7 on PHP4 and PHP5.  If you have problems on these
-(or other) configurations, feel free to [contact me] via the [Featurific.com support forum](http://featurific.com/support/thread-9.html).  Support on Wordpress
+(or other) configurations, feel free to [contact me](http://featurific.com/support) via the [Featurific.com support forum](http://featurific.com/support).  Support on Wordpress
 2.3 seems to be limited, I'll post more information as it becomes available.
 
 
@@ -338,7 +341,7 @@ To get rid of the "Powered by Featurific" logo, you're going to have to splurge 
 
 
 = I can't get this thing to work!  What's wrong? =
-[Drop me a line](http://featurific.com) on the [Featurific.com support forum](http://featurific.com) and I'll try to help you out.
+[Drop me a line](http://featurific.com/support) on the [Featurific.com support forum](http://featurific.com/support) and I'll try to help you out.
 
 
 
