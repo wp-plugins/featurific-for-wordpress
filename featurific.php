@@ -34,16 +34,18 @@ displaying summaries of featured articles on the site.  Installation is
 automatic and easy, while advanced users can customize every element of the
 Flash slideshow presentation.
 Author: Rich Christiansen
-Version: 1.4.4
+Version: 1.5.0
 Author URI: http://endorkins.com/
 */
 
 //Constants
-define('FEATURIFIC_VERSION', '1.4.4');
+define('FEATURIFIC_VERSION', '1.5.0');
 define('FEATURIFIC_MAX_INT', defined('PHP_INT_MAX') ? PHP_INT_MAX : 32767);
 define('FEATURIFIC_STORE_UNDEFINED', false);
 define('FEATURIFIC_STORE_IN_DB', 1);
 define('FEATURIFIC_STORE_ON_FILESYSTEM', 2);
+define('FEATURIFIC_TEMPLATES_URL', 'http://featurific.com/files/templates');
+define('FEATURIFIC_TEMPLATES_LIBRARY_FILENAME', 'library.xml');
 
 //Libraries
 include_once('featurific_db.php');
@@ -268,15 +270,14 @@ function featurific_deactivate()
 function featurific_test_environment() {
 	featurific_test_plugin_root_write_access();
 	featurific_test_image_cache_write_access();
+	featurific_test_templates_write_access();
 }
 
 
 /**
  *
  */
-function featurific_test_plugin_root_write_access() {
-	$filename = 'FeaturificTestPluginRootWriteAccess'.rand(999999999, 9999999999); //Create an (essentially) guaranteed unique filename
-	$path = featurific_get_plugin_root().$filename;
+function featurific_test_write_access($path) {
 	//echo "Testing $path<br/>";
 	$f = @fopen($path, 'w');
 	
@@ -285,11 +286,22 @@ function featurific_test_plugin_root_write_access() {
 		//echo 'success<br/>';
 		fclose($f);
 		unlink($path);
-		update_option('featurific_root_write_access', true);
+		return true;
 	}
-	//Failure
+	
+	return false;
+}
+
+
+/**
+ *
+ */
+function featurific_test_plugin_root_write_access() {
+	$path = featurific_get_plugin_root().'FeaturificTestPluginRootWriteAccess'.rand(999999999, 9999999999); //Create an (essentially) guaranteed unique filename
+	
+	if(featurific_test_write_access($path))
+		update_option('featurific_root_write_access', true);
 	else {
-		//echo 'failure<br/>';
 		update_option('featurific_root_write_access', false);
 		update_option('featurific_store_data_xml', FEATURIFIC_STORE_IN_DB); //If we don't have root write access, force the data.xml to be stored in the DB.
 	}
@@ -300,25 +312,29 @@ function featurific_test_plugin_root_write_access() {
  *
  */
 function featurific_test_image_cache_write_access() {
-	$filename = 'FeaturificTestImageCacheWriteAccess'.rand(999999999, 9999999999); //Create an (essentially) guaranteed unique filename
-	$path = featurific_get_plugin_root().'image_cache/'.$filename;
-	//echo "Testing $path<br/>";
-	$f = @fopen($path, 'w');
+	$path = featurific_get_plugin_root().'image_cache/'.'FeaturificTestImageCacheWriteAccess'.rand(999999999, 9999999999); //Create an (essentially) guaranteed unique filename
 	
-	//Success
-	if($f) {
-		//echo 'success<br/>';
-		fclose($f);
-		unlink($path);
+	if(featurific_test_write_access($path))
 		update_option('featurific_image_cache_write_access', true);
-	}
-	//Failure
 	else {
-		//echo 'failure<br/>';
 		update_option('featurific_image_cache_write_access', false);
 		update_option('featurific_store_cached_images', FEATURIFIC_STORE_IN_DB); //If we don't have image cache write access, force the the images to be stored in the DB.
 	}
 }
+
+
+/**
+ *
+ */
+function featurific_test_templates_write_access() {
+	$path = featurific_get_plugin_root().'templates/'.'FeaturificTestTemplatesWriteAccess'.rand(999999999, 9999999999); //Create an (essentially) guaranteed unique filename
+	
+	if(featurific_test_write_access($path))
+		update_option('featurific_templates_write_access', true);
+	else
+		update_option('featurific_templates_write_access', false);
+}
+
 
 /**
  * Attempt to automatically insert the call to insert_featurific() in the user's active template.
@@ -737,8 +753,10 @@ function featurific_delete_options() {
 	delete_option('featurific_popular_days');
 	delete_option('featurific_auto_excerpt_length');
 	delete_option('featurific_screen_duration');
-	delete_option('featurific_store_data_xml');
 	delete_option('featurific_store_cached_images');
+	delete_option('featurific_use_rtl_text');
+	delete_option('featurific_rtl_sentence_separators');
+	delete_option('featurific_store_data_xml');
 	
 	//Internal options
 	delete_option('featurific_last_generation_time');
@@ -755,21 +773,23 @@ function featurific_delete_options() {
  */
 function featurific_set_default_options() {
 	//User-specified options
-	if(get_option('featurific_screen_assignment')===false)			add_option('featurific_screen_assignment', 'random');
-	if(get_option('featurific_width')===false)									add_option('featurific_width', 0);
-	if(get_option('featurific_height')===false)									add_option('featurific_height', 0);
-	if(get_option('featurific_type')===false)										add_option('featurific_type', 'commented');
-	if(get_option('featurific_category_filter')===false)				add_option('featurific_category_filter', array());
-	if(get_option('featurific_user_specified_posts')===false)		add_option('featurific_user_specified_posts', '');
-	if(get_option('featurific_generation_frequency')===false)		add_option('featurific_generation_frequency', 10);
-	if(get_option('featurific_data_xml_override')===false)			add_option('featurific_data_xml_override', '');
-	if(get_option('featurific_template')===false)								add_option('featurific_template', 'Thumber Abstract/template.xml');
-	if(get_option('featurific_num_posts')===false)							add_option('featurific_num_posts', 5);
-	if(get_option('featurific_popular_days')===false)						add_option('featurific_popular_days', 90);
-	if(get_option('featurific_auto_excerpt_length')===false)		add_option('featurific_auto_excerpt_length', 150);
-	if(get_option('featurific_screen_duration')===false)				add_option('featurific_screen_duration', 7000);
-	if(get_option('featurific_store_data_xml')===false)					add_option('featurific_store_data_xml', FEATURIFIC_STORE_IN_DB); //We can't use true/false to indicate whether or not to store the data.xml in the database, because false also means that the option is undefined.  So, we use an int (and constants defined at the beginning of this file).
-	if(get_option('featurific_store_cached_images')===false)		add_option('featurific_store_cached_images', FEATURIFIC_STORE_IN_DB); //We can't use true/false to indicate whether or not to store the data.xml in the database, because false also means that the option is undefined.  So, we use an int (and constants defined at the beginning of this file).
+	if(get_option('featurific_screen_assignment')===false)				add_option('featurific_screen_assignment', 'random');
+	if(get_option('featurific_width')===false)										add_option('featurific_width', 0);
+	if(get_option('featurific_height')===false)										add_option('featurific_height', 0);
+	if(get_option('featurific_type')===false)											add_option('featurific_type', 'commented');
+	if(get_option('featurific_category_filter')===false)					add_option('featurific_category_filter', array());
+	if(get_option('featurific_user_specified_posts')===false)			add_option('featurific_user_specified_posts', '');
+	if(get_option('featurific_generation_frequency')===false)			add_option('featurific_generation_frequency', 10);
+	if(get_option('featurific_data_xml_override')===false)				add_option('featurific_data_xml_override', '');
+	if(get_option('featurific_template')===false)									add_option('featurific_template', 'Thumber Abstract/template.xml');
+	if(get_option('featurific_num_posts')===false)								add_option('featurific_num_posts', 5);
+	if(get_option('featurific_popular_days')===false)							add_option('featurific_popular_days', 90);
+	if(get_option('featurific_auto_excerpt_length')===false)			add_option('featurific_auto_excerpt_length', 150);
+	if(get_option('featurific_screen_duration')===false)					add_option('featurific_screen_duration', 7000);
+	if(get_option('featurific_use_rtl_text')===false)							add_option('featurific_use_rtl_text', false);
+	if(get_option('featurific_rtl_sentence_separators')===false)	add_option('featurific_rtl_sentence_separators', '.!?-');
+	if(get_option('featurific_store_cached_images')===false)			add_option('featurific_store_cached_images', FEATURIFIC_STORE_IN_DB); //We can't use true/false to indicate whether or not to store the data.xml in the database, because false also means that the option is undefined.  So, we use an int (and constants defined at the beginning of this file).
+	if(get_option('featurific_store_data_xml')===false)						add_option('featurific_store_data_xml', FEATURIFIC_STORE_IN_DB); //We can't use true/false to indicate whether or not to store the data.xml in the database, because false also means that the option is undefined.  So, we use an int (and constants defined at the beginning of this file).
 
 	//Internal options
 	if(get_option('featurific_last_generation_time')===false)					add_option('featurific_last_generation_time', 0);
@@ -822,6 +842,11 @@ function featurific_get_templates() {
  * Adapted from http://codex.wordpress.org/Adding_Administration_Menus
  */
 function featurific_options_page() {
+	if($_GET['action']!=null) {
+		featurific_install_templates();
+		return;
+	}
+	
 	$hidden_field_name = 'featurific_submit_hidden';
 	
 	//Set up names
@@ -838,8 +863,10 @@ function featurific_options_page() {
 	$popular_days_opt_name = 'featurific_popular_days';
 	$auto_excerpt_length_opt_name = 'featurific_auto_excerpt_length';
 	$screen_duration_opt_name = 'featurific_screen_duration';
-	$store_data_xml_opt_name = 'featurific_store_data_xml';
 	$store_cached_images_opt_name = 'featurific_store_cached_images';
+	$use_rtl_text_opt_name = 'featurific_use_rtl_text';
+	$rtl_sentence_separators_opt_name = 'featurific_rtl_sentence_separators';
+	$store_data_xml_opt_name = 'featurific_store_data_xml';
 	//$_opt_name = 'featurific_';
 
 	//Read in existing option values from database
@@ -856,8 +883,10 @@ function featurific_options_page() {
 	$popular_days_opt_val = get_option($popular_days_opt_name);
 	$auto_excerpt_length_opt_val = get_option($auto_excerpt_length_opt_name);
 	$screen_duration_opt_val = get_option($screen_duration_opt_name);
-	$store_data_xml_opt_val = get_option($store_data_xml_opt_name);
 	$store_cached_images_opt_val = get_option($store_cached_images_opt_name);
+	$use_rtl_text_opt_val = get_option($use_rtl_text_opt_name);
+	$rtl_sentence_separators_opt_val = get_option($rtl_sentence_separators_opt_name);
+	$store_data_xml_opt_val = get_option($store_data_xml_opt_name);
 	//$_opt_val = get_option($_opt_name);
 
 	// See if the user has posted us some information
@@ -882,6 +911,9 @@ function featurific_options_page() {
 		$popular_days_opt_val = $_POST[$popular_days_opt_name];
 		$auto_excerpt_length_opt_val = $_POST[$auto_excerpt_length_opt_name];
 		$screen_duration_opt_val = $_POST[$screen_duration_opt_name];
+		$use_rtl_text_opt_val = $_POST[$use_rtl_text_opt_name];
+		$rtl_sentence_separators_opt_val = $_POST[$rtl_sentence_separators_opt_name];
+
 		if($_POST[$store_data_xml_opt_name]!=null) $store_data_xml_opt_val = $_POST[$store_data_xml_opt_name]; //Only change the displayed value for this field to the new POSTed value if a value was actually POSTed (if the field was disabled, no value will be submitted)
 		if($_POST[$store_cached_images_opt_name]!=null) $store_cached_images_opt_val = $_POST[$store_cached_images_opt_name];
 		//$_opt_val = $_POST[$_opt_name];
@@ -918,6 +950,9 @@ function featurific_options_page() {
 		update_option($popular_days_opt_name, $popular_days_opt_val);
 		update_option($auto_excerpt_length_opt_name, $auto_excerpt_length_opt_val);
 		update_option($screen_duration_opt_name, $screen_duration_opt_val);
+		update_option($use_rtl_text_opt_name, $use_rtl_text_opt_val);
+		update_option($rtl_sentence_separators_opt_name, $rtl_sentence_separators_opt_val);
+
 		if($store_data_xml_opt_val!=null) update_option($store_data_xml_opt_name, $store_data_xml_opt_val); //Only update the option if it is present (if the field is disabled, the value of this input element is not even included in the POST data.)
 		if($store_cached_images_opt_val!=null) update_option($store_cached_images_opt_name, $store_cached_images_opt_val);
 		//update_option($_opt_name, $_opt_val);
@@ -938,15 +973,27 @@ function featurific_options_page() {
 	$notes_html = featurific_get_notes_from_xml($xml);
 
 	//Prepare other assorted values
+	$action_url = str_replace( '%7E', '~', $_SERVER['REQUEST_URI']);
 	$stats_installed_str = function_exists('stats_get_csv')?'<font color="#00cc00">is installed</font>':'<font color="#ff0000">is not installed</font>';
 	$plugin_directory = featurific_get_plugin_root();
+
+	//Prepare auto-download
+	$num_new_templates = featurific_count_new_templates();
+	
+	//There are new templates
+	if($num_new_templates>0) {
+		$new_templates_html = "<div align='right'><a href='$action_url&action=autoinstall'><font size='+2'><strong>New templates available!</strong></font><br/>Auto-download $num_new_templates new templates now</a></div>";
+	}
+	else {
+		$new_templates_html = "<div align='right'>Template library is up to date.</div>";
+	}
 
 	// Display the options editing screen
 	?>
 <div class="wrap">
 <h2>Featurific for Wordpress</h2>
 
-<form name="form1" method="post" action="<?php echo str_replace( '%7E', '~', $_SERVER['REQUEST_URI']); ?>">
+<form name="form1" method="post" action="<?php echo $action_url ?>">
 <input type="hidden" name="<?php echo $hidden_field_name; ?>" value="Y">
 
 <table class="form-table">
@@ -955,6 +1002,7 @@ function featurific_options_page() {
  <tr valign="top">
   <th scope="row">Template:</th>
   <td>
+   <?php echo $new_templates_html ?>
    <select name="<?php echo $template_opt_name; ?>">
     <?php
 			$templates = featurific_get_templates();
@@ -1101,13 +1149,23 @@ function featurific_options_page() {
    <ul>
     <li>Database: <strong>Advantage: Convenience.</strong>  Store the files in the database and serve them to clients via PHP.  This eliminates the need for the web server to be able to write to the filesystem.</li>
     <li>Filesystem: <strong>Advantage: Speed.</strong>  Store the files on the filesystem and serve them to clients directly via the web server.  This decreases server load substantially, but is more difficult to set up than 'Database' storage.</li>
-    <li>If any of these options are greyed out, it is because your server is only configured to allow 'Database' storage.  To enable 'Filesystem' storage, the web server needs write access to the following locations.
+    <li>If any of these options are greyed out, it is because your server is only configured to allow 'Database' storage.  To enable 'Filesystem' storage, the web server needs write access to the following locations.  (After you make the directories writeable, deactivate and reactivate Featurific for Wordpress for your changes to be detected.)
      <ul>
       <li>For data.xml files: <code><?php echo featurific_get_plugin_root(); ?></code></li>
       <li>For cached images: <code><?php echo featurific_get_plugin_root(); ?>image_cache</code></li>
      </ul>
     </li>
    </ul>
+  </td>
+ </tr>
+
+ <tr valign="top">
+  <th scope="row">RTL Text (beta):</th>
+  <td>
+   <input type="checkbox" name="<?php echo $use_rtl_text_opt_name; ?>" <?php if($use_rtl_text_opt_val) { echo 'checked'; } ?>> Use RTL (Right To Left) text for display of RTL languages (Arabic, Persian, Hebrew, Farsi, Urdu, etc.).<br/>
+   RTL sentence separators: <input type="text" name="<?php echo $rtl_sentence_separators_opt_name; ?>" value="<?php echo $rtl_sentence_separators_opt_val; ?>" size="15"><br/>
+   RTL sentence separators are characters that are used to find sentence boundaries in RTL text.  These separators ensure RTL text is displayed correctly.  Typical separators include limited punctuation such as '.!?-' (the '-' is necessary because it replaces the newline character when present).<br/>
+   <strong>Note</strong>: When using RTL Text, you may want to use one of the templates labeled as "(Right Justified)".
   </td>
  </tr>
 
@@ -1416,17 +1474,21 @@ function featurific_flash_escape($s) {
 
 	return
 	$string =
-		str_replace('\'', '&#039;',
-			str_replace('"', '&quot;',
-				str_replace('%', '&#37;',
-					str_replace('&ldquo;', '&quot;',
-						str_replace('&rdquo;', '&quot;',
-							str_replace('&lsquo;', '&#039;',
-								str_replace('&rsquo;', '&#039;', $s)
+		str_replace('<', '&lt;',
+			str_replace('>', '&gt;',
+				str_replace('\'', '&#039;',
+					str_replace('"', '&quot;',
+						str_replace('%', '&#37;',
+							str_replace('&ldquo;', '&quot;',
+								str_replace('&rdquo;', '&quot;',
+									str_replace('&lsquo;', '&#039;',
+										str_replace('&rsquo;', '&#039;', $s)
+									)
+								)
 							)
-						)
+						)		
 					)
-				)		
+				)
 			)
 		);
 }
@@ -1492,6 +1554,56 @@ function featurific_html_to_text($html) {
 	$html = preg_replace('/\s+$/m', '', $html);
 
 	return $html;
+}
+
+
+/**
+ * Convert $s to RTL text.
+ *
+ */
+/**
+ * Known bugs with RTL support:
+ *  - On Barebones Black, the (Read More...) text is messed up on the Arabic test slide... Suggesting that the Flash player is doing some sort of auto-RTL-ing. Weird.
+ *  - Multiple spaces within text are condensed down to one (actually, not a bug of the RTL process, this is a bug of the strip HTML process)
+ *  - Flash portion of the plugin (Featurific itself) still needs to be modified to display with 'tf.autoSize = TextFieldAutoSize.RIGHT;' when RTL is enabled.
+ *  - Will likely need to update templates, creating RTL versions of them (how does this work?  When we turn on TextFieldAutoSize.RIGHT, does the text 'grow' from the specified point to the left (instead of growing to the right, as is done with LTR text))
+ */
+function featurific_string_to_rtl($s) {
+	//Split the string into sentences.
+	$separators = get_option('featurific_rtl_sentence_separators');
+	$pattern = '/([' . preg_quote($separators) . ']+)/';
+	$sentences = preg_split($pattern, $s, -1, PREG_SPLIT_DELIM_CAPTURE); //TODO: Security risk?  (We're not sanitizing the chars the user enters - just spitting it straight into this regex.)
+
+	// featurific_dump($pattern);
+	// featurific_dump($s);
+	// featurific_dump($sentences);
+	
+	$sentence_rtl = '';
+	
+	//Reverse the words in each sentence.
+	foreach ($sentences as $sentence) {
+		//Get preceding whitespace
+		preg_match('/^\s+/', $sentence, $matches);
+		$whitespace_prefix = $matches[0];
+
+		//Get following whitespace
+		preg_match('/\s+$/', $sentence, $matches);
+		$whitespace_postfix = $matches[0];
+		
+		//Split the sentence into its constituent words.
+		$pattern = '/([ ]+)/';
+		$words = preg_split($pattern, $sentence, -1, PREG_SPLIT_DELIM_CAPTURE);
+		$words = array_reverse($words);
+		
+		//Cumulatively reassemble the words onto the sentence (in the new RTL order).
+		$sentence_rtl .= $whitespace_prefix . trim(implode($words)) . $whitespace_postfix; //Reassemble the words, in reverse order, with the whitespace that originally preceded and followed the sentence correctly positioned (in its original location either at the beginning or end of the sentence).
+		// featurific_dump($words);
+		// featurific_dump($sentence_rtl);
+		// featurific_dump($whitespace_prefix);
+		// featurific_dump($whitespace_postfix);
+	}
+	
+	return $sentence_rtl;
 }
 
 
@@ -1821,6 +1933,8 @@ function featurific_get_posts_tweak(&$posts) {
 			//echo "pos: ".strpos($image, $web_root)."<br/>";
 			if($posts[$post_id]['image_'.$image_number]!=null)
 				$image = $posts[$post_id]['image_'.$image_number];
+				
+			$image = str_replace(' ', '%20', $image); //Escape spaces in the filename.  TODO: Are there other characters that need escaping?
 			
 			//If the image is on the same domain (absolute path or relative path), we can access it from Flash 9 directly.
 			if(strpos($image, $web_root)===0 || $image[0]=='/' || $image[0]=='\\')
@@ -1878,6 +1992,16 @@ function featurific_get_posts_tweak(&$posts) {
 			);
 
 
+		//Fix up the post title for plaintext display.
+		$posts[$post_id]['post_title'] = featurific_html_to_text($posts[$post_id]['post_title']);
+		
+		//Convert various fields in the post to RTL (if specified)
+		if(get_option('featurific_use_rtl_text')) {
+			$posts[$post_id]['post_title'] = featurific_string_to_rtl($posts[$post_id]['post_title']);
+			$posts[$post_id]['post_content'] = featurific_string_to_rtl($posts[$post_id]['post_content']);
+		}
+
+
 		//If the post doesn't have a post_excerpt, then create one.
 		if($posts[$post_id]['post_excerpt']==null || $posts[$post_id]['post_excerpt']=='') {
 			$auto_excerpt_chars = get_option('featurific_auto_excerpt_length');
@@ -1929,6 +2053,304 @@ if (!function_exists('file_get_contents')) {
         return($contents); 
     } 
 }
+
+
+function featurific_get_template_library() {
+	$data = file_get_contents(FEATURIFIC_TEMPLATES_URL.'/'.FEATURIFIC_TEMPLATES_LIBRARY_FILENAME);
+	
+	//featurific_dump($data);
+
+	if($data===false)
+		return null;
+
+	$xml = new XMLParser($data);
+	$xml->Parse();
+	//$xml->document->template[0]->tagAttrs['dirname'];
+	
+	return $xml;
+}
+
+
+function featurific_count_new_templates() {
+	$xml = featurific_get_template_library();
+	
+	$num_new_templates = 0;
+	foreach($xml->document->template as $template) {
+		if(!featurific_check_template_exists($template->tagAttrs['dirname']))
+			$num_new_templates++;
+	}
+
+	return $num_new_templates;
+}
+
+
+function featurific_check_template_exists($dirname)
+{
+	$path = featurific_get_plugin_root() . 'templates/'. $dirname;
+	//featurific_dump('testing ' . $path);
+	
+	$f = @fopen($path, 'r');
+
+	//If the path could be opened, then the template exists
+	if($f) {
+		fclose($f);
+		return true;
+	}
+	
+	return false;
+}
+
+
+function featurific_get_credentials() {
+	$url = wp_nonce_url("update.php?action=upgrade-plugin&plugin=$plugin", "upgrade-plugin_$plugin");
+	if ( false === ($credentials = request_filesystem_credentials($url)) )
+		return null;
+
+	if ( ! WP_Filesystem($credentials) ) {
+		$error = true;
+		if ( is_object($wp_filesystem) && $wp_filesystem->errors->get_error_code() )
+			$error = $wp_filesystem->errors;
+		request_filesystem_credentials($url, '', $error); //Failed to connect, Error and request again
+		return null;
+	}
+
+/*
+	echo '<div class="wrap">';
+	echo '<h2>' . __('Upgrade Plugin') . '</h2>';
+	if ( $wp_filesystem->errors->get_error_code() ) {
+		foreach ( $wp_filesystem->errors->get_error_messages() as $message )
+			show_message($message);
+		echo '</div>';
+		return null;
+	}
+*/
+	
+	return $credentials;
+}
+
+
+function featurific_install_templates() {
+	$credentials = featurific_get_credentials();
+	
+	$tmp_back_url = str_replace( '%7E', '~', $_SERVER['REQUEST_URI']);
+	$back_url = substr($tmp_back_url, 0, strrpos($tmp_back_url, '&action'));
+?>
+
+	<div class="wrap">
+	<h2>Featurific for Wordpress</h2>
+	<a href="<?php echo $back_url ?>">Back to main configuration page</a><br/>
+
+	<?php
+		$xml = featurific_get_template_library();
+		$auto_install_prequisites_met = true;
+		
+		if(!function_exists('unzip_file')) {
+			echo '<br/><strong><font color="red">Auto-install prerequisite not met:</font></strong> In order for template auto installation to work, the PHP function \'unzip_file()\' is required.  The easiest way to satisfy this prerequisite is by upgrading your Wordpress version.';
+			$auto_install_prequisites_met = false;
+		}
+
+		if(!get_option('featurific_templates_write_access')) {
+			echo '<br/><strong><font color="red">Auto-install prerequisite not met:</font></strong> In order for template auto installation to work, Wordpress needs write access to the \'templates\' directory.  Its full path is:<code>'.featurific_get_plugin_root().'templates</code>.  (After you make the directory writeable, deactivate and reactivate Featurific for Wordpress for your changes to be detected.)';
+			$auto_install_prequisites_met = false;
+		}
+		
+		if($credentials==null) {
+			echo '<br/><strong><font color="red">Auto-install prerequisite not met:</font></strong> In order for template auto installation to work, Wordpress needs advanced access to your filesystem.  Please fill out and submit the form at the top of this page to satisfy this prerequisite.';
+			$auto_install_prequisites_met = false;
+		}
+		
+		if(!$auto_install_prequisites_met) {
+			echo '<br/><br/><h3>Manual Installation</h3>Since auto installation is currently not available on your installation, please satisfy the dependencies above or manually install the desired templates.  To manually install a template:<ul><li>First, download the .zip file and extract its contents.</li><li>Second, upload the contents of the zip file to <code>'.featurific_get_plugin_root().'templates</code>.</li><li>That\'s it!</li></ul>';
+		}
+
+		?>
+		<br/>
+		<h3>Note</h3>
+		The Template Auto-Install functionality is a beta feature.  We'd love to hear your thoughts on it - <a href="http://featurific.com/content/contact-us">drop us a line!</a><br/>
+		<table class="form-table">
+		<?php
+		
+		$num_new_templates = 0;
+		foreach($xml->document->template as $template) {
+			$url = FEATURIFIC_TEMPLATES_URL.'/'.$template->tagAttrs['filename'];
+
+			if(featurific_check_template_exists($template->tagAttrs['dirname']))
+				continue;
+			
+			$num_new_templates++;
+			?>
+
+			 <tr valign="top">
+			  <td>
+					<table width="700">
+						<tr>
+							<td width="15%">
+								<strong><?php echo $template->tagAttrs['name'] ?></strong>
+							</td>
+							<td width="40%">
+								<?php
+									$screenshot_url = FEATURIFIC_TEMPLATES_URL.'/'.$template->tagAttrs['screenshot'];
+								?>
+								<a href="<?php echo $screenshot_url ?>"><img width="200" src="<?php echo $screenshot_url ?>"/></a>
+							</td>
+							<td width="35%">
+								<?php echo $template->tagAttrs['shortdescription'] ?>
+							</td>
+							<td width="10%">
+								<?php
+									if($auto_install_prequisites_met) {
+										echo '<small>';
+										if(featurific_install_template($url))
+											echo '<strong>Done!</strong>';
+										else
+											echo '<strong>Error</strong>';
+										echo '</small>';
+									}
+									else {
+										echo '<a href="'.$url.'">Download</a>';
+									}
+								?>
+							</td>
+						</tr>
+					</table>
+			  </td>
+			 </tr>
+
+			<?php
+		}
+	?>
+
+	</table>
+
+	<hr />
+	</div>
+
+<?php
+	if($num_new_templates==0)
+		echo '<br/>Template library is up to date.';
+}
+
+
+function featurific_install_template($url) {
+	global $wp_filesystem;
+
+	$status_indicator = '<strong>...</strong>';
+
+	echo '<strong>Starting</strong>';
+
+	echo $status_indicator;
+	echo '<strong>Downloading</strong>';
+
+	//$data = file_get_contents($url);
+	$data = file_get_contents(str_replace(' ', '%20', $url));
+	$dir = featurific_get_plugin_root() . 'templates/';
+	$filename = basename($url);
+
+	echo $status_indicator;
+	
+	if($data==null)
+		return false;
+
+	echo $status_indicator;
+	echo '<strong>Saving Archive</strong>';
+	
+	file_put_contents($dir.$filename, $data);
+
+	echo $status_indicator;
+	
+	//Adapted from WP's plugin-install.php
+	// Is a filesystem accessor setup?
+	if ( ! $wp_filesystem || ! is_object($wp_filesystem) )
+		WP_Filesystem();
+
+	if ( ! is_object($wp_filesystem) ) {
+		featurific_dump(new WP_Error('fs_unavailable', __('Could not access filesystem.')));
+		return false;
+	}
+
+	if ( $wp_filesystem->errors->get_error_code() ) {
+		featurific_dump(new WP_Error('fs_error', __('Filesystem error'), $wp_filesystem->errors));
+		return false;
+	}
+
+	echo '<strong>Unarchiving</strong>';
+	echo $status_indicator;
+
+	// Unzip package to working directory
+	//echo 'Unzipping '.$dir.$filename.' to '.$dir;
+	$result = unzip_file($dir.$filename, $dir);
+
+	echo $status_indicator;
+	echo '<strong>Deleting Archive</strong>';
+
+	// Once extracted, delete the package
+	@unlink($dir.$filename);
+	echo $status_indicator;
+
+	if ( is_wp_error($result) ) {
+		// $wp_filesystem->delete($working_dir, true);
+		// return $result;
+		return false;
+	}
+	echo $status_indicator;
+	
+	return true;
+}
+
+
+/*
+function featurific_install_template($url) {
+	//Portions adapted from WP's plugin-install.php
+
+	// Is a filesystem accessor setup?
+	if(!$wp_filesystem || !is_object($wp_filesystem))
+		WP_Filesystem();
+		
+	featurific_dump(get_filesystem_method());
+
+	global $wp_filesystem;
+
+	$status_indicator = '<strong>.</strong>';
+	echo $status_indicator;
+
+	$data = file_get_contents(str_replace(' ', '%20', $url));
+	$dir = featurific_get_plugin_root() . 'templates/';
+	$filename = basename($url);
+	echo $status_indicator;
+
+	featurific_dump($dir.'blahhhh');
+	if(!$wp_filesystem->mkdir($dir.'blahhhh', FS_CHMOD_DIR))
+	//if(!$wp_filesystem->mkdir($dir.'blahhhh', 777))
+		return false;
+
+	//$data = file_get_contents($url);
+	
+	if($data==null)
+		return false;
+	echo $status_indicator;
+	
+	file_put_contents($dir.$filename, $data);
+	echo $status_indicator;
+	
+	// Unzip package to working directory
+	$result = unzip_file($dir.$filename, $dir);
+	echo $status_indicator;
+
+	// Once extracted, delete the package
+	//@unlink($dir.$filename);
+	echo $status_indicator;
+
+	featurific_dump($result);
+	if ( is_wp_error($result) ) {
+		// $wp_filesystem->delete($working_dir, true);
+		// return $result;
+		return false;
+	}
+	echo $status_indicator;
+	
+	return true;
+}
+*/
 
 
 /**
@@ -1985,5 +2407,26 @@ if (!function_exists('file_put_contents')) {
 }
 
 
-
+/**
+ * Formatted print_r().  From http://www.bin-co.com/php/scripts/dump/
+ *
+ * Arguments : $data - the variable that must be displayed
+ * Prints a array, an object or a scalar variable in an easy to view format.
+ */
+function featurific_dump($data) {
+    if(is_array($data)) { //If the given variable is an array, print using the print_r function.
+        print "<pre>-----------------------\n";
+        print_r($data);
+        print "-----------------------</pre>";
+    } elseif (is_object($data)) {
+        print "<pre>==========================\n";
+        var_dump($data);
+        print "===========================</pre>";
+    } else {
+        print "=========&gt; ";
+        var_dump($data);
+        print " &lt;=========";
+    }
+		print "<br/>";
+}
 ?>
