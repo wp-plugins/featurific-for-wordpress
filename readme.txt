@@ -2,7 +2,7 @@
 Contributors: rinogo
 Tags: slideshow, slide, show, gallery, flash, xml, dynamic, conversion, funnel, Post, posts, sidebar, images, links, photo, photos, statistics, stats, swf, plugin, admin
 Requires at least: 2.3
-Tested up to: 2.7
+Tested up to: 2.7.1
 Stable tag: 1.4.4
 
 An effortless but powerful interface to Featurific Free, the featured story slideshow.  (Similar to the 'featured'
@@ -49,17 +49,10 @@ Once you get Featurific for Wordpress installed, let us know by [posting a link 
 
 [The Hoop Doctors](http://thehoopdoctors.com/online/) |
 [Endorkins](http://endorkins.com/) |
-[Passion for Poetry](http://p4poetry.com/) |
 [Bigg Success](http://biggsuccess.com) |
 [Life Magick](http://www.lifemagick.net/) |
 [Teknoblog](http://www.teknoblog.com/) |
-[West Ham United](http://www.westhampoland.com) |
-[Alofoke Music](http://alofokemusic.net/v2) |
-[The GPS Times](http://thegpstimes.com) |
-[Sox & Dawgs](http://soxanddawgs.com/) |
-[Michael Aulia](http://www.michaelaulia.com/blogs/) |
-[ATA-WA Taekwondo](http://www.ata-wa.org.au/) |
-[FreeDB2.com](http://freedb2.com/)
+[The GPS Times](http://thegpstimes.com)
 
 
 
@@ -77,6 +70,22 @@ Sax Hammer of [Ultragreek News](http://news.ultragreek.com/)
 
 
 == Changelog ==
+**1.5.0 (3/24/09)**
+Releasing changes to public.  Tested with WP 2.7.1
+
+**1.4.8 (3/24/09)**
+Added improved template installation experience through 'auto installer',
+greatly reducing initial download size.
+
+**1.4.7 (2/9/09)**
+Fixed a minor bug that prevented loading of images with spaces in their filenames.  Added some RTL-enabled themes, as well as implemented the related Wordpress to Featurific interface for specifying the RTL option.
+
+**1.4.6 (1/29/09)**
+Added RTL (Right To Left text) support.
+
+**1.4.5 (1/21/09)**
+Fixed a bug in which '<' and '>' were not escaped correctly during the translation from post data to screen XML.
+
 **1.4.4 (12/30/08)**
 Documentation update.
 
@@ -351,6 +360,3 @@ To get rid of the "Powered by Featurific" logo, you're going to have to splurge 
 2. An example of the plugin in action.
 3. An example of the plugin in action.
 4. An example of the plugin in action.
-5. An example of the plugin in action.
-6. An example of the plugin in action.
-7. An example of the plugin in action.
