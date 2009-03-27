@@ -70,8 +70,8 @@ Sax Hammer of [Ultragreek News](http://news.ultragreek.com/)
 
 
 == Changelog ==
-**1.5.0 (3/24/09)**
-Releasing changes to public.  Tested with WP 2.7.1
+**1.5.0 (3/26/09)**
+Releasing changes to public.  Tested with WP 2.7.1.
 
 **1.4.8 (3/24/09)**
 Added improved template installation experience through 'auto installer',
