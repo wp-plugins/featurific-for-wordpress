@@ -3,7 +3,7 @@ Contributors: rinogo
 Tags: slideshow, slide, show, gallery, flash, xml, dynamic, conversion, funnel, Post, posts, sidebar, images, links, photo, photos, statistics, stats, swf, plugin, admin
 Requires at least: 2.3
 Tested up to: 2.7.1
-Stable tag: 1.5.0
+Stable tag: 1.5.1
 
 An effortless but powerful interface to Featurific Free, the featured story slideshow.  (Similar to the 'featured'
 widget on time.com, msn.com, walmart.com, etc.)
@@ -70,6 +70,9 @@ Sax Hammer of [Ultragreek News](http://news.ultragreek.com/)
 
 
 == Changelog ==
+**1.5.1 (3/26/09)**
+Modified ordering of featurific.php's WP metadata comment and the GNU license header comment.  This restores the auto-update plugin functionality.  Also, fixed a bug that prevented the data.xml file from being generated if the template file/dir is inadvertently deleted (manually or via the auto-upgrade process).
+
 **1.5.0 (3/26/09)**
 Releasing changes to public.  Tested with WP 2.7.1.
 

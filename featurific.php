@@ -9,7 +9,7 @@ displaying summaries of featured articles on the site.  Installation is
 automatic and easy, while advanced users can customize every element of the
 Flash slideshow presentation.
 Author: Rich Christiansen
-Version: 1.5.0
+Version: 1.5.1
 Author URI: http://endorkins.com/
 */
 
@@ -38,7 +38,7 @@ Author URI: http://endorkins.com/
 */
 
 //Constants
-define('FEATURIFIC_VERSION', '1.5.0');
+define('FEATURIFIC_VERSION', '1.5.1');
 define('FEATURIFIC_MAX_INT', defined('PHP_INT_MAX') ? PHP_INT_MAX : 32767);
 define('FEATURIFIC_STORE_UNDEFINED', false);
 define('FEATURIFIC_STORE_IN_DB', 1);
@@ -1283,7 +1283,22 @@ function featurific_generate_data_xml($output_filename) {
 	$template = get_option('featurific_template');
 	
 	//Parse the template XML
-	$in = file_get_contents(featurific_get_plugin_root() . 'templates/'. $template);
+	$in = @file_get_contents(featurific_get_plugin_root() . 'templates/' . $template);
+	
+	//If for some reason the chosen template is inaccessible, just choose the first valid template found and use it.
+	if($in==false) {
+		$templates = featurific_get_templates();
+		asort($templates);
+		foreach($templates as $template => $path) {
+			$in = @file_get_contents(featurific_get_plugin_root() . 'templates/'. $path);
+			if($in) break;
+		}
+	}
+	
+	//If no valid template can be found, just return.
+	if($in==false)
+		return false;
+
 	$template_xml = new XMLParser($in);
 	$template_xml->Parse();
 	
