@@ -70,6 +70,9 @@ Sax Hammer of [Ultragreek News](http://news.ultragreek.com/)
 
 
 == Changelog ==
+**1.5.3 (3/30/09)**
+Updated default template to be Time.com (Transparent).
+
 **1.5.2 (3/30/09)**
 Fixed some svn template issues.
 

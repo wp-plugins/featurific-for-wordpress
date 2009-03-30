@@ -9,7 +9,7 @@ displaying summaries of featured articles on the site.  Installation is
 automatic and easy, while advanced users can customize every element of the
 Flash slideshow presentation.
 Author: Rich Christiansen
-Version: 1.5.1
+Version: 1.5.3
 Author URI: http://endorkins.com/
 */
 
@@ -38,7 +38,7 @@ Author URI: http://endorkins.com/
 */
 
 //Constants
-define('FEATURIFIC_VERSION', '1.5.1');
+define('FEATURIFIC_VERSION', '1.5.3');
 define('FEATURIFIC_MAX_INT', defined('PHP_INT_MAX') ? PHP_INT_MAX : 32767);
 define('FEATURIFIC_STORE_UNDEFINED', false);
 define('FEATURIFIC_STORE_IN_DB', 1);
@@ -780,7 +780,7 @@ function featurific_set_default_options() {
 	if(get_option('featurific_user_specified_posts')===false)			add_option('featurific_user_specified_posts', '');
 	if(get_option('featurific_generation_frequency')===false)			add_option('featurific_generation_frequency', 10);
 	if(get_option('featurific_data_xml_override')===false)				add_option('featurific_data_xml_override', '');
-	if(get_option('featurific_template')===false)									add_option('featurific_template', 'Thumber Abstract/template.xml');
+	if(get_option('featurific_template')===false)									add_option('featurific_template', 'Time.com (Transparent)/template.xml');
 	if(get_option('featurific_num_posts')===false)								add_option('featurific_num_posts', 5);
 	if(get_option('featurific_popular_days')===false)							add_option('featurific_popular_days', 90);
 	if(get_option('featurific_auto_excerpt_length')===false)			add_option('featurific_auto_excerpt_length', 150);
