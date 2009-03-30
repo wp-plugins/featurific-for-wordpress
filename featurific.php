@@ -2116,6 +2116,10 @@ function featurific_check_template_exists($dirname)
 
 
 function featurific_get_credentials() {
+	if(!function_exists('request_filesystem_credentials')) {
+		return null;
+	}
+	
 	$url = wp_nonce_url("update.php?action=upgrade-plugin&plugin=$plugin", "upgrade-plugin_$plugin");
 	if ( false === ($credentials = request_filesystem_credentials($url)) )
 		return null;
@@ -2169,7 +2173,8 @@ function featurific_install_templates() {
 		}
 		
 		if($credentials==null) {
-			echo '<br/><strong><font color="red">Auto-install prerequisite not met:</font></strong> In order for template auto installation to work, Wordpress needs advanced access to your filesystem.  Please fill out and submit the form at the top of this page to satisfy this prerequisite.';
+			if(function_exists('request_filesystem_credentials'))
+				echo '<br/><strong><font color="red">Auto-install prerequisite not met:</font></strong> In order for template auto installation to work, Wordpress needs advanced access to your filesystem.  Please fill out and submit the form at the top of this page to satisfy this prerequisite.';
 			$auto_install_prequisites_met = false;
 		}
 		
