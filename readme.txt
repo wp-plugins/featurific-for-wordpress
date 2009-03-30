@@ -70,6 +70,9 @@ Sax Hammer of [Ultragreek News](http://news.ultragreek.com/)
 
 
 == Changelog ==
+**1.5.2 (3/30/09)**
+Fixed some svn template issues.
+
 **1.5.1 (3/26/09)**
 Modified ordering of featurific.php's WP metadata comment and the GNU license header comment.  This restores the auto-update plugin functionality.  Also, fixed a bug that prevented the data.xml file from being generated if the template file/dir is inadvertently deleted (manually or via the auto-upgrade process).
 
