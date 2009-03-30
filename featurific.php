@@ -1,5 +1,19 @@
 <?php
 /*
+Plugin Name: Featurific for Wordpress
+Plugin URI: http://featurific.com/ffw
+Description: This plugin provides an effortless interface to Featurific, the
+featured story slideshow.  Unlike traditional slideshows, Featurific imitates
+the behavior seen on the home pages of sites like time.com and msn.com,
+displaying summaries of featured articles on the site.  Installation is
+automatic and easy, while advanced users can customize every element of the
+Flash slideshow presentation.
+Author: Rich Christiansen
+Version: 1.5.0
+Author URI: http://endorkins.com/
+*/
+
+/*
   This file is part of Featurific For Wordpress.
 
   Copyright 2008  Rich Christiansen  (rich at <please don't spam me> byu period net)
@@ -21,21 +35,6 @@
 	License.  It is released under the license contained in license.txt.  For details
 	on licensing of Featurific (Free, Pro, etc), please contact Breeze Computer
 	Consulting at support@featurific.com.
-*/
-
-
-/*
-Plugin Name: Featurific for Wordpress
-Plugin URI: http://featurific.com/ffw
-Description: This plugin provides an effortless interface to Featurific, the
-featured story slideshow.  Unlike traditional slideshows, Featurific imitates
-the behavior seen on the home pages of sites like time.com and msn.com,
-displaying summaries of featured articles on the site.  Installation is
-automatic and easy, while advanced users can customize every element of the
-Flash slideshow presentation.
-Author: Rich Christiansen
-Version: 1.5.0
-Author URI: http://endorkins.com/
 */
 
 //Constants
