@@ -9,7 +9,7 @@ displaying summaries of featured articles on the site.  Installation is
 automatic and easy, while advanced users can customize every element of the
 Flash slideshow presentation.
 Author: Rich Christiansen
-Version: 1.5.3
+Version: 1.5.4
 Author URI: http://endorkins.com/
 */
 
@@ -38,7 +38,7 @@ Author URI: http://endorkins.com/
 */
 
 //Constants
-define('FEATURIFIC_VERSION', '1.5.3');
+define('FEATURIFIC_VERSION', '1.5.4');
 define('FEATURIFIC_MAX_INT', defined('PHP_INT_MAX') ? PHP_INT_MAX : 32767);
 define('FEATURIFIC_STORE_UNDEFINED', false);
 define('FEATURIFIC_STORE_IN_DB', 1);
@@ -2070,6 +2070,10 @@ if (!function_exists('file_get_contents')) {
 
 
 function featurific_get_template_library() {
+	//TODO: Temporary workaround.  Check to see if we can use file_get_contents.  If not, just return.  (The better, long-term solution, is to use the WP_Http class in http.php instead of file_get_contents)
+	if(ini_get('allow_url_fopen')!=1)
+		return null;
+
 	$data = file_get_contents(FEATURIFIC_TEMPLATES_URL.'/'.FEATURIFIC_TEMPLATES_LIBRARY_FILENAME);
 	
 	//featurific_dump($data);
@@ -2087,6 +2091,9 @@ function featurific_get_template_library() {
 
 function featurific_count_new_templates() {
 	$xml = featurific_get_template_library();
+	
+	if($xml==null)
+		return 0;
 	
 	$num_new_templates = 0;
 	foreach($xml->document->template as $template) {

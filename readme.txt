@@ -70,6 +70,11 @@ Sax Hammer of [Ultragreek News](http://news.ultragreek.com/)
 
 
 == Changelog ==
+
+
+**1.5.4 (4/6/09)**
+Added a call to ini_get('allow_url_fopen') in featurific_get_template_library() to check if file_get_contents() will fail.  If so, null is returned.  This is only a temporary workaround - The better, long-term solution, is to use the WP_Http class in http.php instead of file_get_contents() at all (falling back on file_get_contents() if the WP_Http class isn't available (e.g. on older WP installations)).
+
 **1.5.3 (3/30/09)**
 Updated default template to be Time.com (Transparent).
 
