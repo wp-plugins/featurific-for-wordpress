@@ -2,8 +2,8 @@
 Contributors: rinogo
 Tags: slideshow, slide, show, gallery, flash, xml, dynamic, conversion, funnel, Post, posts, sidebar, images, links, photo, photos, statistics, stats, swf, plugin, admin
 Requires at least: 2.3
-Tested up to: 2.6
-Stable tag: trunk
+Tested up to: 2.7.1
+Stable tag: 1.5.1
 
 An effortless but powerful interface to Featurific Free, the featured story slideshow.  (Similar to the 'featured'
 widget on time.com, msn.com, walmart.com, etc.)
@@ -45,20 +45,14 @@ For basic configuration:
 
 
 == Demo Sites ==
-Once you get Featurific for Wordpress installed, please email me and I'll add you to this list of demo sites.
-(Hey, free traffic! :) ) (rich at [please don't spam me] byu period net)
+Once you get Featurific for Wordpress installed, let us know by [posting a link to your site](http://featurific.com/support/thread-9.html) on our [support forum](http://featurific.com/support/thread-9.html).  From time to time, we'll choose a few sites from the list to be featured here and on the Featurific.com website.
 
+[The Hoop Doctors](http://thehoopdoctors.com/online/) |
 [Endorkins](http://endorkins.com/) |
-[Passion for Poetry](http://p4poetry.com/) |
 [Bigg Success](http://biggsuccess.com) |
 [Life Magick](http://www.lifemagick.net/) |
 [Teknoblog](http://www.teknoblog.com/) |
-[West Ham United](http://www.westhampoland.com) |
-[Alofoke Music](http://alofokemusic.net/v2) |
-[The GPS Times](http://thegpstimes.com) |
-[Sox & Dawgs](http://soxanddawgs.com/) |
-[The Hoop Doctors](http://thehoopdoctors.com/online/) |
-[Michael Aulia](http://www.michaelaulia.com/blogs/)
+[The GPS Times](http://thegpstimes.com)
 
 
 
@@ -76,6 +70,54 @@ Sax Hammer of [Ultragreek News](http://news.ultragreek.com/)
 
 
 == Changelog ==
+
+
+**1.5.4 (4/6/09)**
+Added a call to ini_get('allow_url_fopen') in featurific_get_template_library() to check if file_get_contents() will fail.  If so, null is returned.  This is only a temporary workaround - The better, long-term solution, is to use the WP_Http class in http.php instead of file_get_contents() at all (falling back on file_get_contents() if the WP_Http class isn't available (e.g. on older WP installations)).
+
+**1.5.3 (3/30/09)**
+Updated default template to be Time.com (Transparent).
+
+**1.5.2 (3/30/09)**
+Fixed some svn template issues.
+
+**1.5.1 (3/26/09)**
+Modified ordering of featurific.php's WP metadata comment and the GNU license header comment.  This restores the auto-update plugin functionality.  Also, fixed a bug that prevented the data.xml file from being generated if the template file/dir is inadvertently deleted (manually or via the auto-upgrade process).
+
+**1.5.0 (3/26/09)**
+Releasing changes to public.  Tested with WP 2.7.1.
+
+**1.4.8 (3/24/09)**
+Added improved template installation experience through 'auto installer',
+greatly reducing initial download size.
+
+**1.4.7 (2/9/09)**
+Fixed a minor bug that prevented loading of images with spaces in their filenames.  Added some RTL-enabled themes, as well as implemented the related Wordpress to Featurific interface for specifying the RTL option.
+
+**1.4.6 (1/29/09)**
+Added RTL (Right To Left text) support.
+
+**1.4.5 (1/21/09)**
+Fixed a bug in which '<' and '>' were not escaped correctly during the translation from post data to screen XML.
+
+**1.4.4 (12/30/08)**
+Documentation update.
+
+**1.4.4 (12/30/08)**
+Releasing changes since 1.3.5 to public.  Tested (with no issues) in WP 2.7.
+
+**1.4.2 (9/3/08)**
+Fixed a minor bug with the category restriction's in_array() call ('Warning: in_array() [function.in-array]: Wrong datatype for second argument in...')
+
+**1.4.1 (9/3/08)**
+Added a user-configurable option for choosing whether to serve up the cached image files dynamically (via PHP) or statically (via the web server).  Also modified the related administration page slightly.
+
+**1.4.0 (8/28/08)**
+Fixed a bug that caused Featurific to behave somewhat erratically when used in conjunction with [gallery] shortcodes.  Featurific should now work fine with the built-in Wordpress gallery shortcode, as well as third-party galery plugins such as NextGen Gallery.  Also added a user-configurable option for choosing whether to serve up the data.xml dynamically (via PHP) or statically (via the web server).
+
+**1.3.6 (8/08)**
+Internal version.
+
 **1.3.5 (7/28/08)**
 Fixed a bug that caused the plugin to use incorrect URLs in slideshow generation when the blog had been moved from one location (e.g. myblog.com/wordpress) to another location (e.g. myblog.com).  (A method leveraging the_permalink() is now used rather than using $post['guid']).  Also fixed a bug that caused images referenced via a relative URL to not be processed/included correctly in the slideshow.
 
@@ -131,7 +173,8 @@ Changelog added.  Unicode Support (UTF-8 encoding) added to FeaturificFree.swf.
 = I can't get the plugin to install.  Can you help me? =
 I'm sorry if the plugin is causing you problems.  It has only recently been released (consider yourself an early
 adopter! :) ), so I still need to work through the bugs that weren't manifest in my development environment.  Please
-email me (rich at [please don't spam me] byu period net) and I'll be happy to help you work through the bugs.
+[contact me](http://featurific.com/support) via the [Featurific.com support forum](http://featurific.com/support) and I'll be happy
+to help you work through the bugs.
 
 
 
@@ -153,6 +196,16 @@ your Featurific template and Wordpress theme to their original state.
 
 
 
+= Featurific works, but none of the images load.  Help! =
+In most cases, this issue is related to hotlink prevention measures taken by a web host.  To make a long story short,
+Flash (Actionscript 3.0) doesn't send the HTTP-REFERER HTTP header, which causes some web servers to erroneously conclude
+that Featurific is attempting to [hot-link](http://en.wikipedia.org/wiki/Inline_linking) an image.  So, these servers
+block Featurific's image requests and the images do not appear.  To fix this issue, try disabling 'hot link' or 'leech'
+protection in your CPanel or PLESK control panels.  If that does not work, try contacting your web host and explain that
+you need hotlink protection disabled.
+
+
+
 = I can't get the "User-Defined Posts" feature to work.  Any ideas? =
 **Use the correct format**
 The format for this field is a comma-separated list of post id's, such as '5, 14, 8, 23' (omit the quotes).
@@ -171,16 +224,19 @@ http://mysuperblog.com/blog/?p=54
 If you can't access the post via this URL, then you're trying to use an invalid post id.
 
 
+
 = Where can I find more templates? =
 [The Featurific website](http://featurific.com/ffw) ([http://featurific.com/ffw](http://featurific.com/ffw)).  No
 extra templates have been released yet - please let me know if you'd like your template to be the first featured
 template!
 
 
+
 = What are the system requirements for using Featurific? =
-Featurific has been successfully tested with Wordpress 2.3 to 2.5.1 on PHP4 and PHP5.  If you have problems on these
-(or other) configurations, feel free to email me.  (rich at [please don't spam me] byu period net)  Support on Wordpress
+Featurific has been successfully tested with Wordpress 2.3 to 2.7 on PHP4 and PHP5.  If you have problems on these
+(or other) configurations, feel free to [contact me](http://featurific.com/support) via the [Featurific.com support forum](http://featurific.com/support).  Support on Wordpress
 2.3 seems to be limited, I'll post more information as it becomes available.
+
 
 
 = How do I move Featurific to another location on my page? (aka How do I manually install Featurific?) =
@@ -308,7 +364,7 @@ To get rid of the "Powered by Featurific" logo, you're going to have to splurge 
 
 
 = I can't get this thing to work!  What's wrong? =
-Drop me an email and I'll try to help you out.  (rich at [please don't spam me] byu period net)
+[Drop me a line](http://featurific.com/support) on the [Featurific.com support forum](http://featurific.com/support) and I'll try to help you out.
 
 
 
@@ -318,6 +374,3 @@ Drop me an email and I'll try to help you out.  (rich at [please don't spam me] 
 2. An example of the plugin in action.
 3. An example of the plugin in action.
 4. An example of the plugin in action.
-5. An example of the plugin in action.
-6. An example of the plugin in action.
-7. An example of the plugin in action.

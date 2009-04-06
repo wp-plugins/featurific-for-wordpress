@@ -15,6 +15,7 @@
 	<!-- Notes about this template.  Use any HTML you like, but use '[' and ']' to define your tags.  (e.g. [h4]Notes[/h4])  To use the literals '[' and ']', use '&#91;' and '&#93;', respectively. -->
 	<notes>
 		Thumber is a great gallery to use if you have images included in the posts on your blog.  (If you don't include images in your posts, try one of the variants of Thumber)[br/]
+		Note that all text in this template is right justified.
 		Recommended settings:[br/]
 		[ul]
 			[li][b]Screen Assignment[/b]: Random
@@ -69,7 +70,7 @@
 		<image filename="%image_1%" x="100" y="100" gravity="center" width="130" height="130" resizetype="max" animationspeed="6" animatefromx="-500" animatefromy="50"/>
 		
 		<!-- Main text -->
-		<text x="210" y="5" width="180" animationspeed="6" animatefromx="700" animatefromy="5">
+		<text x="390" y="5" width="180" animationspeed="6" animatefromx="900" animatefromy="5" align="right">
 			<line fontsize="18" fontstyle="bold" fontcolor="%title_color%" text="%post_title%"/>
 			<line fontsize="12" fontstyle="bold" fontcolor="%excerpt_color%" text="%post_excerpt%"/>
 			<line fontsize="10" fontcolor="%date_time_color%" text="%post_dotted_date% @ %post_human_time%"/>
@@ -98,7 +99,7 @@
 		<image filename="%image_1%" x="300" y="100" gravity="center" width="130" height="130" resizetype="max" animationspeed="6" animatefromx="700" animatefromy="50"/>
 		
 		<!-- Main text -->
-		<text x="10" y="5" width="180" animationspeed="6" animatefromx="-500" animatefromy="5">
+		<text x="190" y="5" width="180" animationspeed="6" animatefromx="-300" animatefromy="5" align="right">
 			<line fontsize="18" fontstyle="bold" fontcolor="%title_color%" text="%post_title%"/>
 			<line fontsize="12" fontstyle="bold" fontcolor="%excerpt_color%" text="%post_excerpt%"/>
 			<line fontsize="10" fontcolor="%date_time_color%" text="%post_dotted_date% @ %post_human_time%"/>
