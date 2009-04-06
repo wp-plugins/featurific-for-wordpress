@@ -966,7 +966,17 @@ function featurific_options_page() {
 
 	//Prepare the template (or data.xml override) notes
 	$template_opt_val = get_option('featurific_template');
-	$in = file_get_contents(featurific_get_plugin_root() . 'templates/'. $template_opt_val);
+	$in = @file_get_contents(featurific_get_plugin_root() . 'templates/'. $template_opt_val);
+	
+	//If we couldn't open the template the user has selected, just use the first template we *can* open.
+	if($in==null) {
+		$templates_tmp = featurific_get_templates();
+		foreach ($templates_tmp as $name_tmp => $path_tmp) {
+			$in = file_get_contents(featurific_get_plugin_root() . 'templates/'. $path_tmp);
+			break;
+		}
+	}
+	
 	$xml = new XMLParser($in);
 	$xml->Parse();
 	$notes_html = featurific_get_notes_from_xml($xml);
