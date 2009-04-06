@@ -964,7 +964,7 @@ function featurific_options_page() {
 		featurific_do_cron(true);
 	}
 
-	//Prepare the template (or data.xml override) notes
+	//Prepare the template (or data.xml override) notes.
 	$template_opt_val = get_option('featurific_template');
 	$in = @file_get_contents(featurific_get_plugin_root() . 'templates/'. $template_opt_val);
 	
