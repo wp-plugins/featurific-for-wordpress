@@ -29,13 +29,13 @@
 	<screen url="%url%" duration="%screen_duration%" transition="fade">
 		<!-- Main image.  Note that we use the 'max' resize type so that the image is guaranteed to fit in the display area. -->
 		<image filename="%image_1%" x="0" y="0" width="350" height="233" resizetype="max"/>
-		<default name="image_1" value="templates/Time.com/default.jpg"/>
+		<default name="image_1" value="templates/common/timeDefault.jpg"/>
 		
 		<!-- Lighter grey portion, behind text.  Note that this lighter grey portion is listed *after* the main image.  This will cause the main image to be cropped by the lighter grey portion.  This is necessary since we're using the 'min' resize type on the main image. -->
-		<image filename="templates/Time.com/greyF5.gif" x="0" y="233" width="350" height="87" resizetype="exact"/>
+		<image filename="templates/common/greyF5.gif" x="0" y="233" width="350" height="87" resizetype="exact"/>
 		
 		<!-- Darker grey portion, behind control panel -->
-		<image filename="templates/Time.com/greyEB.gif" x="0" y="320" width="350" height="30" resizetype="exact"/>
+		<image filename="templates/common/greyEB.gif" x="0" y="320" width="350" height="30" resizetype="exact"/>
 
 		<text x="5" y="233" width="340">
 			<line fontsize="18" fontstyle="bold" fontcolor="black" text="%post_title%"/>

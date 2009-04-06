@@ -29,13 +29,13 @@
 	<screen url="%url%" duration="%screen_duration%" transition="fade">
 		<!-- Main image.  Note that we use the 'max' resize type so that the image is guaranteed to fit in the display area. -->
 		<image filename="%image_1%" x="0" y="0" width="350" height="350" resizetype="max"/>
-		<default name="image_1" value="templates/Time.com (Transparent)/default.jpg"/>
+		<default name="image_1" value="templates/common/timeDefault.jpg"/>
 		
 		<!-- Lighter grey portion, behind text.  Note that this lighter grey portion is listed *after* the main image.  This will cause the main image to be cropped by the lighter grey portion.  This is necessary since we're using the 'min' resize type on the main image. -->
-		<image filename="templates/Time.com (Transparent)/greyF5.png" x="0" y="233" width="350" height="87" resizetype="exact" animatefromx="0" animatefromy="1500" animationspeed="5"/>
+		<image filename="templates/common/greyF5.png" x="0" y="233" width="350" height="87" resizetype="exact" animatefromx="0" animatefromy="1500" animationspeed="5"/>
 		
 		<!-- Darker grey portion, behind control panel -->
-		<image filename="templates/Time.com (Transparent)/greyEB.png" x="0" y="320" width="350" height="30" resizetype="exact" animatefromx="0" animatefromy="1500" animationspeed="5"/>
+		<image filename="templates/common/greyEB.png" x="0" y="320" width="350" height="30" resizetype="exact" animatefromx="0" animatefromy="1500" animationspeed="5"/>
 
 		<text x="5" y="233" width="340" animatefromx="5" animatefromy="1500" animationspeed="5">
 			<line fontsize="18" fontstyle="bold" fontcolor="black" text="%post_title%"/>

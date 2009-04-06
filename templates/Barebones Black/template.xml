@@ -46,7 +46,7 @@
 
 
 	<screen url="%url%" duration="%screen_duration%" transition="fade">
-		<image filename="templates/Barebones Black/pixel.gif" x="0" y="0" width="105" height="200" resizetype="exact" animationspeed="8" animatefromx="-105" animatefromy="0"/>
+		<image filename="templates/common/black.gif" x="0" y="0" width="105" height="200" resizetype="exact" animationspeed="8" animatefromx="-105" animatefromy="0"/>
 
 		<text x="25" y="10" animationspeed="8"><line fontsize="130" fontstyle="bold" fontcolor="#333333" text="%screen_number%"/></text>
 		<text x="5" y="55" animationspeed="8"><line fontsize="16" fontstyle="bold" fontcolor="#444444" text="Story"/></text>
@@ -62,7 +62,7 @@
 
 
 	<screen url="%url%" duration="%screen_duration%" transition="fade">
-		<image filename="templates/Barebones Black/pixel.gif" x="0" y="0" width="400" height="200" resizetype="exact" animationspeed="8" animatefromx="0" animatefromy="-200"/>
+		<image filename="templates/common/black.gif" x="0" y="0" width="400" height="200" resizetype="exact" animationspeed="8" animatefromx="0" animatefromy="-200"/>
 
 		<text x="300" y="40" animationspeed="8"><line fontsize="130" fontstyle="bold" fontcolor="#333333" text="%screen_number%"/></text>
 		<text x="280" y="85" animationspeed="8"><line fontsize="16" fontstyle="bold" fontcolor="#444444" text="Story"/></text>
@@ -78,7 +78,7 @@
 
 
 	<screen url="%url%" duration="%screen_duration%" transition="fade">
-		<image filename="templates/Barebones Black/pixel.gif" x="105" y="0" width="400" height="200" resizetype="exact" animationspeed="8" animatefrom="right"/>
+		<image filename="templates/common/black.gif" x="105" y="0" width="400" height="200" resizetype="exact" animationspeed="8" animatefrom="right"/>
 
 		<text x="25" y="10" animationspeed="8"><line fontsize="130" fontstyle="bold" fontcolor="#eeeeee" text="%screen_number%"/></text>
 		<text x="5" y="55" animationspeed="8"><line fontsize="16" fontstyle="bold" fontcolor="#dddddd" text="Story"/></text>
@@ -94,7 +94,7 @@
 
 
 	<screen url="%url%" duration="%screen_duration%" transition="fade">
-		<image filename="templates/Barebones Black/pixel.gif" x="0" y="-200" width="400" height="200" resizetype="exact" animationspeed="8" animatefromx="0" animatefromy="0"/>
+		<image filename="templates/common/black.gif" x="0" y="-200" width="400" height="200" resizetype="exact" animationspeed="8" animatefromx="0" animatefromy="0"/>
 
 		<text x="300" y="40" animationspeed="8"><line fontsize="130" fontstyle="bold" fontcolor="#eeeeee" text="%screen_number%"/></text>
 		<text x="280" y="85" animationspeed="8"><line fontsize="16" fontstyle="bold" fontcolor="#dddddd" text="Story"/></text>
@@ -110,7 +110,7 @@
 
 
 	<screen url="%url%" duration="%screen_duration%" transition="fade">
-		<image filename="templates/Barebones Black/pixel.gif" x="0" y="0" width="105" height="200" resizetype="exact" animationspeed="8" animatefromx="0" animatefromy="200"/>
+		<image filename="templates/common/black.gif" x="0" y="0" width="105" height="200" resizetype="exact" animationspeed="8" animatefromx="0" animatefromy="200"/>
 
 		<text x="25" y="10" animationspeed="8"><line fontsize="130" fontstyle="bold" fontcolor="#333333" text="%screen_number%"/></text>
 		<text x="5" y="55" animationspeed="8"><line fontsize="16" fontstyle="bold" fontcolor="#444444" text="Story"/></text>

@@ -42,13 +42,13 @@
 	<screen url="%url%" duration="%screen_duration%" transition="fade">
 		<!-- Main image.  Note that we use the 'min' resize type so that the image is guaranteed to fill the display area. -->
 		<image filename="%image_1%" x="0" y="0" width="500" height="140" resizetype="min"/>
-		<default name="image_1" value="templates/Cutline White/default.jpg"/>
+		<default name="image_1" value="templates/common/cutlineDefault.jpg"/>
 
 		<!-- Transparent white overlay -->
-		<image filename="templates/Cutline White/white80.png" x="0" y="0" width="500" height="140" resizetype="exact"/>
+		<image filename="templates/common/white80.png" x="0" y="0" width="500" height="140" resizetype="exact"/>
 
 		<!-- Cutline-esque black line at top -->
-		<image filename="templates/Cutline White/black.gif" x="0" y="0" width="500" height="2" resizetype="exact"/>
+		<image filename="templates/common/black.gif" x="0" y="0" width="500" height="2" resizetype="exact"/>
 		
 		<!-- Main text -->
 		<text x="10" y="5" width="470" animationspeed="6" animatefromx="10" animatefromy="-100">

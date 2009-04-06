@@ -40,7 +40,7 @@
 	<screen url="%url%" duration="%screen_duration%" transition="fade">
 		<!-- Main image.  Note that we use the 'max' resize type so that the image is guaranteed to fit in the display area. -->
 		<image filename="%image_1%" x="0" y="0" width="150" height="200" resizetype="max"/>
-		<default name="image_1" value="templates/Boxy (Image Only)/default.jpg"/>
+		<default name="image_1" value="templates/common/boxyDefault.jpg"/>
 	</screen>
 
 </data>
