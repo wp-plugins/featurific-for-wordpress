@@ -970,6 +970,7 @@ function featurific_options_page() {
 	
 	//If we couldn't open the template the user has selected, just use the first template we *can* open.
 	if($in==null) {
+		echo '<strong>Error: Your template (templates/'.$template_opt_val.') could not be loaded.  Please select a new template or restore the missing template.  (Some templates have been moved to the template library.  You might be able to restore the template by installing new/missing templates via the \'New Templates Available!\' link below.)</strong><br/>';
 		$templates_tmp = featurific_get_templates();
 		foreach ($templates_tmp as $name_tmp => $path_tmp) {
 			$in = file_get_contents(featurific_get_plugin_root() . 'templates/'. $path_tmp);
