@@ -983,6 +983,11 @@ function featurific_options_page() {
 	if($num_new_templates>0) {
 		$new_templates_html = "<div align='right'><a href='$action_url&action=autoinstall'><font size='+2'><strong>New templates available!</strong></font><br/>Auto-download $num_new_templates new templates now</a></div>";
 	}
+	//Couldn't get library.xml file, so just send user directly to a quick 'n dirty file listing.
+	elseif($num_new_templates<0) {
+		$new_templates_html = "<div align='right'><a href='".FEATURIFIC_TEMPLATES_URL."/index.html'><font size='+2'><strong>New templates available!</strong></font><br/>Download new templates now</a></div>";
+	}
+	//No new templates
 	else {
 		$new_templates_html = "<div align='right'>Template library is up to date.</div>";
 	}
@@ -2093,7 +2098,7 @@ function featurific_count_new_templates() {
 	$xml = featurific_get_template_library();
 	
 	if($xml==null)
-		return 0;
+		return -1;
 	
 	$num_new_templates = 0;
 	foreach($xml->document->template as $template) {
