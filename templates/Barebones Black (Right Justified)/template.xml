@@ -40,16 +40,13 @@
 		<button type="pause"/>
 	</controlpanel>
 
-	<!-- <text x="-3000" y="0" animationspeed="1" animatefrom="right">
-		<line fontsize="130" fontstyle="bold" fontcolor="#555555" text="%post_title%"/>
-	</text> -->
-
 
 	<screen url="%url%" duration="%screen_duration%" transition="fade">
+
 		<text x="25" y="10" animationspeed="8"><line fontsize="130" fontstyle="bold" fontcolor="#333333" text="%screen_number%"/></text>
 		<text x="5" y="55" animationspeed="8"><line fontsize="16" fontstyle="bold" fontcolor="#444444" text="Story"/></text>
 
-		<text x="115" y="10" width="260" animationspeed="8" animatefrom="right">
+		<text x="375" y="10" width="260" animationspeed="8" animatefrom="left" align="right">
 			<line fontsize="20" fontstyle="bold" fontcolor="#555555" text="%post_title%"/>
 			<line fontsize="12" fontstyle="bold" fontcolor="#555555" text="%post_excerpt% (Read More)..."/>
 			<line fontsize="10" fontcolor="#555555" text="Posted in %categories% by %nickname%"/>
@@ -66,7 +63,7 @@
 		<text x="300" y="40" animationspeed="8"><line fontsize="130" fontstyle="bold" fontcolor="#333333" text="%screen_number%"/></text>
 		<text x="280" y="85" animationspeed="8"><line fontsize="16" fontstyle="bold" fontcolor="#444444" text="Story"/></text>
 
-		<text x="25" y="10" width="350" animationspeed="8" animatefrom="top">
+		<text x="375" y="10" width="350" animationspeed="8" animatefrom="top" align="right">
 			<line fontsize="20" fontstyle="bold" fontcolor="#dddddd" text="%post_title%"/>
 			<line fontsize="12" fontstyle="bold" fontcolor="#dddddd" text="%post_excerpt% (Read More)..."/>
 			<line fontsize="10" fontcolor="#dddddd" text="Posted in %categories% by %nickname%"/>
@@ -83,7 +80,7 @@
 		<text x="25" y="10" animationspeed="8"><line fontsize="130" fontstyle="bold" fontcolor="#eeeeee" text="%screen_number%"/></text>
 		<text x="5" y="55" animationspeed="8"><line fontsize="16" fontstyle="bold" fontcolor="#dddddd" text="Story"/></text>
 
-		<text x="115" y="10" width="260" animationspeed="8" animatefrom="right">
+		<text x="375" y="10" width="260" animationspeed="8" animatefrom="left" align="right">
 			<line fontsize="20" fontstyle="bold" fontcolor="#dddddd" text="%post_title%"/>
 			<line fontsize="12" fontstyle="bold" fontcolor="#dddddd" text="%post_excerpt% (Read More)..."/>
 			<line fontsize="10" fontcolor="#dddddd" text="Posted in %categories% by %nickname%"/>
@@ -96,10 +93,11 @@
 
 
 	<screen url="%url%" duration="%screen_duration%" transition="fade">
+
 		<text x="300" y="40" animationspeed="8"><line fontsize="130" fontstyle="bold" fontcolor="#eeeeee" text="%screen_number%"/></text>
 		<text x="280" y="85" animationspeed="8"><line fontsize="16" fontstyle="bold" fontcolor="#dddddd" text="Story"/></text>
 
-		<text x="25" y="10" width="350" animationspeed="8" animatefrom="top">
+		<text x="375" y="10" width="350" animationspeed="8" animatefrom="top" align="right">
 			<line fontsize="20" fontstyle="bold" fontcolor="#555555" text="%post_title%"/>
 			<line fontsize="12" fontstyle="bold" fontcolor="#555555" text="%post_excerpt% (Read More)..."/>
 			<line fontsize="10" fontcolor="#555555" text="Posted in %categories% by %nickname%"/>
@@ -116,7 +114,7 @@
 		<text x="25" y="10" animationspeed="8"><line fontsize="130" fontstyle="bold" fontcolor="#333333" text="%screen_number%"/></text>
 		<text x="5" y="55" animationspeed="8"><line fontsize="16" fontstyle="bold" fontcolor="#444444" text="Story"/></text>
 
-		<text x="115" y="10" width="260" animationspeed="8" animatefrom="right">
+		<text x="375" y="10" width="260" animationspeed="8" animatefrom="left" align="right">
 			<line fontsize="20" fontstyle="bold" fontcolor="#555555" text="%post_title%"/>
 			<line fontsize="12" fontstyle="bold" fontcolor="#555555" text="%post_excerpt% (Read More)..."/>
 			<line fontsize="10" fontcolor="#555555" text="Posted in %categories% by %nickname%"/>

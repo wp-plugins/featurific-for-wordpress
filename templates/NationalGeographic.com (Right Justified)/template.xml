@@ -49,14 +49,14 @@
 		<image filename="templates/common/black.gif" x="0" y="210" width="480" height="30" resizetype="exact"/>
 		
 		<!-- Black shadow behind text -->
-		<text x="11" y="11" width="460" animationspeed="6" animatefromx="10" animatefromy="-100">
+		<text x="471" y="11" width="460" animationspeed="6" animatefromx="471" animatefromy="-100" align="right">
 			<line fontsize="24" fontstyle="bold" fontcolor="black" text="%post_title%"/>
 			<line fontsize="16" fontstyle="bold" fontcolor="black" text="%post_excerpt%"/>
 			<line fontsize="12" fontstyle="bold" fontcolor="black" text="Read More"/>
 		</text>
 
 		<!-- Main text -->
-		<text x="10" y="10" width="460" animationspeed="6" animatefromx="10" animatefromy="-100">
+		<text x="470" y="10" width="460" animationspeed="6" animatefromx="470" animatefromy="-100" align="right">
 			<line fontsize="24" fontstyle="bold" fontcolor="%title_color%" text="%post_title%"/>
 			<line fontsize="16" fontstyle="bold" fontcolor="%excerpt_color%" text="%post_excerpt%"/>
 			<line fontsize="12" fontstyle="bold" fontcolor="%read_more_color%" text="Read More"/>
@@ -76,14 +76,14 @@
 		<image filename="templates/common/black.gif" x="0" y="210" width="480" height="30" resizetype="exact"/>
 		
 		<!-- Black shadow behind text -->
-		<text x="11" y="11" width="460" animationspeed="6" animatefromx="-200" animatefromy="10">
+		<text x="471" y="11" width="460" animationspeed="6" animatefromx="940" animatefromy="11" align="right">
 			<line fontsize="24" fontstyle="bold" fontcolor="black" text="%post_title%"/>
 			<line fontsize="16" fontstyle="bold" fontcolor="black" text="%post_excerpt%"/>
 			<line fontsize="12" fontstyle="bold" fontcolor="black" text="Read More"/>
 		</text>
 
 		<!-- Main text -->
-		<text x="10" y="10" width="460" animationspeed="6" animatefromx="-200" animatefromy="10">
+		<text x="470" y="10" width="460" animationspeed="6" animatefromx="940" animatefromy="10" align="right">
 			<line fontsize="24" fontstyle="bold" fontcolor="%title_color%" text="%post_title%"/>
 			<line fontsize="16" fontstyle="bold" fontcolor="%excerpt_color%" text="%post_excerpt%"/>
 			<line fontsize="12" fontstyle="bold" fontcolor="%read_more_color%" text="Read More"/>

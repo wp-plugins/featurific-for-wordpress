@@ -32,7 +32,7 @@
 	
 	<screen url="%url%" duration="%screen_duration%" transition="fade">
 		<!-- Main image.  Note that we use the 'min' resize type so that the image is guaranteed to fill the display area. -->
-		<image filename="templates/Skinny/image1.jpg" x="0" y="0" width="480" height="60" resizetype="min"/>
+		<image filename="templates/common/skinnyDefault.jpg" x="0" y="0" width="480" height="60" resizetype="min"/>
 		
 		<!-- Black shadow behind text -->
 		<text x="6" y="1" width="410">
