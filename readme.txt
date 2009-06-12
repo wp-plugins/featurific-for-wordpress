@@ -72,6 +72,9 @@ Sax Hammer of [Ultragreek News](http://news.ultragreek.com/)
 == Changelog ==
 
 
+**1.5.6 (6/12/09)**
+Fixed some bugs in the templates included in the archive.
+
 **1.5.5 (6/12/09)**
 Upgrading to reflect (successful) testing with WP 2.8.  Also including an updated version of FeaturificFree.swf.
 
