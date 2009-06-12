@@ -2,7 +2,7 @@
 Contributors: rinogo
 Tags: slideshow, slide, show, gallery, flash, xml, dynamic, conversion, funnel, Post, posts, sidebar, images, links, photo, photos, statistics, stats, swf, plugin, admin
 Requires at least: 2.3
-Tested up to: 2.7.1
+Tested up to: 2.8
 Stable tag: 1.5.4
 
 An effortless but powerful interface to Featurific Free, the featured story slideshow.  (Similar to the 'featured'
@@ -71,6 +71,9 @@ Sax Hammer of [Ultragreek News](http://news.ultragreek.com/)
 
 == Changelog ==
 
+
+**1.5.5 (6/12/09)**
+Upgrading to reflect (successful) testing with WP 2.8.  Also including an updated version of FeaturificFree.swf.
 
 **1.5.4 (4/6/09)**
 Added a call to ini_get('allow_url_fopen') in featurific_get_template_library() to check if file_get_contents() will fail.  If so, null is returned.  This is only a temporary workaround - The better, long-term solution, is to use the WP_Http class in http.php instead of file_get_contents() at all (falling back on file_get_contents() if the WP_Http class isn't available (e.g. on older WP installations)).

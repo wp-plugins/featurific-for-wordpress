@@ -9,7 +9,7 @@ displaying summaries of featured articles on the site.  Installation is
 automatic and easy, while advanced users can customize every element of the
 Flash slideshow presentation.
 Author: Rich Christiansen
-Version: 1.5.4
+Version: 1.5.5
 Author URI: http://endorkins.com/
 */
 
@@ -38,7 +38,7 @@ Author URI: http://endorkins.com/
 */
 
 //Constants
-define('FEATURIFIC_VERSION', '1.5.4');
+define('FEATURIFIC_VERSION', '1.5.5');
 define('FEATURIFIC_MAX_INT', defined('PHP_INT_MAX') ? PHP_INT_MAX : 32767);
 define('FEATURIFIC_STORE_UNDEFINED', false);
 define('FEATURIFIC_STORE_IN_DB', 1);
