@@ -9,7 +9,7 @@ displaying summaries of featured articles on the site.  Installation is
 automatic and easy, while advanced users can customize every element of the
 Flash slideshow presentation.
 Author: Rich Christiansen
-Version: 1.5.6
+Version: 1.5.7
 Author URI: http://endorkins.com/
 */
 
@@ -38,7 +38,7 @@ Author URI: http://endorkins.com/
 */
 
 //Constants
-define('FEATURIFIC_VERSION', '1.5.6');
+define('FEATURIFIC_VERSION', '1.5.7');
 define('FEATURIFIC_MAX_INT', defined('PHP_INT_MAX') ? PHP_INT_MAX : 32767);
 define('FEATURIFIC_STORE_UNDEFINED', false);
 define('FEATURIFIC_STORE_IN_DB', 1);
@@ -1960,6 +1960,10 @@ function featurific_get_posts_tweak(&$posts) {
 		
 		$image_number = 1;
 		foreach($images as $image) {
+			//Only process one image per post to prevent Featurific from running out of memory.  (All existing templates only use one image per post (the first one, or 'image_1'), so we really only need to process one image per post.)
+			if($image_number>1)
+				break;
+				
 			//echo "pos: ".strpos($image, $web_root)."<br/>";
 			if($posts[$post_id]['image_'.$image_number]!=null)
 				$image = $posts[$post_id]['image_'.$image_number];

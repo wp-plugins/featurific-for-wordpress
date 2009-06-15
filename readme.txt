@@ -72,6 +72,9 @@ Sax Hammer of [Ultragreek News](http://news.ultragreek.com/)
 == Changelog ==
 
 
+**1.5.7 (6/15/09)**
+Fixed a bug that prevented data.xml files from being generated in high-volume and image-heavy blogs.  Only one image per post is processed now (the first image, available via the '%image_1%' tag).  Before, all images were parsed which caused high server load during data.xml generation, causing blogs on shared hosts or blogs with large amounts of posts to timeout/run out of memory.
+
 **1.5.6 (6/12/09)**
 Fixed some bugs in the templates included in the archive.
 
