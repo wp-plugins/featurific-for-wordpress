@@ -3,7 +3,7 @@ Contributors: rinogo
 Tags: slideshow, slide, show, gallery, flash, xml, dynamic, conversion, funnel, Post, posts, sidebar, images, links, photo, photos, statistics, stats, swf, plugin, admin
 Requires at least: 2.3
 Tested up to: 2.9
-Stable tag: 1.5.7
+Stable tag: 1.6.1
 
 An effortless but powerful interface to Featurific Free, the featured story slideshow.  (Similar to the 'featured'
 widget on time.com, msn.com, walmart.com, etc.)
