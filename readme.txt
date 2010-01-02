@@ -2,7 +2,7 @@
 Contributors: rinogo
 Tags: slideshow, slide, show, gallery, flash, xml, dynamic, conversion, funnel, Post, posts, sidebar, images, links, photo, photos, statistics, stats, swf, plugin, admin
 Requires at least: 2.3
-Tested up to: 2.8
+Tested up to: 2.9
 Stable tag: 1.5.7
 
 An effortless but powerful interface to Featurific Free, the featured story slideshow.  (Similar to the 'featured'
@@ -71,6 +71,12 @@ Sax Hammer of [Ultragreek News](http://news.ultragreek.com/)
 
 == Changelog ==
 
+
+**1.6.1 (12/31/09)**
+Removed FeaturificFree.swf from the download and added a download helper to facilitate obtaining/installing FeaturificFree.  Also improved the 'code-reuse' of the plugin, rewriting some functions to be less repetitive.
+
+**1.6.0 (6/22/09)**
+Added the 'Random' post selection type (sponsored by [TheChive.com](http://www.thechive.com/)).
 
 **1.5.7 (6/15/09)**
 Fixed a bug that prevented data.xml files from being generated in high-volume and image-heavy blogs.  Only one image per post is processed now (the first image, available via the '%image_1%' tag).  Before, all images were parsed which caused high server load during data.xml generation, causing blogs on shared hosts or blogs with large amounts of posts to timeout/run out of memory.
