@@ -9,7 +9,7 @@ displaying summaries of featured articles on the site.  Installation is
 automatic and easy, while advanced users can customize every element of the
 Flash slideshow presentation.
 Author: Rich Christiansen
-Version: 1.5.5
+Version: 1.6.1
 Author URI: http://endorkins.com/
 */
 
@@ -38,11 +38,13 @@ Author URI: http://endorkins.com/
 */
 
 //Constants
-define('FEATURIFIC_VERSION', '1.5.5');
+define('FEATURIFIC_VERSION', '1.6.1');
 define('FEATURIFIC_MAX_INT', defined('PHP_INT_MAX') ? PHP_INT_MAX : 32767);
 define('FEATURIFIC_STORE_UNDEFINED', false);
 define('FEATURIFIC_STORE_IN_DB', 1);
 define('FEATURIFIC_STORE_ON_FILESYSTEM', 2);
+define('FEATURIFIC_SWF_URL', 'http://featurific.com/autoInstall/09_03_26/FeaturificFree.swf');
+define('FEATURIFIC_SWF_MANUAL_URL', 'http://featurific.com/autoInstall/09_03_26/manual/download.php');
 define('FEATURIFIC_TEMPLATES_URL', 'http://featurific.com/files/templates');
 define('FEATURIFIC_TEMPLATES_LIBRARY_FILENAME', 'library.xml');
 
@@ -142,6 +144,98 @@ if(!get_option('featurific_current_template_configured')) {
 	//return;
 }
 
+
+/**
+ * Every time a page is loaded in the admin area (but not on the FeaturificFree.swf auto install page), check if FeaturificFree.swf is present.
+ * If it is not, display the warning (with instructions of how to obtain FeaturificFree.swf)
+ */
+if(strpos($_SERVER['REQUEST_URI'], '/wp-admin/')!==false && strpos($_SERVER['REQUEST_URI'], '&action=installFeaturific')===false) {
+	featurific_test_featurific_swf_present();
+	if(!get_option('featurific_swf_installed')) {
+		function featurific_install_swf_warning() {
+			// $action_url = str_replace( '%7E', '~', $_SERVER['REQUEST_URI']);
+			$install_url = featurific_get_wordpress_web_root().'wp-admin/options-general.php?page=featurificoptions&action=installFeaturific';
+			echo "
+				<div id='featurific-for-wordpress-warning' class='updated fade'><p><strong>Featurific for Wordpress is almost ready</strong>.  To complete installation, Featurific for Wordpress needs to download and install the <strong>latest version of Featurific Free</strong>.  Featurific Free is distributed by Breeze Computer Consulting, LLC.<br/>
+				
+					<div style='float:left; padding:30px'>
+						<a href='$install_url' style='margin-top:200px'><font size='+2'><strong>Install Featurific Free</strong></font></a>
+					</div>
+					
+					<div style='float:left'>
+						<center>
+							By clicking 'Install Featurific Free', you<br/>accept the following Terms &amp; Conditions:<br/>
+							<textarea rows='3' cols='50' name='' id=''  readonly='' class='form-textarea resizable' style='font-size:0.75em'>IMPORTANT:   THIS AGREEMENT (or &quot;EULA&quot;) IS A LEGAL AGREEMENT BETWEEN THE PERSON, COMPANY, OR ORGANIZATION THAT HAS LICENSED THIS SOFTWARE (&quot;YOU&quot; OR &quot;CUSTOMER&quot;) AND BREEZE COMPUTER CONSULTING, LLC (HEREAFTER SIMPLY &quot;BCC&quot;).   BY INSTALLING AND USING THE SOFTWARE, CUSTOMER ACCEPTS THE SOFTWARE AND AGREES TO THE TERMS OF THIS AGREEMENT.     READ IT CAREFULLY BEFORE COMPLETING THE INSTALLATION PROCESS AND USING THE SOFTWARE.   BY INSTALLING AND/OR USING THE SOFTWARE, YOU ARE CONFIRMING YOUR ACCEPTANCE OF THE SOFTWARE AND AGREEING TO BECOME BOUND BY THE TERMS OF THIS AGREEMENT.   IF YOU DO NOT AGREE TO BE BOUND BY THESE TERMS, OR DO NOT HAVE AUTHORITY TO BIND CUSTOMER TO THESE TERMS, THEN DO NOT INSTALL AND/OR USE THE SOFTWARE AND RETURN THE SOFTWARE TO YOUR PLACE OF PURCHASE FOR A FULL REFUND IN ACCORDANCE WITH ITS REFUND POLICIES.
+	THIS EULA SHALL APPLY ONLY TO THE SOFTWARE SUPPLIED BY BCC HEREWITH REGARDLESS OF WHETHER OTHER SOFTWARE IS REFERRED TO OR DESCRIBED HEREIN.
+	1. License Grants
+	The licenses granted in this Section 1 are subject to the terms and conditions set forth in this EULA:
+	(a)   You may install and use the Software on any number of pages on a single website.  Every page containing the Software must reside on the same domain and, if applicable, within the same path to the the customer&#039;s home directory.  A license for the Software may not be shared, installed or used concurrently on different websites.   A license for the Software may not be accessed and used via a server or network storage device - the Software must be installed and used locally on the server and website.  To use the Software on multiple websites, you must purchase (except in the case of the FREE version, which is provided free of charge) and download a new copy of the Software for each website.
+	(b)   You may make one copy of the Software in machine-readable form solely for backup purposes. You must reproduce on any such copy all copyright notices and any other proprietary legends on the original copy of the Software.   You may not sell or transfer any copy of the Software made for backup purposes.    
+	(c)   You agree that BCC may audit your use of the Software for compliance with these terms at any time, upon reasonable notice. In the event that such audit reveals any use of the Software by you other than in full compliance with the terms of this Agreement, you shall reimburse BCC for all reasonable expenses related to such audit in addition to any other liabilities you may incur as a result of such non-compliance.
+	(d)   Unless otherwise set forth in the documentation relating to such code and/or the Software or in a separate agreement between you and BCC, you may modify the source code form of those portions of such software programs that are identified as sample code, sample application code, or components (each, &quot;Sample Application Code&quot;) in the accompanying documentation solely for the purposes of designing, developing and testing   websites and website applications developed using BCC software programs; provided, however, you are permitted to copy and distribute the Sample Application Code (modified or unmodified) only if all of the following conditions are met: (1) you distribute the compiled object Sample Application Code with your application; (2) you do not include the Sample Application Code in any product or application designed for website development; and (3) you do not use BCC&#039;s name, logos or other BCC trademarks to market your application.   You agree to indemnify, hold harmless and defend BCC from and against any loss, damage, claims or lawsuits, including attorney&#039;s fees, that arise or result from the use or distribution of your application.
+	(g)    Your license rights under this EULA are non-exclusive.   
+	(h)    You agree to grant BCC the right to actively track usage of the Software, which may involve the transmission of data via the Software to BCC.  Perceived piracy may result in an audit in accordance with Section 1(c).
+	(i)    For the Enterprise version of the Software, you may modify the provided source code and re-compile the Software, provided that the following conditions are met: (1) you do not redistribute the original or modified source code, (2) the source code retains all original trademarks, copyrights, and notices, (3) you adhere to the stipulations set forth in this agreement (including, but not limited to, the grant to use the Software on one website only).
+	2. License Restrictions
+	(a)   Other than as set forth in Section 1, you may not make or distribute copies of the Software, or electronically transfer the Software from one computer to another or over a network.
+	(b)   Other than as set forth in Section 1, you may not alter, merge, modify, adapt or translate the Software, or decompile, reverse engineer, disassemble, or otherwise reduce the Software to a human-perceivable form.
+	(c)   Unless otherwise provided herein, you may not sell, rent, lease, or sublicense the Software.
+	(d)   Unless otherwise provided herein, you may not modify the Software or create derivative works based upon the Software.
+	(e)    You may not export the Software into any country prohibited by the United States Export Administration Act and the regulations thereunder.
+	(f)     You may receive the Software in more than one medium but you shall only install or use one medium.   Regardless of the number of media you receive, you may use only the medium that is appropriate for the server or computer on which the Software is to be installed.
+	(g)    You may receive the Software in more than one platform but you shall only install or use one platform.
+	(h)    You shall not use the Software to develop any product having the same primary function as the Software.
+	(i)    In the case of the Enterprise version of the Software, the source code is provided (according to Section 1(i)).  Since the source code is ultimately what controls how the product works, you agree to indemnify, hold harmless and defend BCC from and against any loss, damage, claims or lawsuits, including attorney&#039;s fees, that arise or result from the use or distribution of your application.  Any warrantees set forth by this agreement shall apply only to unmodified portions of the source code that have not been programmatically or declaratively affected by your source code modifications or the environment which contains the Software.
+	(j)    In the event that you fail to comply with this EULA, BCC may terminate the license and you must destroy all copies of the Software (with all other rights of both parties and all other provisions of this EULA surviving any such termination).
+	3. Ownership
+	The foregoing license gives you limited license to use the Software. BCC and its suppliers retain all right, title and interest, including all copyright and intellectual property rights, in and to, the Software (as an independent work and as an underlying work serving as a basis for any application you may develop),   and all copies thereof. All rights not specifically granted in this EULA, including Federal and International Copyrights, are reserved by BCC and its suppliers.
+	4. LIMITED WARRANTY AND DISCLAIMER
+	(a)    Except with respect to any Sample Application Code and the FREE Version of the Software, BCC warrants that, for a period of ninety (90) days from the date of delivery (as evidenced by a copy of your receipt): (i) when used with a recommended hardware configuration, the Software will perform in substantial conformance with the documentation supplied with the Software; and (ii) the physical media on which the Software is furnished will be free from defects in materials and workmanship under normal use.   
+	(b)    BCC PROVIDES NO REMEDIES OR WARRANTIES, WHETHER EXPRESS OR IMPLIED, FOR ANY SAMPLE APPLICATION CODE AND THE FREE VERSION OF THE SOFTWARE.   ANY SAMPLE APPLICATION CODE AND THE FREE VERSION OF THE SOFTWARE ARE PROVIDED &quot;AS IS&quot;.
+	(c)    EXCEPT AS SET FORTH IN THE FOREGOING LIMITED WARRANTY WITH RESPECT TO SOFTWARE OTHER THAN ANY SAMPLE APPLICATION CODE AND FREE VERSION, BCC AND ITS SUPPLIERS DISCLAIM ALL OTHER WARRANTIES AND REPRESENTATIONS, WHETHER EXPRESS, IMPLIED, OR OTHERWISE, INCLUDING THE WARRANTIES OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE. ALSO, THERE IS NO WARRANTY OF NON-INFRINGEMENT AND TITLE OR QUIET ENJOYMENT. BCC DOES NOT WARRANT THAT THE SOFTWARE IS ERROR-FREE OR WILL OPERATE WITHOUT INTERRUPTION. NO RIGHTS OR REMEDIES REFERRED TO IN ARTICLE 2A OF THE UCC WILL BE CONFERRED ON YOU UNLESS EXPRESSLY GRANTED HEREIN. THE SOFTWARE IS NOT DESIGNED, INTENDED OR LICENSED FOR USE IN HAZARDOUS ENVIRONMENTS REQUIRING FAIL-SAFE CONTROLS, INCLUDING WITHOUT LIMITATION, THE DESIGN, CONSTRUCTION, MAINTENANCE OR OPERATION OF NUCLEAR FACILITIES, AIRCRAFT NAVIGATION OR COMMUNICATION SYSTEMS, AIR TRAFFIC CONTROL, AND LIFE SUPPORT OR WEAPONS SYSTEMS. BCC SPECIFICALLY DISCLAIMS ANY EXPRESS OR IMPLIED WARRANTY OF FITNESS FOR SUCH PURPOSES.
+	(d)    IF APPLICABLE LAW REQUIRES ANY WARRANTIES WITH RESPECT TO THE SOFTWARE, ALL SUCH WARRANTIES ARE LIMITED IN DURATION TO NINETY (90) DAYS FROM THE DATE OF DELIVERY.
+	(e)   NO ORAL OR WRITTEN INFORMATION OR ADVICE GIVEN BY BCC, ITS DEALERS, DISTRIBUTORS, AGENTS OR EMPLOYEES SHALL CREATE A WARRANTY OR IN ANY WAY INCREASE THE SCOPE OF ANY WARRANTY PROVIDED HEREIN.  
+	(f)     ( USA only) SOME STATES DO NOT ALLOW THE EXCLUSION OF IMPLIED WARRANTIES, SO THE ABOVE EXCLUSION MAY NOT APPLY TO YOU. THIS WARRANTY GIVES YOU SPECIFIC LEGAL RIGHTS AND YOU MAY ALSO HAVE OTHER LEGAL RIGHTS THAT VARY FROM STATE TO STATE.
+	5. Exclusive Remedy
+	Your exclusive remedy under the preceding is to return the Software to the place you acquired it, with a copy of your receipt and a description of the problem.   Provided that any non-compliance with the above warranty is reported in writing to BCC no more than ninety (90) days following delivery to you, BCC will use reasonable commercial efforts to supply you with a replacement copy of the Software that substantially conforms to the documentation, provide a replacement for defective media, or refund to you your purchase price for the Software, at its option. BCC shall have no responsibility if the Software has been altered in any way (except as set forth in Section 2(i)), if the media has been damaged by misuse, accident, abuse, modification or misapplication, or if the failure arises out of use of the Software with other than a recommended hardware configuration.   Any such misuse, accident, abuse, modification or misapplication of the Software will void the warranty above.   THIS REMEDY IS THE SOLE AND EXCLUSIVE REMEDY AVAILABLE TO YOU FOR BREACH OF EXPRESS OR IMPLIED WARRANTIES WITH RESPECT TO THE SOFTWARE AND RELATED DOCUMENTATION.
+	6. LIMITATION OF LIABILITY
+	(a)    NEITHER BCC NOR ITS SUPPLIERS SHALL BE LIABLE TO YOU OR ANY THIRD PARTY FOR ANY INDIRECT, SPECIAL, INCIDENTAL, PUNITIVE, COVER OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, DAMAGES FOR THE INABILITY TO USE EQUIPMENT OR ACCESS DATA, LOSS OF BUSINESS, LOSS OF PROFITS, BUSINESS INTERRUPTION OR THE LIKE), ARISING OUT OF THE USE OF, OR INABILITY TO USE, THE SOFTWARE AND BASED ON ANY THEORY OF LIABILITY INCLUDING BREACH OF CONTRACT, BREACH OF WARRANTY, TORT (INCLUDING NEGLIGENCE), PRODUCT LIABILITY OR OTHERWISE, EVEN IF BCC OR ITS REPRESENTATIVES HAVE BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES AND EVEN IF A REMEDY SET FORTH HEREIN IS FOUND TO HAVE FAILED OF ITS ESSENTIAL PURPOSE.
+	(b)    BCC&#039;S TOTAL LIABILITY TO YOU FOR ACTUAL DAMAGES FOR ANY CAUSE WHATSOEVER WILL BE LIMITED TO THE GREATER OF $500 OR THE AMOUNT PAID BY YOU FOR THE SOFTWARE THAT CAUSED SUCH DAMAGE.
+	(c)    (USA only) SOME STATES DO NOT ALLOW THE LIMITATION OR EXCLUSION OF LIABILITY FOR INCIDENTAL OR CONSEQUENTIAL DAMAGES, SO THE ABOVE LIMITATION OR EXCLUSION MAY NOT APPLY TO YOU AND YOU MAY ALSO HAVE OTHER LEGAL RIGHTS THAT VARY FROM STATE TO STATE.
+	(d)    THE FOREGOING LIMITATIONS ON LIABILITY ARE INTENDED TO APPLY TO THE WARRANTIES AND DISCLAIMERS ABOVE AND ALL OTHER ASPECTS OF THIS EULA.
+	7. Basis of Bargain
+	The Limited Warranty and Disclaimer, Exclusive Remedies and Limited Liability set forth above are fundamental elements of the basis of the agreement between BCC and you. BCC would not be able to provide the Software on an economic basis without such limitations.   Such Limited Warranty and Disclaimer, Exclusive Remedies and Limited Liability inure to the benefit of BCC&#039;s licensors.
+	8. U.S. GOVERNMENT RESTRICTED RIGHTS LEGEND
+	This Software and the documentation are provided with &quot;RESTRICTED RIGHTS&quot; applicable to private and public licenses alike.   Without limiting the foregoing, use, duplication, or disclosure by the U.S. Government is subject to restrictions as set forth in this EULA and as provided in DFARS 227.7202-1(a) and 227.7202-3(a) (1995), DFARS 252.227-7013 (c)(1)(ii)(OCT 1988), FAR 12.212(a)(1995), FAR 52.227-19, or FAR 52.227-14, as applicable.   Manufacturer: Breeze Computer Consulting, LLC, 2227 S 2200 E, SLC, UT 84109.
+	9. (Outside of the USA ) Consumer End Users Only
+	The limitations or exclusions of warranties and liability contained in this EULA do not affect or prejudice the statutory rights of a consumer, i.e., a person acquiring goods otherwise than in the course of a business.
+	The limitations or exclusions of warranties, remedies or liability contained in this EULA shall apply to you only to the extent such limitations or exclusions are permitted under the laws of the jurisdiction where you are located.  
+	11. General
+	BCC reserves the right to modify this agreement at any time.  Continued use of the Software requires acceptance of the most recent version of the agreement, accessible at Featurific.com, or by contacting BCC at: Breeze Computer Consulting, LLC, 2227 S 2200 E, SLC, UT 84109.
+	This EULA shall be governed by the internal laws of the State of Utah , without giving effect to principles of conflict of laws.   You hereby consent to the exclusive jurisdiction and venue of the state courts sitting in Utah County , Utah or the federal courts in Utah to resolve any disputes arising under this EULA.   In each case this EULA shall be construed and enforced without regard to the United Nations Convention on the International Sale of Goods.
+	This EULA contains the complete agreement between the parties with respect to the subject matter hereof, and supersedes all prior or contemporaneous agreements or understandings, whether oral or written. You agree that any varying or additional terms contained in any purchase order or other written notification or document issued by you in relation to the Software licensed hereunder shall be of no effect. The failure or delay of BCC to exercise any of its rights under this EULA or upon any breach of this EULA shall not be deemed a waiver of those rights or of the breach.
+	No BCC dealer, agent or employee is authorized to make any amendment to this EULA unless such amendment is in writing and signed by a duly authorized representative of BCC.  
+	If any provision of this EULA shall be held by a court of competent jurisdiction to be contrary to law, that provision will be enforced to the maximum extent permissible, and the remaining provisions of this EULA will remain in full force and effect.
+	All questions concerning this EULA shall be directed to: Breeze Computer Consulting, LLC, 2227 S 2200 E, SLC, UT 84109.
+	Breeze Computer Consulting, LLC and other trademarks contained in the Software are trademarks or registered trademarks of Breeze Computer Consulting, LLC in the United States and/or other countries. Third party trademarks, trade names, product names and logos may be the trademarks or registered trademarks of their respective owners.   You may not remove or alter any trademark, trade names, product names, logo, copyright or other proprietary notices, legends, symbols or labels in the Software.   This EULA does not authorize you to use BCC&#039;s or its licensors&#039; names or any of their respective trademarks.
+							</textarea>
+						</center>
+					</div>
+					<div style='clear:both'></div>
+				
+					</p>
+				</div>";
+		}
+		add_action('admin_notices', 'featurific_install_swf_warning');
+		//return;
+	}
+}
+
+
+
+
+
+
 function featurific_show_admin_message_once($m) {
 	$messages = get_option('featurific_admin_messages_to_show_once');
 	
@@ -240,12 +334,7 @@ function featurific_activate($template)
 	}
 	else {
 		update_option('featurific_current_template_configured', false);
-		return;
 	}
-	
-	//echo('Activation of Featurific was successful.<br/>');
-	//__FILE__
-	//wp_redirect(get_option('siteurl') . '/wp-admin/options-general.php?page=featurificoptions');
 }
 
 
@@ -276,6 +365,24 @@ function featurific_test_environment() {
 /**
  *
  */
+function featurific_test_read_access($path) {
+	//echo "Testing $path<br/>";
+	$f = @fopen($path, 'r');
+	
+	//Success
+	if($f) {
+		//echo 'success<br/>';
+		fclose($f);
+		return true;
+	}
+	
+	return false;
+}
+
+
+/**
+ *
+ */
 function featurific_test_write_access($path) {
 	//echo "Testing $path<br/>";
 	$f = @fopen($path, 'w');
@@ -289,6 +396,18 @@ function featurific_test_write_access($path) {
 	}
 	
 	return false;
+}
+
+
+function featurific_test_featurific_swf_present() {
+	$path = featurific_get_plugin_root().'FeaturificFree.swf';
+	
+	if(featurific_test_read_access($path)) {
+		update_option('featurific_swf_installed', true);
+		return;
+	}
+	
+	update_option('featurific_swf_installed', false);
 }
 
 
@@ -586,6 +705,22 @@ function featurific_get_plugin_root() {
  * the web root.
  */
 function featurific_get_plugin_web_root() {
+	$plugin_root = featurific_get_plugin_root();
+	//PHP 5 only
+	//$plugin_dir_name = substr($plugin_root, strrpos($plugin_root, '/', -2)+1); //-2 to skip the trailing '/' on $plugin_root
+	//PHP 4 workaround
+	$plugin_dir_name = substr($plugin_root, strrpos(substr($plugin_root, 0, strlen($plugin_root)-2), DIRECTORY_SEPARATOR)+1); //-2 to skip the trailing '/' on $plugin_root
+
+	$web_root = featurific_get_wordpress_web_root() . 'wp-content/plugins/' . $plugin_dir_name;
+	
+	return $web_root;
+}
+
+
+/**
+ * Get the root directory of Wordpress relative to the web root.
+ */
+function featurific_get_wordpress_web_root() {
 	$site_url = get_option('siteurl');
 	
 	//Test URLs
@@ -595,12 +730,6 @@ function featurific_get_plugin_web_root() {
 	//$site_url = 'http://nacl.ir/a-dir/whatever/wordpress/';
 	$pos = featurific_strpos_nth(3, $site_url, '/');
 	
-	$plugin_root = featurific_get_plugin_root();
-	//PHP 5 only
-	//$plugin_dir_name = substr($plugin_root, strrpos($plugin_root, '/', -2)+1); //-2 to skip the trailing '/' on $plugin_root
-	//PHP 4 workaround
-	$plugin_dir_name = substr($plugin_root, strrpos(substr($plugin_root, 0, strlen($plugin_root)-2), DIRECTORY_SEPARATOR)+1); //-2 to skip the trailing '/' on $plugin_root
-
 	if($pos===false)
 		$web_root = substr($site_url, strlen($site_url));
 	else
@@ -609,8 +738,6 @@ function featurific_get_plugin_web_root() {
 	if($web_root[strlen($web_root)-1]!='/')
 		$web_root .= '/';
 
-	$web_root .= 'wp-content/plugins/' . $plugin_dir_name;
-	
 	return $web_root;
 }
 
@@ -841,11 +968,22 @@ function featurific_get_templates() {
  * Adapted from http://codex.wordpress.org/Adding_Administration_Menus
  */
 function featurific_options_page() {
-	if($_GET['action']!=null) {
-		featurific_install_templates();
-		return;
+	switch($_GET['action']) {
+		case 'installTemplates':
+			featurific_install_templates();
+			return;
+			
+		case 'installFeaturific':
+			featurific_install_featurific();
+			return;
+			
+		default:
+			break;
 	}
 	
+	if($_GET['installed']=='1')
+		echo "<div id='featurific-for-wordpress-warning' class='updated fade'><p><a href='options-general.php?page=featurificoptions'>Featurific for Wordpress</a> notice: <strong>FeaturificFree.swf was successfully downloaded and installed</strong>.</p></div>";
+
 	$hidden_field_name = 'featurific_submit_hidden';
 	
 	//Set up names
@@ -920,7 +1058,7 @@ function featurific_options_page() {
 		
 		//If 'popular' post selection was chosen but the user has not installed Wordpress.com stats correctly, report an error and fall back to another post selection type.
 		if($type_opt_val=='popular' && !function_exists('stats_get_csv')) {
-			echo "<div class='updated' style='background-color:#f66;'><p><a href='options-general.php?page=featurificoptions'>Featurific for Wordpress</a> needs attention: please install the <a href='http://wordpress.org/extend/plugins/stats/'>Wordpress.com Stats</a> plugin to use the 'Most popular' post selection type.  Until the plugin is installed, consider using the 'Most commented' post selection type instead.</p></div>";
+			echo "<div id='featurific-for-wordpress-warning' class='updated fade'><p><a href='options-general.php?page=featurificoptions'>Featurific for Wordpress</a> needs attention: please install the <a href='http://wordpress.org/extend/plugins/stats/'>Wordpress.com Stats</a> plugin to use the 'Most popular' post selection type.  Until the plugin is installed, consider using the 'Most commented' post selection type instead.</p></div>";
 			$type_opt_val = 'commented'; //'commented' is the best approximation of 'popular' that we have
 		}
 		
@@ -992,7 +1130,7 @@ function featurific_options_page() {
 	
 	//There are new templates
 	if($num_new_templates>0) {
-		$new_templates_html = "<div align='right'><a href='$action_url&action=autoinstall'><font size='+2'><strong>New templates available!</strong></font><br/>Auto-download $num_new_templates new templates now</a></div>";
+		$new_templates_html = "<div align='right'><a href='$action_url&action=installTemplates'><font size='+2'><strong>New templates available!</strong></font><br/>Auto-download $num_new_templates new templates now</a></div>";
 	}
 	//Couldn't get library.xml file, so just send user directly to a quick 'n dirty file listing.
 	elseif($num_new_templates<0) {
@@ -1063,6 +1201,7 @@ function featurific_options_page() {
    <input type="radio" name="<?php echo $type_opt_name; ?>" value='popular' <?php if($type_opt_val=='popular') { echo 'checked'; } ?>> Most popular posts over the last <input type="text" name="<?php echo $popular_days_opt_name; ?>" value="<?php echo $popular_days_opt_val; ?>" size="2"> days (<a href='http://wordpress.org/extend/plugins/stats/'>Wordpress.com Stats Plugin</a> <?php echo $stats_installed_str; ?>)<br/>
    <input type="radio" name="<?php echo $type_opt_name; ?>" value='commented' <?php if($type_opt_val=='commented') { echo 'checked'; } ?>> Most commented posts<br/>
    <input type="radio" name="<?php echo $type_opt_name; ?>" value='recent' <?php if($type_opt_val=='recent') { echo 'checked'; } ?>> Most recent posts<br/>
+   <input type="radio" name="<?php echo $type_opt_name; ?>" value='random' <?php if($type_opt_val=='random') { echo 'checked'; } ?>> Random posts<br/>
    <input type="radio" name="<?php echo $type_opt_name; ?>" value='userspecified' <?php if($type_opt_val=='userspecified') { echo 'checked'; } ?>> User-specified posts: <input type="text" name="<?php echo $user_specified_posts_opt_name; ?>" value="<?php echo $user_specified_posts_opt_val; ?>" size="35"> (comma separated - e.g. "4, 1, 16, 5")<br/>
    <!--This field is only used if  '<code>User-specified posts</code>' is selected as the <code>Post Selection</code>.-->
   </td>
@@ -1732,6 +1871,16 @@ function featurific_get_posts($type, $cat_filter, $n, $post_list=null)
 			break;
 
 
+		case 'random':
+			$posts = get_posts(
+				array(
+					'numberposts' => FEATURIFIC_MAX_INT,
+					'orderby' => 'rand'
+				)
+			);
+			break;
+
+
 		case 'userspecified':
 			$posts_tmp = get_posts(
 				array(
@@ -1942,6 +2091,7 @@ function featurific_get_posts_tweak(&$posts) {
 		//Find images in the post content's HTML and prepare the images and $posts[$post_id] so the images can be accessed in the template.
 		$web_root = get_option('siteurl'); //e.g. 'http://mysite.com/wordpress' (provided wordpress was installed at public_html/wordpress)
 		$images = featurific_parse_images_from_html($posts[$post_id]['post_content']);
+		//print dp_attachment_image($post->ID, 'full', 'alt="' . $post->post_title . '"');
 
 
 		//Before we process the images and cache them if necessary, load any image_x custom fields.  These custom fields specify images that should be used *instead of* OR *in addition to* (depending on whether or not the corresponding image (e.g. image_1) was found in the post) the existing images as parsed from the post.
@@ -1960,6 +2110,10 @@ function featurific_get_posts_tweak(&$posts) {
 		
 		$image_number = 1;
 		foreach($images as $image) {
+			//Only process one image per post to prevent Featurific from running out of memory.  (All existing templates only use one image per post (the first one, or 'image_1'), so we really only need to process one image per post.)
+			if($image_number>1)
+				break;
+				
 			//echo "pos: ".strpos($image, $web_root)."<br/>";
 			if($posts[$post_id]['image_'.$image_number]!=null)
 				$image = $posts[$post_id]['image_'.$image_number];
@@ -2170,6 +2324,102 @@ function featurific_get_credentials() {
 }
 
 
+function featurific_install_featurific() {
+	$featurific_settings_url = featurific_get_wordpress_web_root().'wp-admin/options-general.php?page=featurificoptions';
+?>
+
+	<div class="wrap">
+	<h2>Featurific for Wordpress</h2>
+
+	<?php
+		if(get_option('featurific_swf_installed')) {
+			echo 'FeaturificFree.swf has already been successfully installed.';
+			return;
+		}
+		
+		$auto_install_prequisites_met = true;
+		
+		if(!get_option('featurific_root_write_access')) {
+			echo '<br/><strong><font color="red">Auto Install prerequisite not met:</font></strong> In order for auto installation to work, Wordpress needs write access to the home directory of Featurific for Wordpress.  The full path of this directory is:<code>'.featurific_get_plugin_root().'</code>.  (After you make the directory writeable, deactivate and reactivate Featurific for Wordpress for your changes to be detected.)';
+			$auto_install_prequisites_met = false;
+		}
+		
+		$manual_install_instructions = '<h3>Installation</h3>To manually install Featurific Free:<br/><br/><ol><li>Download <a href="'.FEATURIFIC_SWF_MANUAL_URL.'">FeaturificFree.swf</a>.</li><li>Upload FeaturificFree.swf to your web server at the following location: <code>'.featurific_get_plugin_root().'</code>.</li><li>That\'s it!</li></ol><br/>';
+		if(!$auto_install_prequisites_met) {
+			echo '<br/><br/>To install Featurific Free, either <strong>satisfy the prerequisites above</strong> or <strong>perform the simple manual installation</strong> detailed below.';
+			echo $manual_install_instructions;
+		}
+	?>
+		<br/>
+		<?php
+			if($auto_install_prequisites_met) {
+				$success = featurific_install_swf(FEATURIFIC_SWF_URL);
+				if($success) {
+					// echo '<script type="text/javascript">setTimeout(function() {window.location = "' . $featurific_settings_url . '"}, 3000)</script>';
+					echo '<script type="text/javascript">window.location = "' . $featurific_settings_url . '&installed=1"</script>';
+					// echo '<br/><br/><center><h1><font color="#00cc00">FeaturificFree.swf installation successful</font></h1><a href="' . $featurific_settings_url . '">Edit Featurific for Wordpress settings</a></center><br/><br/><br/>';
+				}
+				else {
+					// echo 'Auto Installation failed.  Don\'t give up hope, though!  Please try the simple Manual Installation steps below.';
+					echo $manual_install_instructions;
+				}
+			}
+		?>
+
+	<hr />
+	</div>
+<?php
+	//Update the 'featurific_swf_installed' option.
+	featurific_test_featurific_swf_present();
+}
+
+
+function featurific_install_swf($url) {
+	global $wp_filesystem;
+
+	// $status_indicator = '<strong>...</strong>';
+	// 
+	// echo '<strong>Starting</strong>';
+	// 
+	// echo $status_indicator;
+	// echo '<strong>Downloading</strong>';
+
+	//$data = file_get_contents($url);
+	$data = file_get_contents(str_replace(' ', '%20', $url));
+	$dir = featurific_get_plugin_root();
+	$filename = basename($url);
+
+	// echo $status_indicator;
+	
+	if($data==null)
+		return false;
+
+	// echo $status_indicator;
+	// echo '<strong>Saving Archive</strong>';
+	
+	file_put_contents($dir.$filename, $data);
+
+	// echo $status_indicator;
+	
+	//Adapted from WP's plugin-install.php
+	// Is a filesystem accessor setup?
+	if ( ! $wp_filesystem || ! is_object($wp_filesystem) )
+		WP_Filesystem();
+
+	if ( ! is_object($wp_filesystem) ) {
+		featurific_dump(new WP_Error('fs_unavailable', __('Could not access filesystem.')));
+		return false;
+	}
+
+	if ( $wp_filesystem->errors->get_error_code() ) {
+		featurific_dump(new WP_Error('fs_error', __('Filesystem error'), $wp_filesystem->errors));
+		return false;
+	}
+
+	return true;
+}
+
+
 function featurific_install_templates() {
 	$credentials = featurific_get_credentials();
 	
@@ -2208,7 +2458,7 @@ function featurific_install_templates() {
 		?>
 		<br/>
 		<h3>Note</h3>
-		The Template Auto-Install functionality is a beta feature.  We'd love to hear your thoughts on it - <a href="http://featurific.com/content/contact-us">drop us a line!</a><br/>
+		The Template Auto-Install functionality is a beta feature.  We'd love to hear your thoughts on it - <a href="mailto:rich@byu.net">drop us a line!</a><br/>
 		<table class="form-table">
 		<?php
 		
