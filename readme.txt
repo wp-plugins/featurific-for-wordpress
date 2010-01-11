@@ -34,7 +34,7 @@ Selected feature list:
 Standard Wordpress installation:
 
 1. Extract all files from FeaturificForWordpress.zip.
-1. Upload the entire `featurific` directory to the `/wp-content/plugins/` directory
+1. Upload the entire `featurific-for-wordpress` directory to the `/wp-content/plugins/` directory
 1. Activate the plugin through the 'Plugins' menu in WordPress
 1. If necessary, click on the large "Install Featurific Free" text to auto-install required libraries
 1. You're done! :)
@@ -196,8 +196,11 @@ to help you work through the bugs.
 
 = Why is the plugin asking me to install the additional files in "Featurific Free"? =
 The actual Featurific Free file (FeaturificFree.swf) was removed from the Featurific for Wordpress package since its license agreement conflicts with that of Wordpress.org. So, Featurific Free must be installed separately for the plugin to work.
+
 Don't worry - The plugin should help you auto-install Featurific Free. Simply click on "Install Featurific Free" after you've activated the plugin. If the auto-installation fails, follow the directions provided to install Featurific Free manually.
+
 Please [contact me](http://featurific.com/support) via the [Featurific.com support forum](http://featurific.com/support) if you need help installing Featurific Free and I'll be happy to help you out.
+
 (Technical details: The *Featurific for Wordpress plugin* (GPL license) simply generates a data.xml file that can be read by *Featurific Free* (proprietary license). Featurific Free reads this data.xml file and renders the posts/images inside of it on-screen in the visual format that you see on your blog's main page)
 
 
