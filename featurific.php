@@ -156,15 +156,15 @@ if(strpos($_SERVER['REQUEST_URI'], '/wp-admin/')!==false && strpos($_SERVER['REQ
 			// $action_url = str_replace( '%7E', '~', $_SERVER['REQUEST_URI']);
 			$install_url = featurific_get_wordpress_web_root().'wp-admin/options-general.php?page=featurificoptions&action=installFeaturific';
 			echo "
-				<div id='featurific-for-wordpress-warning' class='updated fade'><p><strong>Featurific for Wordpress is almost ready</strong>.  To complete installation, Featurific for Wordpress needs to download and install the <strong>latest version of Featurific Free</strong>.  Featurific Free is distributed by Breeze Computer Consulting, LLC.<br/>
+				<div id='featurific-for-wordpress-warning' class='updated fade'><p><strong>Featurific for Wordpress is almost ready</strong>.  To complete installation, we need to download and install the <strong>latest version of Featurific Free</strong>. Featurific Free is the (free) software that is used to display posts on your main page. (<a href='http://featurific.com/ffw#additionalfiles'>More info</a>)<br/>
 				
 					<div style='float:left; padding:30px'>
-						<a href='$install_url' style='margin-top:200px'><font size='+2'><strong>Install Featurific Free</strong></font></a>
+						<a href='$install_url' style='margin-top:200px'><font size='+2'><strong>Auto-Install Featurific Free</strong></font></a>
 					</div>
 					
 					<div style='float:left'>
 						<center>
-							By clicking 'Install Featurific Free', you<br/>accept the following Terms &amp; Conditions:<br/>
+							By clicking 'Auto-Install Featurific Free', you<br/>accept the following Terms &amp; Conditions:<br/>
 							<textarea rows='3' cols='50' name='' id=''  readonly='' class='form-textarea resizable' style='font-size:0.75em'>IMPORTANT:   THIS AGREEMENT (or &quot;EULA&quot;) IS A LEGAL AGREEMENT BETWEEN THE PERSON, COMPANY, OR ORGANIZATION THAT HAS LICENSED THIS SOFTWARE (&quot;YOU&quot; OR &quot;CUSTOMER&quot;) AND BREEZE COMPUTER CONSULTING, LLC (HEREAFTER SIMPLY &quot;BCC&quot;).   BY INSTALLING AND USING THE SOFTWARE, CUSTOMER ACCEPTS THE SOFTWARE AND AGREES TO THE TERMS OF THIS AGREEMENT.     READ IT CAREFULLY BEFORE COMPLETING THE INSTALLATION PROCESS AND USING THE SOFTWARE.   BY INSTALLING AND/OR USING THE SOFTWARE, YOU ARE CONFIRMING YOUR ACCEPTANCE OF THE SOFTWARE AND AGREEING TO BECOME BOUND BY THE TERMS OF THIS AGREEMENT.   IF YOU DO NOT AGREE TO BE BOUND BY THESE TERMS, OR DO NOT HAVE AUTHORITY TO BIND CUSTOMER TO THESE TERMS, THEN DO NOT INSTALL AND/OR USE THE SOFTWARE AND RETURN THE SOFTWARE TO YOUR PLACE OF PURCHASE FOR A FULL REFUND IN ACCORDANCE WITH ITS REFUND POLICIES.
 	THIS EULA SHALL APPLY ONLY TO THE SOFTWARE SUPPLIED BY BCC HEREWITH REGARDLESS OF WHETHER OTHER SOFTWARE IS REFERRED TO OR DESCRIBED HEREIN.
 	1. License Grants
