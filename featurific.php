@@ -683,8 +683,12 @@ function get_home_template_of_theme($theme) {
 	//TODO: A better solution might be to just insert Featurific into *both* index.php and home.php.
 	if(file_exists(ABSPATH . $wp_content . $theme['Template Dir'] . "/home.php"))
 		$template = ABSPATH . $wp_content . $theme['Template Dir'] . "/home.php";
+	elseif(file_exists($theme['Template Dir'] . "/home.php")) //Wordpress 2.9ish (at least that's when I noticed it) seems to have changed $theme['Template Dir'] to be an absolute path... Detect and use that scenario here.
+		$template = $theme['Template Dir'] . "/home.php";
 	elseif(file_exists(ABSPATH . $wp_content . $theme['Template Dir'] . "/index.php"))
 		$template = ABSPATH . $wp_content . $theme['Template Dir'] . "/index.php";
+	elseif(file_exists($theme['Template Dir'] . "/index.php")) //Wordpress 2.9ish (at least that's when I noticed it) seems to have changed $theme['Template Dir'] to be an absolute path... Detect and use that scenario here.
+		$template = $theme['Template Dir'] . "/index.php";
 
 	return apply_filters('home_template', $template);
 }
