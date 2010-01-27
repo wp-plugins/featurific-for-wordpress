@@ -73,6 +73,9 @@ Sax Hammer of [Ultragreek News](http://news.ultragreek.com/)
 == Changelog ==
 
 
+**1.6.1 (Re-release) (1/27/10)**
+Bugfix in get_home_template_of_theme() for changed $theme['Template Dir'] behavior.  Not releasing as a new version since anyone who is currently using the plugin mananged to get it working without this fix.
+
 **1.6.1 (12/31/09)**
 Removed FeaturificFree.swf from the download and added a download helper to facilitate obtaining/installing FeaturificFree.  Also improved the 'code-reuse' of the plugin, rewriting some functions to be less repetitive.
 
