@@ -9,7 +9,7 @@ displaying summaries of featured articles on the site.  Installation is
 automatic and easy, while advanced users can customize every element of the
 Flash slideshow presentation.
 Author: Rich Christiansen
-Version: 1.6.1
+Version: 1.6.2
 Author URI: http://endorkins.com/
 */
 
@@ -681,7 +681,12 @@ function get_home_template_of_theme($theme) {
 		
 	//Put home.php if statement before the index.php statement - if both index.php and home.php exist, we want to use home.php.  (From experience, it seems that if both files exist, home.php is more likely to be the actual main template.)
 	//TODO: A better solution might be to just insert Featurific into *both* index.php and home.php.
-	if(file_exists(ABSPATH . $wp_content . $theme['Template Dir'] . "/home.php"))
+	//Added support for checking loop.php file first (to support Twenty Ten theme and derivatives/relatives) - 10/21/11
+	if(file_exists(ABSPATH . $wp_content . $theme['Template Dir'] . "/loop.php"))
+		$template = ABSPATH . $wp_content . $theme['Template Dir'] . "/loop.php";
+	elseif(file_exists($theme['Template Dir'] . "/loop.php")) //Wordpress 2.9ish (at least that's when I noticed it) seems to have changed $theme['Template Dir'] to be an absolute path... Detect and use that scenario here.
+		$template = $theme['Template Dir'] . "/loop.php";
+	elseif(file_exists(ABSPATH . $wp_content . $theme['Template Dir'] . "/home.php"))
 		$template = ABSPATH . $wp_content . $theme['Template Dir'] . "/home.php";
 	elseif(file_exists($theme['Template Dir'] . "/home.php")) //Wordpress 2.9ish (at least that's when I noticed it) seems to have changed $theme['Template Dir'] to be an absolute path... Detect and use that scenario here.
 		$template = $theme['Template Dir'] . "/home.php";

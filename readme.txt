@@ -2,8 +2,8 @@
 Contributors: rinogo
 Tags: slideshow, slide, show, gallery, flash, xml, dynamic, conversion, funnel, Post, posts, sidebar, images, links, photo, photos, statistics, stats, swf, plugin, admin
 Requires at least: 2.3
-Tested up to: 2.9
-Stable tag: 1.6.1
+Tested up to: 3.2.1
+Stable tag: 1.6.2
 
 An effortless but powerful interface to Featurific Free, the featured story slideshow.  (Similar to the 'featured'
 widget on time.com, msn.com, walmart.com, etc.)
@@ -72,6 +72,9 @@ Sax Hammer of [Ultragreek News](http://news.ultragreek.com/)
 
 == Changelog ==
 
+
+**1.6.2 (10/21/11)**
+Added support for checking loop.php file before index.php and home.php (in determining where to insert Featurific) (to support Twenty Ten theme and derivatives/relatives).
 
 **1.6.1 (Re-release) (1/27/10)**
 Bugfix in get_home_template_of_theme() for changed $theme['Template Dir'] behavior.  Not releasing as a new version since anyone who is currently using the plugin mananged to get it working without this fix.
